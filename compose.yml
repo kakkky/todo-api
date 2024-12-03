@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - type: bind
+        source: ./
+        target: /src #コンテナ内の指定のディレクトリにマウントされる
+    tty: true
