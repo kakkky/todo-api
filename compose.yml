@@ -1,12 +1,44 @@
 services:
   api:
+    container_name: todo-api
     build:
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.api
       context: .
-    ports:
-      - "8080:8080"
     volumes:
       - type: bind
         source: ./
-        target: /src #コンテナ内の指定のディレクトリにマウントされる
+        target: /src
+    ports:
+      - "8080:8080"
     tty: true
+    environment:
+      TODO_DB_HOST: todo-db
+      TODO_DB_PORT: 3306
+      TODO_DB_USER: todo-user
+      TODO_DB_PASSWORD: pswd
+      TODO_DB_NAME: todo-db
+    depends_on:
+      - db
+  db:
+    container_name: todo-db
+    build:
+      dockerfile: ./Dockerfile.db
+    platform: linux/amd64
+    volumes:
+      - type: volume
+        source: db-store
+        target: /var/lib/mysql
+      - type: bind
+        source: ./app/infrastructure/db/mysql
+        target: /etc/mysql/conf.d
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: todo-db
+      MYSQL_USER: todo-user
+      MYSQL_PASSWORD: pswd
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    tty: true
+volumes:
+  db-store:
+
