@@ -97,7 +97,9 @@ ps:
 	@echo "Viewing running containers with docker-compose ps..."
 	docker compose ps
 
-
+ls:
+	@echo "Viewing running containers with docker-compose ls..."
+	docker container ls
 
 ########################
 ### DBマイグレーション ####

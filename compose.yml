@@ -17,8 +17,11 @@ services:
       TODO_DB_USER: user
       TODO_DB_PASSWORD: pswd
       TODO_DB_NAME: todo-db
+      TODO_KVS_HOST: kvs
+      TODO_KVS_PORT: 6379
     depends_on:
       - db
+      - kvs
   db:
     container_name: todo-db
     image: mysql:8.0.40-debian
@@ -38,6 +41,17 @@ services:
       MYSQL_PASSWORD: pswd
       MYSQL_ALLOW_EMPTY_PASSWORD: true
     tty: true
+  kvs:
+    container_name: todo-kvs
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - type: volume
+        source: kvs-store
+        target: /data
+    tty: true
 volumes:
   db-store:
+  kvs-store:
 
