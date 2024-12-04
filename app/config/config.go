@@ -26,12 +26,10 @@ type redis struct {
 	Port string `envconfig:"KVS_PORT"`
 }
 
-// パッケージ変数として設定
-var config Config
-
-func InitConfig() error {
-	if err := envconfig.Process("", &config); err != nil {
-		return err
+func NewConfig() (*Config, error) {
+	var cfg Config
+	if err := envconfig.Process("", &cfg); err != nil {
+		return nil, err
 	}
-	return nil
+	return &cfg, nil
 }

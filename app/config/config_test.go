@@ -21,8 +21,8 @@ func TestInitConfig(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Setenv("ADDRESS", tt.setEnv)
-			err := InitConfig()
-			got := config.Server.Address
+			cfg, err := NewConfig()
+			got := cfg.Server.Address
 
 			if (err != nil) != tt.wantErr {
 				t.Errorf("want error : %v ,but : %v", tt.wantErr, err)

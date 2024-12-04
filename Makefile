@@ -105,7 +105,7 @@ ls:
 ### DBマイグレーション ####
 ########################
 
-MIGRATE_PATH = app/infrastructure/db/migration
+MIGRATE_PATH = app/infrastructure/db/sqlc/migrations
 DB_URL = "mysql://user:pswd@tcp(db:3306)/todo-db?parseTime=true"
 
 # マイグレーションファイルを作成
@@ -127,4 +127,11 @@ migrate-down:
 	@echo "Rolling back migrations..."
 	migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose down
 
+#############
+### sqlc ####
+#############
 
+# sqlcでコードを生成
+sqlc-gen:
+	@echo "Generating query in sql by sqlc..."
+	cd ./app/infrastructure/db/sqlc && sqlc generate
