@@ -80,7 +80,7 @@ build:
 # docker compose up
 up:
 	@echo "Starting containers with docker-compose up..."
-	docker compose up -d
+	docker compose up
 
 # docker compose down
 down:

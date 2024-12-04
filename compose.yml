@@ -12,6 +12,8 @@ services:
       - "8080:8080"
     tty: true
     environment:
+      PORT: 8080
+      ADDRESS: 127.0.0.1
       TODO_DB_HOST: db
       TODO_DB_PORT: 3306
       TODO_DB_USER: user
