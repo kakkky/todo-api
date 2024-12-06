@@ -18,7 +18,8 @@ type server struct {
 }
 
 // 独自のserver.Server型を返すコンストラクタ
-func NewServer(port string, mux *http.ServeMux) *server {
+// main関数でマルチプレクサを渡す
+func NewServer(port string, mux http.Handler) *server {
 	return &server{
 		&http.Server{
 			Addr:    port,
@@ -46,7 +47,7 @@ func (s *server) Run(ctx context.Context) error {
 	// シャットダウンをするまでのタイムアウト時間を設定
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	// シャットダウン
+	//
 	if err := s.srv.Shutdown(ctx); err != nil {
 		log.Fatalf("failed to shutdown http server on %s : %+v", s.srv.Addr, err)
 	}

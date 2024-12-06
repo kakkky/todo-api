@@ -11,8 +11,8 @@ func TestInitConfig(t *testing.T) {
 	}{
 		{
 			name:    "正常系ーADDRESS環境変数を読み込める",
-			want:    "0.0.0.0",
-			setEnv:  "0.0.0.0",
+			want:    ":8081",
+			setEnv:  ":8081",
 			wantErr: false,
 		},
 	}
@@ -20,9 +20,9 @@ func TestInitConfig(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			t.Setenv("ADDRESS", tt.setEnv)
+			t.Setenv("PORT", tt.setEnv)
 			cfg, err := NewConfig()
-			got := cfg.Server.Address
+			got := cfg.Server.Port
 
 			if (err != nil) != tt.wantErr {
 				t.Errorf("want error : %v ,but : %v", tt.wantErr, err)

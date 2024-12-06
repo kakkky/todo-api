@@ -9,8 +9,7 @@ type Config struct {
 }
 
 type server struct {
-	Address string `envconfig:"ADDRESS"`
-	Port    string `envconfig:"PORT"`
+	Port string `envconfig:"PORT"`
 }
 
 type mysql struct {

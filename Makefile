@@ -14,8 +14,8 @@ help: # コマンド確認
 # - tags=<ビルドタグ> (デフォルト: なし)
 define tests
 	$(if $(TEST_TAGS),\
-		go test -timeout 10m -tags=$(TEST_TAGS) $(TEST_PATH) $(TEST_OPTIONS),\
-		go test -timeout 10m $(TEST_PATH) $(TEST_OPTIONS)\
+		go test -v -timeout 10m -tags=$(TEST_TAGS) $(TEST_PATH) $(TEST_OPTIONS),\
+		go test -v -timeout 10m $(TEST_PATH) $(TEST_OPTIONS)\
 	)
 endef
 

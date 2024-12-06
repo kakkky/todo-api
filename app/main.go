@@ -6,6 +6,8 @@ import (
 
 	"github.com/kakkky/app/config"
 	"github.com/kakkky/app/infrastructure/db/mysql"
+	"github.com/kakkky/app/infrastructure/router"
+	"github.com/kakkky/app/infrastructure/server"
 )
 
 func main() {
@@ -24,5 +26,7 @@ func run(ctx context.Context, cfg *config.Config) error {
 	close := mysql.NewDB(ctx, cfg)
 	defer close()
 	// サーバー
+	srv := server.NewServer(cfg.Server.Port, router.NewMux())
+	srv.Run(ctx)
 	return nil
 }
