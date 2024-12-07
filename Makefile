@@ -135,3 +135,28 @@ migrate-down:
 sqlc-gen:
 	@echo "Generating query in sql by sqlc..."
 	cd ./app/infrastructure/db/sqlc && sqlc generate
+
+#############
+## swagger ##
+#############
+
+# コメントをパースしてドキュメント生成
+swag:
+	@echo "Generating document by swagger..."
+	cd ./app && swag fmt && swag init
+
+###################
+### パッケージ管理 ###
+###################
+
+# github.com/kakkky/appにおいてgo getする
+# コマンド例: $ make get-app name=github.com/xxxx/xxx
+get-app:
+	cd ./app && go get $(name)
+
+get-pkg:
+	cd ./pkg && go get $(name)
+
+# github.com/kakkky/app、/pkgにおいてgo modする
+mod-tidy:
+	cd ./app && go mod tidy && cd ../pkg && go mod tidy

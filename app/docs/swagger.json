@@ -1,0 +1,30 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is TodoAPI by golang.",
+        "title": "TodoAPI",
+        "contact": {},
+        "version": "2.0"
+    },
+    "host": "localhost",
+    "basePath": "/",
+    "paths": {
+        "/health": {
+            "get": {
+                "description": "apiのヘルスチェックを行う。ルーティングが正常に登録されているかを確かめる。",
+                "summary": "apiのヘルスチェックを行う",
+                "responses": {
+                    "200": {
+                        "description": "Health check message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

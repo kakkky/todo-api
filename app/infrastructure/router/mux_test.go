@@ -1,10 +1,12 @@
 package router
 
 import (
-	"io"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestNewMux(t *testing.T) {
@@ -12,15 +14,15 @@ func TestNewMux(t *testing.T) {
 		name     string
 		method   string
 		path     string
-		want     string
+		want     any
 		wantCode int
 		wantErr  bool
 	}{
 		{
 			name:     "正常にヘルスチェックハンドラを呼び出せる",
 			method:   http.MethodGet,
-			path:     "/health/",
-			want:     "health check",
+			path:     "/health",
+			want:     map[string]string{"message": "health check"},
 			wantCode: http.StatusOK,
 			wantErr:  false,
 		},
@@ -37,50 +39,39 @@ func TestNewMux(t *testing.T) {
 			if resp.StatusCode != tt.wantCode {
 				t.Errorf("want status code %d, but got %d", tt.wantCode, resp.StatusCode)
 			}
-			got, err := io.ReadAll(resp.Body)
-			if err != nil {
-				t.Errorf("failed to read response body : %v", err)
+			var got map[string]string
+			if err := json.NewDecoder(resp.Body).Decode(&got); err != nil {
+				t.Errorf("faile to decode json : %v", err)
 			}
-			if string(got) != tt.want {
-				t.Errorf("want %q,but got %q", tt.want, got)
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("mismatch -got +want : %v", diff)
 			}
 		})
 	}
-
 }
 
 func TestComposeMiddlewares(t *testing.T) {
-	middleware1 := func(next http.Handler) http.Handler {
+	middleware1 := func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Middleware", "1")
-			next.ServeHTTP(w, r)
+			h.ServeHTTP(w, r)
 		})
 	}
-
-	middleware2 := func(next http.Handler) http.Handler {
+	middleware2 := func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Middleware", "2")
-			next.ServeHTTP(w, r)
+			h.ServeHTTP(w, r)
 		})
 	}
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	// Define a final handler
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-
-	// Compose middlewares
-	composed := composeMiddlewares(middleware1, middleware2)(handler)
-
-	// Create a test request and response
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
-	rec := httptest.NewRecorder()
-
-	// Serve the request
-	composed.ServeHTTP(rec, req)
-
+	sut := composeMiddlewares(middleware1, middleware2)(handler)
+	r := httptest.NewRequest(http.MethodGet, "/", nil)
+	w := httptest.NewRecorder()
+	sut.ServeHTTP(w, r)
 	// 最終的なMiddrewareヘッダーは2である。
-	if got := rec.Header().Get("Middleware"); got != "2" {
-		t.Errorf("Expected header Middleware to be '2', got '%s'", got)
+	// リクエスト処理は、Middleware1→Middleware2と行われる
+	if got := w.Header().Get("Middleware"); got != "2" {
+		t.Errorf("expected header Middleware to be '2', got '%s'", got)
 	}
 }

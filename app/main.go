@@ -5,11 +5,17 @@ import (
 	"log"
 
 	"github.com/kakkky/app/config"
+	_ "github.com/kakkky/app/docs"
 	"github.com/kakkky/app/infrastructure/db/mysql"
 	"github.com/kakkky/app/infrastructure/router"
 	"github.com/kakkky/app/infrastructure/server"
 )
 
+// @title       TodoAPI
+// @version     2.0
+// @description This is TodoAPI by golang.
+// @host        localhost
+// @BasePath    /
 func main() {
 	ctx := context.Background()
 	cfg, err := config.NewConfig()

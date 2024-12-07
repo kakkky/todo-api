@@ -1,13 +1,11 @@
 package router
 
 import (
-	"fmt"
 	"net/http"
+
+	"github.com/kakkky/app/adapter/presentation/health"
 )
 
-// ヘルスチェック
 func handleHealth(mux *http.ServeMux) {
-	mux.HandleFunc("GET /health/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "health check")
-	})
+	mux.HandleFunc("GET /health", health.HealthCheckHandler)
 }

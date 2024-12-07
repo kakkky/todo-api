@@ -4,10 +4,19 @@ import (
 	"net/http"
 )
 
+const (
+	base = "/api/v2"
+)
+
 // ルーティングを登録したマルチプレクサを返す
-func NewMux() *http.ServeMux {
+func NewMux() http.Handler {
 	mux := http.NewServeMux()
-	handleHealth(mux)
+	{
+		// 開発用ルーティング
+		handleHealth(mux)
+		handleSwagger(mux)
+	}
+
 	return mux
 }
 
