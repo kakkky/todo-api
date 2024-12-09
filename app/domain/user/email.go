@@ -12,8 +12,12 @@ type email struct {
 
 func newEmail(value string) (email, error) {
 	// バリデーション
-	if err, _ := mail.ParseAddress(value); err != nil {
+	if _, err := mail.ParseAddress(value); err != nil {
 		return email{}, errors.ErrInvalidEmail
 	}
 	return email{value: value}, nil
+}
+
+func reconstructEmail(value string) email {
+	return email{value: value}
 }
