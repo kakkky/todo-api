@@ -5,10 +5,10 @@ import (
 )
 
 type User struct {
-	id       string
-	email    email
-	name     string
-	password password
+	id             string
+	email          email
+	name           string
+	hashedPassword hashedPassword
 }
 
 // 新たなユーザーを作成する
@@ -21,15 +21,15 @@ func NewUser(
 	if err != nil {
 		return nil, err
 	}
-	HashedPassword, err := newPassword(password)
+	HashedPassword, err := newHashedPassword(password)
 	if err != nil {
 		return nil, err
 	}
 	return &User{
-		id:       ulid.NewUlid(),
-		email:    validatedEmail,
-		name:     name,
-		password: HashedPassword,
+		id:             ulid.NewUlid(),
+		email:          validatedEmail,
+		name:           name,
+		hashedPassword: HashedPassword,
 	}, nil
 }
 
@@ -40,12 +40,12 @@ func ReconstructUser(
 	id string,
 	email string,
 	name string,
-	password string,
+	hashedPassword string,
 ) *User {
 	return &User{
-		id:       id,
-		email:    reconstructEmail(email),
-		name:     name,
-		password: reconstructPassword(password),
+		id:             id,
+		email:          reconstructEmail(email),
+		name:           name,
+		hashedPassword: reconstructHashedPassword(hashedPassword),
 	}
 }

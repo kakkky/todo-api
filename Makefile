@@ -116,7 +116,7 @@ DB_URL = mysql://user:pswd@tcp(db:3306)/todo-db?parseTime=true
 migrate-create:
 	$(eval NAME=$(or $(name),$(error "Error: Please specify a migration name using name=<name>")))
 	@echo "Creating migration file..."
-	migrate create -ext sql -dir $(MIGRATE_PATH) -seq $(NAME)
+	cd app/ && migrate create -ext sql -dir $(MIGRATE_PATH) -seq $(NAME)
 
 # マイグレーションを適用
 # コマンド例: $ make migrate-up
