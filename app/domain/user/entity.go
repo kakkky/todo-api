@@ -1,5 +1,9 @@
 package user
 
+import (
+	"github.com/kakkky/pkg/ulid"
+)
+
 type User struct {
 	id       string
 	email    email
@@ -15,7 +19,7 @@ func NewUser(
 	password string,
 ) (*User, error) {
 	return newUser(
-		id, //ここは、ulid関数をpkgに実装して適用させる
+		ulid.NewUlid(),
 		email,
 		name,
 		password,
