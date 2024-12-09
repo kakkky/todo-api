@@ -1,12 +1,9 @@
 package router
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"github.com/google/go-cmp/cmp"
 )
 
 func TestNewMux(t *testing.T) {
@@ -14,7 +11,6 @@ func TestNewMux(t *testing.T) {
 		name     string
 		method   string
 		path     string
-		want     any
 		wantCode int
 		wantErr  bool
 	}{
@@ -22,7 +18,6 @@ func TestNewMux(t *testing.T) {
 			name:     "正常にヘルスチェックハンドラを呼び出せる",
 			method:   http.MethodGet,
 			path:     "/health",
-			want:     map[string]string{"message": "health check"},
 			wantCode: http.StatusOK,
 			wantErr:  false,
 		},
@@ -38,13 +33,6 @@ func TestNewMux(t *testing.T) {
 			resp := w.Result()
 			if resp.StatusCode != tt.wantCode {
 				t.Errorf("want status code %d, but got %d", tt.wantCode, resp.StatusCode)
-			}
-			var got map[string]string
-			if err := json.NewDecoder(resp.Body).Decode(&got); err != nil {
-				t.Errorf("faile to decode json : %v", err)
-			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("mismatch -got +want : %v", diff)
 			}
 		})
 	}

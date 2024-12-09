@@ -1,4 +1,17 @@
 basePath: /
+definitions:
+  health.healthResponse:
+    properties:
+      health_check:
+        type: string
+    type: object
+  presenter.SuccessResponse-health_healthResponse:
+    properties:
+      data:
+        $ref: '#/definitions/health.healthResponse'
+      status:
+        type: integer
+    type: object
 host: localhost
 info:
   contact: {}
@@ -13,8 +26,6 @@ paths:
         "200":
           description: Health check message
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/presenter.SuccessResponse-health_healthResponse'
       summary: apiのヘルスチェックを行う
 swagger: "2.0"

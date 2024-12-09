@@ -24,12 +24,30 @@ const docTemplate = `{
                     "200": {
                         "description": "Health check message",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/presenter.SuccessResponse-health_healthResponse"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "health.healthResponse": {
+            "type": "object",
+            "properties": {
+                "health_check": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.SuccessResponse-health_healthResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/health.healthResponse"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         }
