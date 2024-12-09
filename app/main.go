@@ -11,9 +11,9 @@ import (
 	"github.com/kakkky/app/infrastructure/server"
 )
 
-// @title       TodoAPI
-// @version     2.0
-// @description This is TodoAPI by golang.
+// @title       TodoRestAPI
+// @version     1.0
+// @description This is TodoARestPI by golang.
 // @host        localhost
 // @BasePath    /
 func main() {
