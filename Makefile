@@ -101,12 +101,15 @@ ls:
 	@echo "Viewing running containers with docker-compose ls..."
 	docker container ls
 
+exec-db:
+	docker compose exec db /bin/bash
+
 ########################
 ### DBマイグレーション ####
 ########################
 
-MIGRATE_PATH = app/infrastructure/db/sqlc/migrations
-DB_URL = "mysql://user:pswd@tcp(db:3306)/todo-db?parseTime=true"
+MIGRATE_PATH = infrastructure/db/sqlc/migrations
+DB_URL = mysql://user:pswd@tcp(db:3306)/todo-db?parseTime=true
 
 # マイグレーションファイルを作成
 # コマンド例: $ make migrate-create name=<migration-name>
@@ -119,13 +122,13 @@ migrate-create:
 # コマンド例: $ make migrate-up
 migrate-up:
 	@echo "Applying migrations..."
-	migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose up
+	docker compose run api migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose up
 
 # マイグレーションをロールバック
 # コマンド例: $ make migrate-down
 migrate-down:
 	@echo "Rolling back migrations..."
-	migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose down
+	docker compose run api migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose down
 
 #############
 ### sqlc ####

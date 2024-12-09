@@ -55,17 +55,24 @@ func connect(ctx context.Context, user, password, host, port, name string) (*sql
 		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, password, host, port, name)
 		db, err := sql.Open("mysql", dsn)
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to open db : %w", err)
+			// DB接続の初期エラーが発生した場合のログ
+			log.Printf("failed to open db (attempt %d/%d): %v", i+1, maxRetriesCount, err)
+		} else {
+			// 接続確認
+			if err := db.PingContext(ctx); err == nil {
+				// 成功した場合、呼び出し元でdb.Close()を実行できるようにする
+				log.Printf("successfully connected to db (attempt %d/%d)", i+1, maxRetriesCount)
+				return db, func() { db.Close() }, nil
+			}
+			// 接続できた場合のエラーメッセージ
+			log.Printf("failed to ping db: %v", err)
 		}
-		// 接続確認
-		if err := db.PingContext(ctx); err == nil {
-			// 呼び出しもと（main）でクローズ処理を強制させるために関数を返す
-			return db, func() { db.Close() }, nil
-		}
+
 		// 接続できなかったらリトライ
-		log.Printf("could not connect to db: %v", err)
-		log.Printf("retrying in %v seconds...", delay/time.Second)
+		log.Printf("could not connect to db (attempt %d/%d), retrying in %v seconds...", i+1, maxRetriesCount, delay/time.Second)
 		time.Sleep(delay)
 	}
+
+	// 最大試行回数を超えても接続できなかった場合
 	return nil, nil, fmt.Errorf("could not connect to db after %d attempts", maxRetriesCount)
 }
