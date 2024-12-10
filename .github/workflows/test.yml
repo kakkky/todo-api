@@ -4,13 +4,13 @@ on:
     push:
         branches:
             - main
-        paths:
-            - "app/**"
-            - "pkg/**"
         paths-ignore:
             - "app/docs/**"
+            - "Dockerfile.**"
+            - "compose.yml"
+            - "air.toml"
 jobs:
-    unit-tests:
+    unit-test:
         name: Run Unit Tests
         runs-on: ubuntu-latest
         steps:
