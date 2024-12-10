@@ -16,7 +16,7 @@ func TestRun(t *testing.T) {
 	eg, ctx := errgroup.WithContext(ctx)
 	// サーバー構造体（テスト対象）
 	mux := http.NewServeMux()
-	sut := NewServer(":8081", mux)
+	sut := NewServer(":8881", mux)
 	// デフォルトマルチプレクサにハンドラを登録
 	want := "Hello,world!"
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +27,7 @@ func TestRun(t *testing.T) {
 	})
 
 	// リクエストを送ってレスポンスが期待通りか確かめる
-	resp, err := http.Get("http://localhost:8081")
+	resp, err := http.Get("http://localhost:8881")
 	if err != nil {
 		t.Errorf("failed to request server : %v", err)
 	}
