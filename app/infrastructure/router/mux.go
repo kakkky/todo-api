@@ -4,10 +4,6 @@ import (
 	"net/http"
 )
 
-const (
-	base = "/api/v2"
-)
-
 // ルーティングを登録したマルチプレクサを返す
 func NewMux() http.Handler {
 	mux := http.NewServeMux()

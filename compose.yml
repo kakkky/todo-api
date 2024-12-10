@@ -1,8 +1,8 @@
 services:
-  api:
+  app:
     container_name: todo-api
     build:
-      dockerfile: ./Dockerfile.api
+      dockerfile: ./Dockerfile.app
       context: .
     volumes:
       - type: bind

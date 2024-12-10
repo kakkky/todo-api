@@ -122,13 +122,13 @@ migrate-create:
 # コマンド例: $ make migrate-up
 migrate-up:
 	@echo "Applying migrations..."
-	docker compose run api migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose up
+	docker compose run app migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose up
 
 # マイグレーションをロールバック
 # コマンド例: $ make migrate-down
 migrate-down:
 	@echo "Rolling back migrations..."
-	docker compose run api migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose down
+	docker compose run app migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose down
 
 #############
 ### sqlc ####
