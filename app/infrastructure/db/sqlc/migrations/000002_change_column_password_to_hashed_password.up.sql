@@ -1,1 +1,0 @@
-alter table users rename column password to hashed_password;

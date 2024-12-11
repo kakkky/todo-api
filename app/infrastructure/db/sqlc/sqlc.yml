@@ -2,13 +2,13 @@ version: "2"
 sql:
   - engine: "mysql"
     queries: "./queries/"
-    schema: "./migrations/"
+    schema: "../migrations/"
     gen: 
       go:
         package: "sqlc"
         out: "./"
-        emit_json_tags: true
-        emit_prepared_queries: false
-        emit_interface: true
-        emit_exact_table_names: false
-        emit_empty_slices: true
+        emit_json_tags: false #構造体にjsonタグをつけない
+        emit_prepared_queries: true #プリペアードステートメント
+        emit_interface: true #queryごとにインターフェースを生成
+        emit_exact_table_names: false #テーブル名(s抜き)がそのまま構造体としない
+        emit_empty_slices: true #:manyクエリでnilの代わりに空スライスが返される
