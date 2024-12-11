@@ -28,6 +28,7 @@ func TestRun(t *testing.T) {
 	})
 
 	// リクエストを送ってレスポンスが期待通りか確かめる
+	// リトライ処理なしだとCIで落ちる
 	for i := 0; i < 5; i++ {
 		resp, err := http.Get("http://localhost:8881")
 		if err != nil {

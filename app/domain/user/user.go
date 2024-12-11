@@ -11,7 +11,7 @@ type User struct {
 	hashedPassword hashedPassword
 }
 
-// 新たなユーザーを作成する
+// ファクトリー関数
 func NewUser(
 	email string,
 	name string,
