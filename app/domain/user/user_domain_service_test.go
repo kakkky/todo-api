@@ -12,14 +12,14 @@ func TestUserDomainService_IsExists(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name    string
-		email   email
+		email   Email
 		mockFn  func(m *MockUserRepository)
 		want    bool
 		wantErr bool
 	}{
 		{
 			name:  "正常系: ユーザー存在する",
-			email: email{value: "test@example.com"},
+			email: Email{value: "test@example.com"},
 			mockFn: func(m *MockUserRepository) {
 				// ErrNotFoundUserを返す
 				m.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(&User{}, nil)
@@ -29,7 +29,7 @@ func TestUserDomainService_IsExists(t *testing.T) {
 		},
 		{
 			name:  "正常系: ユーザーが存在しない",
-			email: email{value: "test@example.com"},
+			email: Email{value: "test@example.com"},
 			mockFn: func(m *MockUserRepository) {
 				m.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(nil, errors.ErrNotFoundUser)
 			},
@@ -38,7 +38,7 @@ func TestUserDomainService_IsExists(t *testing.T) {
 		},
 		{
 			name:  "異常系:リポジトリからErrNotFoundUser以外のエラーが返る場合",
-			email: email{value: "test@example.com"},
+			email: Email{value: "test@example.com"},
 			mockFn: func(m *MockUserRepository) {
 				m.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(nil, errors.New("Database error"))
 			},

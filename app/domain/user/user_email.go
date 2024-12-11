@@ -6,18 +6,18 @@ import (
 	"github.com/kakkky/app/domain/errors"
 )
 
-type email struct {
+type Email struct {
 	value string
 }
 
-func newEmail(value string) (email, error) {
+func newEmail(value string) (Email, error) {
 	// バリデーション
 	if _, err := mail.ParseAddress(value); err != nil {
-		return email{}, errors.ErrInvalidEmail
+		return Email{}, errors.ErrInvalidEmail
 	}
-	return email{value: value}, nil
+	return Email{value: value}, nil
 }
 
-func reconstructEmail(value string) email {
-	return email{value: value}
+func reconstructEmail(value string) Email {
+	return Email{value: value}
 }

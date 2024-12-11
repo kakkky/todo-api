@@ -10,13 +10,13 @@ type userDomainService struct {
 	userRepository UserRepository
 }
 
-func NewUserDomainService(userRepository UserRepository) userDomainService {
-	return userDomainService{
+func NewUserDomainService(userRepository UserRepository) UserDomainService {
+	return &userDomainService{
 		userRepository: userRepository,
 	}
 }
 
-func (uds userDomainService) IsExists(ctx context.Context, email email) (bool, error) {
+func (uds userDomainService) IsExists(ctx context.Context, email Email) (bool, error) {
 	user, err := uds.userRepository.FindByEmail(ctx, email)
 	// ユーザーが見つからない場合はエラーではない
 	if err != nil && errors.Is(err, errors.ErrNotFoundUser) {

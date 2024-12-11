@@ -6,7 +6,7 @@ import (
 
 type User struct {
 	id             string
-	email          email
+	email          Email
 	name           string
 	hashedPassword hashedPassword
 }
