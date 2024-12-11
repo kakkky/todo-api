@@ -1,0 +1,1 @@
+alter table users drop (created_at,updated_at);
