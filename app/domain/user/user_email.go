@@ -21,3 +21,7 @@ func newEmail(value string) (Email, error) {
 func reconstructEmail(value string) Email {
 	return Email{value: value}
 }
+
+func (e Email) Value() string {
+	return e.value
+}

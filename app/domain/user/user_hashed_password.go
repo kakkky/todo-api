@@ -33,6 +33,10 @@ func reconstructHashedPassword(value string) hashedPassword {
 	return hashedPassword{value: value}
 }
 
+func (hp hashedPassword) Value() string {
+	return hp.value
+}
+
 // ハッシュ化されたパスワードと比較
 func (p hashedPassword) Compare(target string) bool {
 	return hash.Compare(p.value, target)

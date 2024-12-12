@@ -49,3 +49,19 @@ func ReconstructUser(
 		hashedPassword: reconstructHashedPassword(hashedPassword),
 	}
 }
+
+func (u *User) GetID() string {
+	return u.id
+}
+
+func (u *User) GetName() string {
+	return u.name
+}
+
+func (u *User) GetEmail() Email {
+	return u.email
+}
+
+func (u *User) GetHashedPassword() hashedPassword {
+	return u.hashedPassword
+}
