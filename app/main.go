@@ -7,6 +7,7 @@ import (
 	"github.com/kakkky/app/config"
 	_ "github.com/kakkky/app/docs"
 	"github.com/kakkky/app/infrastructure/db"
+	"github.com/kakkky/app/infrastructure/db/sqlc"
 	"github.com/kakkky/app/infrastructure/router"
 	"github.com/kakkky/app/infrastructure/server"
 )
@@ -23,16 +24,21 @@ func main() {
 		log.Fatalf("failed to read config : %v", err)
 	}
 	if err := run(ctx, cfg); err != nil {
-		// エラー処理
+		log.Printf("error occured in process: %v", err)
 	}
 }
 
 func run(ctx context.Context, cfg *config.Config) error {
-	// DB接続
+	// データベース接続を初期化し、終了時にクローズする
 	close := db.NewDB(ctx, cfg)
 	defer close()
-	// サーバー
+
+	// sqlc を使用したクエリ実行のために、sqlcパッケージにクエリオブジェクト変数を設定
+	sqlc.SetQueries(db.GetDB())
+
+	// サーバーを起動し、指定したポートでリクエストを処理
 	srv := server.NewServer(cfg.Server.Port, router.NewMux())
 	srv.Run(ctx)
+
 	return nil
 }

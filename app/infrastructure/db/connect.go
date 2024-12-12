@@ -25,6 +25,7 @@ func GetDB() *sql.DB {
 	return db
 }
 
+// DBをに接続する
 func NewDB(ctx context.Context, cfg *config.Config) func() {
 	db, close, err := connect(
 		ctx,
@@ -38,7 +39,7 @@ func NewDB(ctx context.Context, cfg *config.Config) func() {
 		// DB接続失敗は復旧不可
 		panic(err)
 	}
-	// パッケージ変数にセット
+	// dbパッケージ変数にセット
 	setDB(db)
 	return close
 }

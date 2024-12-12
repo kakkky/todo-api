@@ -108,7 +108,7 @@ exec-db:
 ### DBマイグレーション ####
 ########################
 
-MIGRATE_PATH = infrastructure/db/sqlc/migrations
+MIGRATE_PATH = infrastructure/db/migrations
 DB_URL = mysql://user:pswd@tcp(db:3306)/todo-db?parseTime=true
 
 # マイグレーションファイルを作成
