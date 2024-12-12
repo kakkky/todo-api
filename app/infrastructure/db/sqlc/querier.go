@@ -9,11 +9,11 @@ import (
 )
 
 type Querier interface {
-	DeleteUser(ctx context.Context) error
+	DeleteUser(ctx context.Context, id string) error
 	FetchAllUser(ctx context.Context) ([]FetchAllUserRow, error)
-	FindUserByEmail(ctx context.Context) (FindUserByEmailRow, error)
-	InsertUser(ctx context.Context) error
-	UpdateUser(ctx context.Context) error
+	FindUserByEmail(ctx context.Context, email string) (FindUserByEmailRow, error)
+	InsertUser(ctx context.Context, arg InsertUserParams) error
+	UpdateUser(ctx context.Context, arg UpdateUserParams) error
 }
 
 var _ Querier = (*Queries)(nil)

@@ -8,7 +8,7 @@ sql:
         package: "sqlc"
         out: "./"
         emit_json_tags: false #構造体にjsonタグをつけない
-        emit_prepared_queries: true #プリペアードステートメント
+        emit_prepared_queries: false #プリペアードステートメントは使用しない
         emit_interface: true #queryごとにインターフェースを生成
         emit_exact_table_names: false #テーブル名(s抜き)がそのまま構造体としない
         emit_empty_slices: true #:manyクエリでnilの代わりに空スライスが返される
