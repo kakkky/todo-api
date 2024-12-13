@@ -60,7 +60,7 @@ func TestUserDomainService_IsExists(t *testing.T) {
 			ctx := context.Background()
 			got, err := sut.IsExists(ctx, tt.email)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("want error %v,but got %v : %v", tt.wantErr, got, err)
+				t.Errorf("userDomainService.IsExists() want error %v,but got %v : %v", tt.wantErr, got, err)
 			}
 			if got != tt.want {
 				t.Errorf("userDomainService.IsExists()= %v,but want %v", got, tt.want)

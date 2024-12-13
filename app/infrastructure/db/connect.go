@@ -17,7 +17,7 @@ var (
 )
 
 // パッケージ変数として*sql.DBをセット
-func setDB(d *sql.DB) {
+func SetDB(d *sql.DB) {
 	db = d
 }
 
@@ -40,7 +40,7 @@ func NewDB(ctx context.Context, cfg *config.Config) func() {
 		panic(err)
 	}
 	// dbパッケージ変数にセット
-	setDB(db)
+	SetDB(db)
 	return close
 }
 

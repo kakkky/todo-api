@@ -18,6 +18,7 @@ func NewUserRepository() user.UserRepository {
 func (ur *userRepository) Save(ctx context.Context, user *user.User) error {
 	queries := sqlc.GetQueries()
 	params := sqlc.InsertUserParams{
+		ID:             user.GetID(),
 		Name:           user.GetName(),
 		Email:          user.GetEmail().Value(),
 		HashedPassword: user.GetHashedPassword().Value(),

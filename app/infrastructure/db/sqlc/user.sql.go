@@ -86,10 +86,12 @@ func (q *Queries) FindUserByEmail(ctx context.Context, email string) (FindUserBy
 
 const insertUser = `-- name: InsertUser :exec
 insert into users (
+    id,
     name,
     email,
     hashed_password
 ) values (
+    ?,
     ?,
     ?,
     ?
@@ -97,13 +99,19 @@ insert into users (
 `
 
 type InsertUserParams struct {
+	ID             string
 	Name           string
 	Email          string
 	HashedPassword string
 }
 
 func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) error {
-	_, err := q.db.ExecContext(ctx, insertUser, arg.Name, arg.Email, arg.HashedPassword)
+	_, err := q.db.ExecContext(ctx, insertUser,
+		arg.ID,
+		arg.Name,
+		arg.Email,
+		arg.HashedPassword,
+	)
 	return err
 }
 

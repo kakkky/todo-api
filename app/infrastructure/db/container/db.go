@@ -61,7 +61,7 @@ const migrationsRelativePath = "../migrations"
 func getMigrationsPath() string {
 	// コールスタックを遡って、Callerを呼んだ階層の情報を取得する
 	// Callerを呼んだ階層とは、つまりこのcontainerディレクトリのこと
-	_, callerFile, _, ok := runtime.Caller(2)
+	_, callerFile, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Fatal("failed to get caller directory")
 	}

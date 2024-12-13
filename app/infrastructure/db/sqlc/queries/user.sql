@@ -9,10 +9,12 @@ from users;
 
 -- name: InsertUser :exec
 insert into users (
+    id,
     name,
     email,
     hashed_password
 ) values (
+    sqlc.arg(id),
     sqlc.arg(name),
     sqlc.arg(email),
     sqlc.arg(hashed_password)
