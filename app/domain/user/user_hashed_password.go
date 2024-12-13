@@ -7,7 +7,7 @@ import (
 	"github.com/kakkky/pkg/hash"
 )
 
-type hashedPassword struct {
+type HashedPassword struct {
 	value string
 }
 
@@ -15,29 +15,29 @@ const (
 	minPasswordLength = 6
 )
 
-func newHashedPassword(value string) (hashedPassword, error) {
+func newHashedPassword(value string) (HashedPassword, error) {
 	// バリデーション
 	if minPasswordLength >= utf8.RuneCountInString(value) {
-		return hashedPassword{}, errors.ErrPasswordTooShort
+		return HashedPassword{}, errors.ErrPasswordTooShort
 	}
 	// ハッシュ化する
 	hashed, err := hash.Hash(value)
 	if err != nil {
-		return hashedPassword{}, err
+		return HashedPassword{}, err
 	}
 
-	return hashedPassword{value: hashed}, nil
+	return HashedPassword{value: hashed}, nil
 }
 
-func reconstructHashedPassword(value string) hashedPassword {
-	return hashedPassword{value: value}
+func reconstructHashedPassword(value string) HashedPassword {
+	return HashedPassword{value: value}
 }
 
-func (hp hashedPassword) Value() string {
+func (hp HashedPassword) Value() string {
 	return hp.value
 }
 
 // ハッシュ化されたパスワードと比較
-func (p hashedPassword) Compare(target string) bool {
+func (p HashedPassword) Compare(target string) bool {
 	return hash.Compare(p.value, target)
 }

@@ -8,7 +8,7 @@ type User struct {
 	id             string
 	email          Email
 	name           string
-	hashedPassword hashedPassword
+	hashedPassword HashedPassword
 }
 
 // ファクトリー関数
@@ -62,6 +62,6 @@ func (u *User) GetEmail() Email {
 	return u.email
 }
 
-func (u *User) GetHashedPassword() hashedPassword {
+func (u *User) GetHashedPassword() HashedPassword {
 	return u.hashedPassword
 }
