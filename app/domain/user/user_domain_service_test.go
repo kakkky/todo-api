@@ -28,7 +28,7 @@ func TestUserDomainService_IsExists(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:  "正常系: ユーザーが存在しない",
+			name:  "準正常系: ユーザーが存在しない",
 			email: Email{value: "test@example.com"},
 			mockFn: func(m *MockUserRepository) {
 				m.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(nil, errors.ErrNotFoundUser)

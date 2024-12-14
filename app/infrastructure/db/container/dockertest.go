@@ -16,7 +16,7 @@ var (
 )
 
 // DockerTestのコンテナを起動
-func NewDockerTestContainer() (*dockertest.Pool, *dockertest.Resource) {
+func NewDockertestContainer() (*dockertest.Pool, *dockertest.Resource) {
 	// デフォルトでUnixソケットを使用する
 	pool, err := dockertest.NewPool("")
 	if err != nil {
@@ -56,7 +56,7 @@ func NewDockerTestContainer() (*dockertest.Pool, *dockertest.Resource) {
 }
 
 // コンテナを削除する
-func RemoveDockerTestContainer(pool *dockertest.Pool, resource *dockertest.Resource) {
+func RemoveDockertestContainer(pool *dockertest.Pool, resource *dockertest.Resource) {
 	if err := pool.Purge(resource); err != nil {
 		log.Fatalf("failed to  purge resource: %s", err)
 	}

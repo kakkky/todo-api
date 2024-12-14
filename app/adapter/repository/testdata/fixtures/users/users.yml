@@ -1,0 +1,4 @@
+- id: 1
+  name: user1
+  email: user1@test.com
+  hashed_password: password

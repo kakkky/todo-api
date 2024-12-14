@@ -19,14 +19,14 @@ func TestIsValid(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "異常系: 空文字",
+			name: "正常系: 空文字",
 			args: args{
 				s: "",
 			},
 			want: false,
 		},
 		{
-			name: "異常系: 32文字",
+			name: "正常系: 32文字",
 			args: args{
 				s: "01234567890123456789012345678901",
 			},

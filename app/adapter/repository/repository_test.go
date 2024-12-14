@@ -11,10 +11,10 @@ import (
 
 func TestMain(m *testing.M) {
 	//dockertestコンテナを起動
-	pool, resource := container.NewDockerTestContainer()
+	pool, resource := container.NewDockertestContainer()
 	log.Println("success to start dockertest container")
 	defer func() {
-		container.RemoveDockerTestContainer(pool, resource)
+		container.RemoveDockertestContainer(pool, resource)
 		log.Println("success to remove dockertest container")
 	}()
 	// DBに接続
