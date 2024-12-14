@@ -38,13 +38,22 @@ test-domain:
 	cd ./app/domain && $(call tests)
 
 # リポジトリのテスト
-# コマンド例: $ make test-domain path=./... opts="-run TestXxx"
+# コマンド例: $ make test-presentation path=./... opts="-run TestXxx"
 test-repo:
 	$(eval TEST_PATH=$(or $(path),./...))
 	$(eval TEST_TAGS=$(tags))
 	$(eval TEST_OPTIONS=${opts})
-	@echo "Running tests in domain..."
+	@echo "Running tests in repository..."
 	cd ./app/adapter/repository && $(call tests)
+
+# リポジトリのテスト
+# コマンド例: $ make test-presentation path=./... opts="-run TestXxx"
+test-presentation:
+	$(eval TEST_PATH=$(or $(path),./...))
+	$(eval TEST_TAGS=$(tags))
+	$(eval TEST_OPTIONS=${opts})
+	@echo "Running tests in presentation..."
+	cd ./app/adapter/presentation && $(call tests)
 
 
 # インフラ層のテスト

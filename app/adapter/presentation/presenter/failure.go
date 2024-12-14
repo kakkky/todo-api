@@ -10,11 +10,11 @@ type FailureResponse struct {
 	Message string `json:"message"`
 }
 
-func RespondStatusInternalServerError(w http.ResponseWriter, message string) {
-	respondFailure(w, http.StatusInternalServerError, message)
+func RespondInternalServerError(w http.ResponseWriter, message string) {
+	respondJsonFailure(w, http.StatusInternalServerError, message)
 }
 
-func respondFailure(w http.ResponseWriter, statusCode int, message string) {
+func respondJsonFailure(w http.ResponseWriter, statusCode int, message string) {
 	jsonResp := FailureResponse{
 		Status:  statusCode,
 		Message: message,

@@ -15,5 +15,5 @@ func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	resp := healthResponse{
 		HealthCheck: "ok",
 	}
-	presenter.RespondStatusOK(w, resp)
+	presenter.RespondOK(w, resp)
 }
