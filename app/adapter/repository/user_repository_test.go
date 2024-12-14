@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -11,7 +12,7 @@ import (
 	testhelper "github.com/kakkky/app/infrastructure/db/test_helper"
 )
 
-func TestUserRepository_Save_And_FindByEmail(t *testing.T) {
+func TestUserRepository_Save(t *testing.T) {
 	t.Parallel()
 	userRepository := NewUserRepository()
 	// ユーザーインスタンスを用意
@@ -44,7 +45,6 @@ func TestUserRepository_Save_And_FindByEmail(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
 			ctx := context.Background()
 			// ユーザーを保存
 			if err := userRepository.Save(ctx, tt.args.user); (err != nil) != tt.wantErr {
@@ -71,9 +71,9 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 		"user1",
 		"password",
 	)
-	user2, _ := user.NewUser(
-		"user2@test.com",
-		"user2",
+	noExistentUser, _ := user.NewUser(
+		"noexistent@test.com",
+		"noexistent",
 		"password",
 	)
 	type args struct {
@@ -98,7 +98,7 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 			name: "準正常系：ユーザーが見つからなければErrNotFoundUserが返ってくる",
 			args: args{
 				// 存在しないuser2のemailで検索
-				email: user2.GetEmail(),
+				email: noExistentUser.GetEmail(),
 			},
 			errType: errors.ErrNotFoundUser,
 			wantErr: true,
@@ -107,9 +107,8 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
 			// user1のみがDBに保存されている
-			testhelper.SetupFixtures(t, "testdata/fixtures/users/users.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
 			ctx := context.Background()
 			got, err := userRepository.FindByEmail(ctx, tt.args.email)
 			// 期待されるエラータイプが設定されている場合はそれも検証
@@ -118,10 +117,151 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 				return
 			}
 			if (err != nil) != tt.wantErr {
-				t.Errorf("userRepository.FindByEmail() =error:%v, wantErr:%v", err, err)
+				t.Errorf("userRepository.FindByEmail() =error:%v, wantErr:%v", err, tt.wantErr)
 			}
 			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(user.User{}, user.Email{}, user.HashedPassword{}), cmpopts.IgnoreFields(user.User{}, "id", "hashedPassword")); diff != "" {
 				t.Errorf("userRepository.FindByEmail() -got,+want :%v ", diff)
+			}
+		})
+	}
+}
+
+func TestUserRepository_FetchAllUsers(t *testing.T) {
+	t.Parallel()
+	userRepository := NewUserRepository()
+	var users user.Users
+	for i := 0; i < 3; i++ {
+		u, _ := user.NewUser(
+			fmt.Sprintf("user%d@test.com", i+1),
+			fmt.Sprintf("user%d", i+1),
+			"password",
+		)
+		users = append(users, u)
+	}
+	tests := []struct {
+		name    string
+		want    user.Users
+		wantErr bool
+	}{
+		{
+			name:    "正常系：全てのユーザーを取得できる",
+			want:    users,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
+			ctx := context.Background()
+			got, err := userRepository.FetchAllUsers(ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("userRepository.FetchAllUsers() =error:%v, wantErr:%v", err, tt.wantErr)
+			}
+			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(user.User{}, user.Email{}, user.HashedPassword{}), cmpopts.IgnoreFields(user.User{}, "id", "hashedPassword")); diff != "" {
+				t.Errorf("userRepository.FetchAllUsers() -got,+want :%v ", diff)
+			}
+		})
+	}
+}
+
+func TestUserRepository_Update(t *testing.T) {
+	t.Parallel()
+	userRepository := NewUserRepository()
+	// 更新情報を詰め替えて再構成したユーザー
+	updatingUser := user.ReconstructUser(
+		"1",
+		"updated@test.com", // 更新
+		"updatedUser",      // 更新
+		"password",
+	)
+	updatingNameUser := user.ReconstructUser(
+		"1",
+		"user1@test.com",
+		"nameUpdatedUser", //更新
+		"password",
+	)
+	type args struct {
+		user *user.User
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *user.User
+		wantErr bool
+	}{
+		{
+			name: "正常系: emailとnameの両方を更新する",
+			args: args{
+				user: updatingUser,
+			},
+			want:    updatingUser,
+			wantErr: false,
+		},
+		{
+			name: "正常系: nameのみを更新する",
+			args: args{
+				user: updatingNameUser,
+			},
+			want:    updatingNameUser,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
+			ctx := context.Background()
+			if err := userRepository.Update(ctx, tt.args.user); (err != nil) != tt.wantErr {
+				t.Errorf("userRepository.Update()=error:%v, wantErr:%v", err, tt.wantErr)
+			}
+			got, err := userRepository.FindByEmail(ctx, tt.args.user.GetEmail())
+			if (err != nil) != tt.wantErr {
+				t.Errorf("userRepository.FindByEmail()=error:%v, wantErr:%v", err, tt.wantErr)
+			}
+			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(user.User{}, user.Email{}, user.HashedPassword{}), cmpopts.IgnoreFields(user.User{}, "id", "hashedPassword")); diff != "" {
+				t.Errorf("userRepository.FindByEmail() -got,+want :%v ", diff)
+			}
+		})
+	}
+}
+func TestUserRepository_Delete(t *testing.T) {
+	t.Parallel()
+	userRepository := NewUserRepository()
+	deletingUser := user.ReconstructUser(
+		"1",
+		"user1@test.com",
+		"user1",
+		"password",
+	)
+	type args struct {
+		user *user.User
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "正常系: 指定のユーザーを削除できる",
+			args: args{
+				user: deletingUser,
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
+			ctx := context.Background()
+			if err := userRepository.Delete(ctx, tt.args.user); (err != nil) != tt.wantErr {
+				t.Errorf("userRepository.Delete()=error:%v, wantErr:%v", err, tt.wantErr)
+			}
+			_, err := userRepository.FindByEmail(ctx, deletingUser.GetEmail())
+			// エラーがあればそれはErrNotFoundUserであるべき
+			if err != nil && !errors.Is(err, errors.ErrNotFoundUser) {
+				t.Errorf("userRepository.FindByEmail()=error:%v, wantErr:%v", err, tt.wantErr)
 			}
 		})
 	}

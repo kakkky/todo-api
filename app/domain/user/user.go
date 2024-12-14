@@ -34,7 +34,6 @@ func NewUser(
 }
 
 // 既存のユーザーを返す
-// リポジトリからのみ使用する
 // インスタンスの再構成
 func ReconstructUser(
 	id string,

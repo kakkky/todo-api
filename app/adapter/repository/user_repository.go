@@ -73,9 +73,9 @@ func (ur *userRepository) FetchAllUsers(ctx context.Context) (user.Users, error)
 func (ur *userRepository) Update(ctx context.Context, user *user.User) error {
 	queries := sqlc.GetQueries()
 	params := sqlc.UpdateUserParams{
-		ID:    user.GetID(),
 		Name:  user.GetName(),
 		Email: user.GetEmail().Value(),
+		ID:    user.GetID(),
 	}
 	if err := queries.UpdateUser(ctx, params); err != nil {
 		return err
