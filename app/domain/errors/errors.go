@@ -6,6 +6,7 @@ import (
 
 // ユーザー関連
 var (
+	ErrAlreadyRegisterd = errors.New("you have been already registerd")
 	ErrInvalidEmail     = errors.New("invalid email address")
 	ErrPasswordTooShort = errors.New("password is too short")
 	ErrNotFoundUser     = errors.New("user not found")
