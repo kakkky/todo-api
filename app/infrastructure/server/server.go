@@ -41,6 +41,8 @@ func (s *server) Run(ctx context.Context) error {
 			log.Printf("http server on %s failed : %+v", s.srv.Addr, err)
 			return err
 		}
+		log.Printf("The server on %s is gracefully shutting down", s.srv.Addr)
+
 		return nil
 	})
 	// サーバーからのエラーとシグナルを待機する
@@ -48,7 +50,6 @@ func (s *server) Run(ctx context.Context) error {
 	// シャットダウンをするまでのタイムアウト時間を設定
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	//
 	if err := s.srv.Shutdown(ctx); err != nil {
 		log.Fatalf("failed to shutdown http server on %s : %+v", s.srv.Addr, err)
 	}
