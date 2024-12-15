@@ -47,6 +47,24 @@ func (ur *userRepository) FindByEmail(ctx context.Context, email user.Email) (*u
 	return user, nil
 }
 
+func (ur *userRepository) FindById(ctx context.Context, id string) (*user.User, error) {
+	queries := sqlc.GetQueries()
+	u, err := queries.FindUserById(ctx, id)
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
+		return nil, errors.ErrNotFoundUser
+	}
+	if err != nil {
+		return nil, err
+	}
+	user := user.ReconstructUser(
+		u.ID,
+		u.Email,
+		u.Name,
+		u.HashedPassword,
+	)
+	return user, nil
+}
+
 func (ur *userRepository) FetchAllUsers(ctx context.Context) (user.Users, error) {
 	queries := sqlc.GetQueries()
 	us, err := queries.FetchAllUser(ctx)

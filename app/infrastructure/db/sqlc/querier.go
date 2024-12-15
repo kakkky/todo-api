@@ -12,6 +12,7 @@ type Querier interface {
 	DeleteUser(ctx context.Context, id string) error
 	FetchAllUser(ctx context.Context) ([]FetchAllUserRow, error)
 	FindUserByEmail(ctx context.Context, email string) (FindUserByEmailRow, error)
+	FindUserById(ctx context.Context, id string) (FindUserByIdRow, error)
 	InsertUser(ctx context.Context, arg InsertUserParams) error
 	UpdateUser(ctx context.Context, arg UpdateUserParams) error
 }

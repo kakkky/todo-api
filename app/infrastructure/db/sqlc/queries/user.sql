@@ -3,6 +3,11 @@ select id,email,name,hashed_password
 from users
 where email = sqlc.arg(email);
 
+-- name: FindUserById :one
+select id,email,name,hashed_password
+from users
+where id = sqlc.arg(id);
+
 -- name: FetchAllUser :many
 select id,email,name,hashed_password
 from users;

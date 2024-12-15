@@ -125,6 +125,69 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 		})
 	}
 }
+func TestUserRepository_FindById(t *testing.T) {
+	t.Parallel()
+	userRepository := NewUserRepository()
+	user1 := user.ReconstructUser(
+		"1",
+		"user1@test.com",
+		"user1",
+		"password",
+	)
+	noExistentUser := user.ReconstructUser(
+		"noExistent",
+		"",
+		"",
+		"",
+	)
+	type args struct {
+		id string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *user.User
+		errType error
+		wantErr bool
+	}{
+		{
+			name: "正常系：ユーザーを検索できる",
+			args: args{
+				id: user1.GetID(),
+			},
+			want:    user1,
+			wantErr: false,
+		},
+		{
+			name: "準正常系：ユーザーが見つからなければErrNotFoundUserが返ってくる",
+			args: args{
+				id: noExistentUser.GetID(),
+			},
+			errType: errors.ErrNotFoundUser,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			// user1のみがDBに保存されている
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
+			ctx := context.Background()
+			got, err := userRepository.FindById(ctx, tt.args.id)
+			// 期待されるエラータイプが設定されている場合はそれも検証
+			if (err != nil) != tt.wantErr && tt.errType != nil {
+				t.Errorf("userRepository.FindById() =error:%v, want errType:%v", err, tt.errType)
+				return
+			}
+			if (err != nil) != tt.wantErr {
+				t.Errorf("userRepository.FindById() =error:%v, wantErr:%v", err, tt.wantErr)
+			}
+			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(user.User{}, user.Email{}, user.HashedPassword{}), cmpopts.IgnoreFields(user.User{}, "id", "hashedPassword")); diff != "" {
+				t.Errorf("userRepository.FindById() -got,+want :%v ", diff)
+			}
+		})
+	}
+}
 
 func TestUserRepository_FetchAllUsers(t *testing.T) {
 	t.Parallel()

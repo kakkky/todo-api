@@ -84,6 +84,31 @@ func (q *Queries) FindUserByEmail(ctx context.Context, email string) (FindUserBy
 	return i, err
 }
 
+const findUserById = `-- name: FindUserById :one
+select id,email,name,hashed_password
+from users
+where id = ?
+`
+
+type FindUserByIdRow struct {
+	ID             string
+	Email          string
+	Name           string
+	HashedPassword string
+}
+
+func (q *Queries) FindUserById(ctx context.Context, id string) (FindUserByIdRow, error) {
+	row := q.db.QueryRowContext(ctx, findUserById, id)
+	var i FindUserByIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Name,
+		&i.HashedPassword,
+	)
+	return i, err
+}
+
 const insertUser = `-- name: InsertUser :exec
 insert into users (
     id,
