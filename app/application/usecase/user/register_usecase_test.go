@@ -48,6 +48,7 @@ func TestUser_RegisterUsecase_Run(t *testing.T) {
 				Email:    "email@test.com",
 				Password: "password",
 			},
+			errType: errors.ErrAlreadyRegisterd,
 			wantErr: true,
 		},
 	}
