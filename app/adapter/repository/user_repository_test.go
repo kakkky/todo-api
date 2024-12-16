@@ -13,7 +13,6 @@ import (
 )
 
 func TestUserRepository_Save(t *testing.T) {
-	t.Parallel()
 	userRepository := NewUserRepository()
 	// ユーザーインスタンスを用意
 	user0, _ := user.NewUser(
@@ -64,7 +63,6 @@ func TestUserRepository_Save(t *testing.T) {
 }
 
 func TestUserRepository_FindByEmail(t *testing.T) {
-	t.Parallel()
 	userRepository := NewUserRepository()
 	user1, _ := user.NewUser(
 		"user1@test.com",
@@ -126,7 +124,6 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 	}
 }
 func TestUserRepository_FindById(t *testing.T) {
-	t.Parallel()
 	userRepository := NewUserRepository()
 	user1 := user.ReconstructUser(
 		"1",
@@ -190,7 +187,6 @@ func TestUserRepository_FindById(t *testing.T) {
 }
 
 func TestUserRepository_FetchAllUsers(t *testing.T) {
-	t.Parallel()
 	userRepository := NewUserRepository()
 	var users user.Users
 	for i := 0; i < 3; i++ {
@@ -229,7 +225,6 @@ func TestUserRepository_FetchAllUsers(t *testing.T) {
 }
 
 func TestUserRepository_Update(t *testing.T) {
-	t.Parallel()
 	userRepository := NewUserRepository()
 	// 更新情報を詰め替えて再構成したユーザー
 	updatingUser := user.ReconstructUser(
@@ -289,7 +284,6 @@ func TestUserRepository_Update(t *testing.T) {
 	}
 }
 func TestUserRepository_Delete(t *testing.T) {
-	t.Parallel()
 	userRepository := NewUserRepository()
 	deletingUser := user.ReconstructUser(
 		"1",
