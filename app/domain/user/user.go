@@ -64,6 +64,6 @@ func (u *User) GetHashedPassword() HashedPassword {
 }
 
 // パスワードを比較する
-func (u *User) ComparePassword(plainPassword string) bool {
+func (u *User) ComparePassword(plainPassword string) error {
 	return u.hashedPassword.compare(plainPassword)
 }

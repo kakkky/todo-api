@@ -66,3 +66,39 @@ func TestNewUser(t *testing.T) {
 		})
 	}
 }
+func TestCompairePassword(t *testing.T) {
+	t.Parallel()
+	// パスワードを持ったユーザーを用意
+	user, _ := NewUser(
+		"email@test.com",
+		"testuser",
+		"password",
+	)
+	tests := []struct {
+		name    string
+		plain   string
+		wantErr bool
+	}{
+		{
+			name:    "正常形：パスワードの比較で成功する",
+			plain:   "password",
+			wantErr: false,
+		},
+		{
+			name:    "準正常形：パスワードの比較で成功する",
+			plain:   "incorrect",
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			err := user.ComparePassword(tt.plain)
+			if (err != nil) != tt.wantErr && errors.Is(err, errors.ErrPasswordMismatch) {
+				t.Errorf("ComparePassword() = %v,want %v", err, tt.wantErr)
+			}
+
+		})
+	}
+}

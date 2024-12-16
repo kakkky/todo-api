@@ -50,31 +50,31 @@ func TestCompare(t *testing.T) {
 		name           string
 		password       string
 		targetPassword string
-		want           bool
+		wantErr        bool
 	}{
 		{
 			name:           "correct password match",
 			password:       "testPassword",
 			targetPassword: "testPassword",
-			want:           true,
+			wantErr:        false,
 		},
 		{
 			name:           "incorrect password match",
 			password:       "testPassword",
 			targetPassword: "wrongPassword",
-			want:           false,
+			wantErr:        true,
 		},
 		{
 			name:           "empty password match",
 			password:       "",
 			targetPassword: "",
-			want:           true,
+			wantErr:        false,
 		},
 		{
 			name:           "empty password mismatch",
 			password:       "testPassword",
 			targetPassword: "",
-			want:           false,
+			wantErr:        true,
 		},
 	}
 
@@ -87,9 +87,9 @@ func TestCompare(t *testing.T) {
 			}
 
 			// 比較結果の検証
-			result := Compare(hashedPassword, tt.targetPassword)
-			if result != tt.want {
-				t.Errorf("expected result: %v, got: %v", tt.want, result)
+
+			if err := Compare(hashedPassword, tt.targetPassword); (err != nil) != tt.wantErr {
+				t.Errorf("Compaire() error = %v,wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

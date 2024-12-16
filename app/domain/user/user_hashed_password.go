@@ -39,6 +39,9 @@ func (hp HashedPassword) Value() string {
 
 // ハッシュ化されたパスワードと比較
 // 集約ルートUserから呼び出す
-func (p HashedPassword) compare(target string) bool {
-	return hash.Compare(p.value, target)
+func (p HashedPassword) compare(target string) error {
+	if err := hash.Compare(p.value, target); err != nil {
+		return errors.ErrPasswordMismatch
+	}
+	return nil
 }

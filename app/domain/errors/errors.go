@@ -9,6 +9,7 @@ import (
 var (
 	ErrAlreadyRegisterd = newErrDomain("ErrAlreadyRegisterd", "you have been already registerd")
 	ErrInvalidEmail     = newErrDomain("ErrInvalidEmail", "invalid email address")
+	ErrPasswordMismatch = newErrDomain("ErrPasswordMismatch", "the password is incorrect")
 	ErrPasswordTooShort = newErrDomain("ErrPasswordTooShort", "password is too short")
 	ErrNotFoundUser     = newErrDomain("ErrNotFoundUser", "user not found")
 )
