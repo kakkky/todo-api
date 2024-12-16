@@ -49,18 +49,21 @@ func ReconstructUser(
 	}
 }
 
+// 値のゲッターメソッド
 func (u *User) GetID() string {
 	return u.id
 }
-
 func (u *User) GetName() string {
 	return u.name
 }
-
 func (u *User) GetEmail() Email {
 	return u.email
 }
-
 func (u *User) GetHashedPassword() HashedPassword {
 	return u.hashedPassword
+}
+
+// パスワードを比較する
+func (u *User) ComparePassword(plainPassword string) bool {
+	return u.hashedPassword.compare(plainPassword)
 }

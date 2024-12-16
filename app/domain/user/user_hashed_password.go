@@ -38,6 +38,7 @@ func (hp HashedPassword) Value() string {
 }
 
 // ハッシュ化されたパスワードと比較
-func (p HashedPassword) Compare(target string) bool {
+// 集約ルートUserから呼び出す
+func (p HashedPassword) compare(target string) bool {
 	return hash.Compare(p.value, target)
 }
