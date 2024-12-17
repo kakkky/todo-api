@@ -71,9 +71,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: 新しいユーザーを作成します。
+      description: 新しいユーザーを登録する
       parameters:
-      - description: ユーザー作成のための情報
+      - description: ユーザー登録のための情報
         in: body
         name: request
         required: true
@@ -83,7 +83,7 @@ paths:
       - application/json
       responses:
         "201":
-          description: 作成されたユーザーの情報
+          description: 登録されたユーザーの情報
           schema:
             $ref: '#/definitions/presenter.SuccessResponse-user_PostUserResponse'
         "400":
@@ -94,7 +94,32 @@ paths:
           description: 内部サーバーエラー
           schema:
             $ref: '#/definitions/presenter.FailureResponse'
-      summary: ユーザーの作成
+      summary: ユーザーの登録
+      tags:
+      - User
+  /user/{id}:
+    delete:
+      description: ユーザーを退会させ、ユーザー情報を削除する
+      parameters:
+      - description: 削除するユーザーのid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      summary: ユーザーの退会
       tags:
       - User
 swagger: "2.0"

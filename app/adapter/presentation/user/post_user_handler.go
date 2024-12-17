@@ -20,13 +20,13 @@ func NewPostUserHandler(registerUsecase *user.RegisterUsecase) *PostUserHandler 
 	}
 }
 
-// @Summary     ユーザーの作成
-// @Description 新しいユーザーを作成します。
+// @Summary     ユーザーの登録
+// @Description 新しいユーザーを登録する
 // @Tags        User
 // @Accept      json
 // @Produce     json
-// @Param       request body     PostUserRequest                             true "ユーザー作成のための情報"
-// @Success     201     {object} presenter.SuccessResponse[PostUserResponse] "作成されたユーザーの情報"
+// @Param       request body     PostUserRequest                             true "ユーザー登録のための情報"
+// @Success     201     {object} presenter.SuccessResponse[PostUserResponse] "登録されたユーザーの情報"
 // @Failure     400     {object} presenter.FailureResponse                   "不正なリクエスト"
 // @Failure     500     {object} presenter.FailureResponse                   "内部サーバーエラー"
 // @Router      /user [post]

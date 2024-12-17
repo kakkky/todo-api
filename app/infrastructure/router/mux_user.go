@@ -10,7 +10,11 @@ import (
 )
 
 func handleUser(mux *http.ServeMux) {
+	userRepository := repository.NewUserRepository()
 	mux.Handle("POST /user", userHandler.NewPostUserHandler(userUsecase.NewRegisterUsecase(
-		repository.NewUserRepository(), user.NewUserDomainService(repository.NewUserRepository()),
+		userRepository, user.NewUserDomainService(userRepository),
+	)))
+	mux.Handle("DELETE /user/{id}", userHandler.NewDeleteUserHandler(userUsecase.NewUnregisterUsecase(
+		userRepository,
 	)))
 }

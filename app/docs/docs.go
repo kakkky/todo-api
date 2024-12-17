@@ -35,7 +35,7 @@ const docTemplate = `{
         },
         "/user": {
             "post": {
-                "description": "新しいユーザーを作成します。",
+                "description": "新しいユーザーを登録する",
                 "consumes": [
                     "application/json"
                 ],
@@ -45,10 +45,10 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "ユーザーの作成",
+                "summary": "ユーザーの登録",
                 "parameters": [
                     {
-                        "description": "ユーザー作成のための情報",
+                        "description": "ユーザー登録のための情報",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -59,10 +59,48 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "作成されたユーザーの情報",
+                        "description": "登録されたユーザーの情報",
                         "schema": {
                             "$ref": "#/definitions/presenter.SuccessResponse-user_PostUserResponse"
                         }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "delete": {
+                "description": "ユーザーを退会させ、ユーザー情報を削除する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "ユーザーの退会",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "削除するユーザーのid",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "不正なリクエスト",
