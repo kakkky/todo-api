@@ -7,6 +7,6 @@ type PostUserRequest struct {
 }
 
 type PostUserResponse struct {
-	Email string `json:"email" validate:"required"`
-	Name  string `json:"name" validate:"required"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
 }

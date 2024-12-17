@@ -116,6 +116,38 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/users": {
+            "get": {
+                "description": "全てのユーザーのID・名前をリストで取得する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "全ユーザーを取得する",
+                "responses": {
+                    "200": {
+                        "description": "登録されたユーザーの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-array_user_GetUsersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -132,6 +164,20 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.SuccessResponse-array_user_GetUsersResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.GetUsersResponse"
+                    }
                 },
                 "status": {
                     "type": "integer"
@@ -160,6 +206,17 @@ const docTemplate = `{
                 }
             }
         },
+        "user.GetUsersResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "user.PostUserRequest": {
             "type": "object",
             "required": [
@@ -181,10 +238,6 @@ const docTemplate = `{
         },
         "user.PostUserResponse": {
             "type": "object",
-            "required": [
-                "email",
-                "name"
-            ],
             "properties": {
                 "email": {
                     "type": "string"

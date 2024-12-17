@@ -12,6 +12,15 @@ definitions:
       status:
         type: integer
     type: object
+  presenter.SuccessResponse-array_user_GetUsersResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/user.GetUsersResponse'
+        type: array
+      status:
+        type: integer
+    type: object
   presenter.SuccessResponse-health_healthResponse:
     properties:
       data:
@@ -25,6 +34,13 @@ definitions:
         $ref: '#/definitions/user.PostUserResponse'
       status:
         type: integer
+    type: object
+  user.GetUsersResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
     type: object
   user.PostUserRequest:
     properties:
@@ -45,9 +61,6 @@ definitions:
         type: string
       name:
         type: string
-    required:
-    - email
-    - name
     type: object
 host: localhost:8080
 info:
@@ -120,6 +133,27 @@ paths:
           schema:
             $ref: '#/definitions/presenter.FailureResponse'
       summary: ユーザーの退会
+      tags:
+      - User
+  /users:
+    get:
+      description: 全てのユーザーのID・名前をリストで取得する
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登録されたユーザーの情報
+          schema:
+            $ref: '#/definitions/presenter.SuccessResponse-array_user_GetUsersResponse'
+        "400":
+          description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      summary: 全ユーザーを取得する
       tags:
       - User
 swagger: "2.0"
