@@ -6,20 +6,20 @@ import (
 	"github.com/kakkky/app/domain/user"
 )
 
-type EditProfileUsecase struct {
+type UpdateProfileUsecase struct {
 	userRepository user.UserRepository
 }
 
-func NewEditProfileUsecase(
+func NewUpdateProfileUsecase(
 	userRepository user.UserRepository,
-) *EditProfileUsecase {
-	return &EditProfileUsecase{
+) *UpdateProfileUsecase {
+	return &UpdateProfileUsecase{
 		userRepository: userRepository,
 	}
 }
 
-func (epu *EditProfileUsecase) Run(ctx context.Context, input EditProfileUsecaseInputDTO) (
-	*EditProfileUsecaseOutputDTO, error,
+func (epu *UpdateProfileUsecase) Run(ctx context.Context, input UpdateProfileUsecaseInputDTO) (
+	*UpdateProfileUsecaseOutputDTO, error,
 ) {
 	// 存在しているユーザーしか編集できない
 	u, err := epu.userRepository.FindById(ctx, input.ID)
@@ -37,7 +37,7 @@ func (epu *EditProfileUsecase) Run(ctx context.Context, input EditProfileUsecase
 	if err := epu.userRepository.Update(ctx, u); err != nil {
 		return nil, err
 	}
-	return &EditProfileUsecaseOutputDTO{
+	return &UpdateProfileUsecaseOutputDTO{
 		ID:    u.GetID(),
 		Email: u.GetEmail().Value(),
 		Name:  u.GetName(),

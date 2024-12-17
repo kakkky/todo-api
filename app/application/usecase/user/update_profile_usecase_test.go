@@ -10,12 +10,12 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestUser_EditProfileUsecase_Run(t *testing.T) {
+func TestUser_UpdateProfileUsecase_Run(t *testing.T) {
 	tests := []struct {
 		name    string
 		mockFn  func(mr *user.MockUserRepository)
-		input   EditProfileUsecaseInputDTO
-		want    *EditProfileUsecaseOutputDTO
+		input   UpdateProfileUsecaseInputDTO
+		want    *UpdateProfileUsecaseOutputDTO
 		wantErr bool
 	}{
 		{
@@ -25,12 +25,12 @@ func TestUser_EditProfileUsecase_Run(t *testing.T) {
 				mr.EXPECT().Update(gomock.Any(), gomock.Any()).Return(nil)
 
 			},
-			input: EditProfileUsecaseInputDTO{
+			input: UpdateProfileUsecaseInputDTO{
 				ID:    "1",
 				Email: "updated@test.com",
 				Name:  "updatedUser",
 			},
-			want: &EditProfileUsecaseOutputDTO{
+			want: &UpdateProfileUsecaseOutputDTO{
 				ID:    "1",
 				Email: "updated@test.com",
 				Name:  "updatedUser",
@@ -42,7 +42,7 @@ func TestUser_EditProfileUsecase_Run(t *testing.T) {
 			mockFn: func(mr *user.MockUserRepository) {
 				mr.EXPECT().FindById(gomock.Any(), gomock.Any()).Return(nil, errors.ErrNotFoundUser)
 			},
-			input: EditProfileUsecaseInputDTO{
+			input: UpdateProfileUsecaseInputDTO{
 				ID:    "0",
 				Email: "noexistent@test.com",
 				Name:  "noexitstent",
@@ -59,14 +59,14 @@ func TestUser_EditProfileUsecase_Run(t *testing.T) {
 			mockUserRepository := user.NewMockUserRepository(ctrl)
 			tt.mockFn(mockUserRepository)
 			// ユースケースオブジェクト
-			editProfileUsecase := NewEditProfileUsecase(mockUserRepository)
+			UpdateProfileUsecase := NewUpdateProfileUsecase(mockUserRepository)
 			ctx := context.Background()
-			got, err := editProfileUsecase.Run(ctx, tt.input)
+			got, err := UpdateProfileUsecase.Run(ctx, tt.input)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("editProfileUsecase.Run = error:%v,wantErr:%v", err, tt.wantErr)
+				t.Errorf("UpdateProfileUsecase.Run = error:%v,wantErr:%v", err, tt.wantErr)
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("editProfileUsecase.Run() -got,+want :%v ", diff)
+				t.Errorf("UpdateProfileUsecase.Run() -got,+want :%v ", diff)
 			}
 		})
 	}

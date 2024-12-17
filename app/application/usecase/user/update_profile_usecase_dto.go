@@ -1,11 +1,11 @@
 package user
 
-type EditProfileUsecaseInputDTO struct {
+type UpdateProfileUsecaseInputDTO struct {
 	ID    string
 	Name  string
 	Email string
 }
-type EditProfileUsecaseOutputDTO struct {
+type UpdateProfileUsecaseOutputDTO struct {
 	ID    string
 	Name  string
 	Email string
