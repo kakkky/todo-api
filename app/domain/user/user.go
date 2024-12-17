@@ -49,6 +49,25 @@ func ReconstructUser(
 	}
 }
 
+// ユーザーオブジェクト更新
+func UpdateUser(
+	id string,
+	email string,
+	name string,
+	hashedPassword string,
+) (*User, error) {
+	validatedEmail, err := newEmail(email)
+	if err != nil {
+		return nil, err
+	}
+	return &User{
+		id:             id,
+		email:          validatedEmail,
+		name:           name,
+		hashedPassword: reconstructHashedPassword(hashedPassword),
+	}, nil
+}
+
 // 値のゲッターメソッド
 func (u *User) GetID() string {
 	return u.id

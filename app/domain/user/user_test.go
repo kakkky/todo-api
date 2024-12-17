@@ -66,6 +66,61 @@ func TestNewUser(t *testing.T) {
 		})
 	}
 }
+func TestUpdateUser(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		id       string
+		name     string
+		email    string
+		password string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *User
+		errType error
+		wantErr bool
+	}{
+		{
+			name: "正常系",
+			args: args{
+				id:       "1",
+				name:     "test",
+				email:    "example@test.com",
+				password: "password",
+			},
+			want: &User{
+				id:             "1",
+				email:          Email{value: "example@test.com"},
+				name:           "test",
+				hashedPassword: HashedPassword{value: "password"},
+			},
+			wantErr: false,
+		},
+		{
+			name: "準正常系：emailアドレスが不正",
+			args: args{
+				email: "test.com",
+			},
+			errType: errors.ErrInvalidEmail,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			got, err := UpdateUser(tt.args.id, tt.args.email, tt.args.name, tt.args.password)
+			if (err != nil) != tt.wantErr && errors.Is(err, tt.errType) {
+				t.Fatalf("NewUser() error=%v,but wantErr %v", err, tt.wantErr)
+			}
+			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(User{}, Email{}, HashedPassword{}), cmpopts.IgnoreFields(User{}, "id", "hashedPassword")); diff != "" {
+				t.Errorf("NewProduct() -got,+want :%v ", diff)
+			}
+		})
+	}
+}
+
 func TestCompairePassword(t *testing.T) {
 	t.Parallel()
 	// パスワードを持ったユーザーを用意

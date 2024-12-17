@@ -38,6 +38,24 @@ func TestUser_UpdateProfileUsecase_Run(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "正常形:空のフィールドは更新されない",
+			mockFn: func(mr *user.MockUserRepository) {
+				mr.EXPECT().FindById(gomock.Any(), gomock.Any()).Return(user.ReconstructUser("1", "user@test.com", "testuser", ""), nil)
+				mr.EXPECT().Update(gomock.Any(), gomock.Any()).Return(nil)
+
+			},
+			input: UpdateProfileUsecaseInputDTO{
+				ID:   "1",
+				Name: "updatedUser",
+			},
+			want: &UpdateProfileUsecaseOutputDTO{
+				ID:    "1",
+				Email: "user@test.com",
+				Name:  "updatedUser",
+			},
+			wantErr: false,
+		},
+		{
 			name: "準正常形:存在しないユーザーは編集できない",
 			mockFn: func(mr *user.MockUserRepository) {
 				mr.EXPECT().FindById(gomock.Any(), gomock.Any()).Return(nil, errors.ErrNotFoundUser)

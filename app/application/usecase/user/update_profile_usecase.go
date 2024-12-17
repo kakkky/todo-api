@@ -27,19 +27,30 @@ func (epu *UpdateProfileUsecase) Run(ctx context.Context, input UpdateProfileUse
 	if err != nil || u == nil {
 		return nil, err
 	}
+	// 値が空の場合は既存情報を入れる
+	if input.Name == "" {
+		input.Name = u.GetName()
+	}
+	if input.Email == "" {
+		input.Email = u.GetEmail().Value()
+	}
 	// input情報をもとに、更新情報を反映したインスタンスを作成
-	u = user.ReconstructUser(
+	updatedUser, err := user.UpdateUser(
 		input.ID,
 		input.Email,
 		input.Name,
-		"",
+		u.GetHashedPassword().Value(), //パスワードはそのまま
 	)
+	if err != nil {
+		return nil, err
+	}
 	if err := epu.userRepository.Update(ctx, u); err != nil {
 		return nil, err
 	}
+	// 更新したオブジェクトをDTOに詰め替える
 	return &UpdateProfileUsecaseOutputDTO{
-		ID:    u.GetID(),
-		Email: u.GetEmail().Value(),
-		Name:  u.GetName(),
+		ID:    updatedUser.GetID(),
+		Email: updatedUser.GetEmail().Value(),
+		Name:  updatedUser.GetName(),
 	}, nil
 }
