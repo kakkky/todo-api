@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/app/domain/user"
 	"go.uber.org/mock/gomock"
@@ -73,7 +74,7 @@ func TestUser_RegisterUsecase_Run(t *testing.T) {
 				t.Errorf("registerUsecase.Run = error:%v,wantErr:%v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(RegisterUsecaseOutputDTO{}, "ID")); diff != "" {
 				t.Errorf("registerUsecase.Run() -got,+want :%v ", diff)
 			}
 		})

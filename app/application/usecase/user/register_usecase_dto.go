@@ -7,6 +7,7 @@ type RegisterUsecaseInputDTO struct {
 }
 
 type RegisterUsecaseOutputDTO struct {
+	ID    string
 	Name  string
 	Email string
 }

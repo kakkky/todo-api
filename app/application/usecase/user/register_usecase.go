@@ -46,6 +46,7 @@ func (ru *RegisterUsecase) Run(ctx context.Context, input RegisterUsecaseInputDT
 	}
 	// DTOに詰め替えて返す
 	return &RegisterUsecaseOutputDTO{
+		ID:    u.GetID(),
 		Name:  u.GetName(),
 		Email: u.GetEmail().Value(),
 	}, nil

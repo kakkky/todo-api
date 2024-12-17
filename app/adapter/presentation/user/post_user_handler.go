@@ -59,6 +59,7 @@ func (puh *PostUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resp := PostUserResponse{
+		ID:    output.ID,
 		Email: output.Email,
 		Name:  output.Name,
 	}
