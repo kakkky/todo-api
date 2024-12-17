@@ -35,6 +35,13 @@ definitions:
       status:
         type: integer
     type: object
+  presenter.SuccessResponse-user_UpdateUserResponse:
+    properties:
+      data:
+        $ref: '#/definitions/user.UpdateUserResponse'
+      status:
+        type: integer
+    type: object
   user.GetUsersResponse:
     properties:
       id:
@@ -59,6 +66,28 @@ definitions:
     properties:
       email:
         type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  user.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    required:
+    - id
+    type: object
+  user.UpdateUserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
       name:
         type: string
     type: object
@@ -81,6 +110,35 @@ paths:
       tags:
       - HealthCheck
   /user:
+    patch:
+      consumes:
+      - application/json
+      description: ユーザー情報（名前・メールアドレス）を更新する
+      parameters:
+      - description: ユーザー更新のための情報
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登録されたユーザーの情報
+          schema:
+            $ref: '#/definitions/presenter.SuccessResponse-user_UpdateUserResponse'
+        "400":
+          description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      summary: ユーザーの更新
+      tags:
+      - User
     post:
       consumes:
       - application/json

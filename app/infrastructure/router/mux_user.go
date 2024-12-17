@@ -21,4 +21,7 @@ func handleUser(mux *http.ServeMux) {
 	mux.Handle("GET /users", userHandler.NewGetUsersHandler(userUsecase.NewListUsersUsecase(
 		userRepository,
 	)))
+	mux.Handle("PATCH /user", userHandler.NewUpdateUserHandler(userUsecase.NewUpdateProfileUsecase(
+		userRepository,
+	)))
 }

@@ -77,6 +77,50 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "ユーザー情報（名前・メールアドレス）を更新する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "ユーザーの更新",
+                "parameters": [
+                    {
+                        "description": "ユーザー更新のための情報",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登録されたユーザーの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-user_UpdateUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
             }
         },
         "/user/{id}": {
@@ -206,6 +250,17 @@ const docTemplate = `{
                 }
             }
         },
+        "presenter.SuccessResponse-user_UpdateUserResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/user.UpdateUserResponse"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
         "user.GetUsersResponse": {
             "type": "object",
             "properties": {
@@ -240,6 +295,40 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UpdateUserRequest": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UpdateUserResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "name": {
