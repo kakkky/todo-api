@@ -44,7 +44,7 @@ func (epu *UpdateProfileUsecase) Run(ctx context.Context, input UpdateProfileUse
 	if err != nil {
 		return nil, err
 	}
-	if err := epu.userRepository.Update(ctx, u); err != nil {
+	if err := epu.userRepository.Update(ctx, updatedUser); err != nil {
 		return nil, err
 	}
 	// 更新したオブジェクトをDTOに詰め替える
