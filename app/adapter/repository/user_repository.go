@@ -68,9 +68,6 @@ func (ur *userRepository) FindById(ctx context.Context, id string) (*user.User, 
 func (ur *userRepository) FetchAllUsers(ctx context.Context) (user.Users, error) {
 	queries := sqlc.GetQueries()
 	us, err := queries.FetchAllUser(ctx)
-	if err != nil && errors.Is(err, sql.ErrNoRows) {
-		return nil, errors.ErrNotFoundUser
-	}
 	if err != nil {
 		return nil, err
 	}
