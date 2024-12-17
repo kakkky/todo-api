@@ -19,12 +19,61 @@ const docTemplate = `{
         "/health": {
             "get": {
                 "description": "apiのヘルスチェックを行う。ルーティングが正常に登録されているかを確かめる。",
+                "tags": [
+                    "HealthCheck"
+                ],
                 "summary": "apiのヘルスチェックを行う",
                 "responses": {
                     "200": {
                         "description": "Health check message",
                         "schema": {
                             "$ref": "#/definitions/presenter.SuccessResponse-health_healthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "post": {
+                "description": "新しいユーザーを作成します。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "ユーザーの作成",
+                "parameters": [
+                    {
+                        "description": "ユーザー作成のための情報",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.PostUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "作成されたユーザーの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-user_PostUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
                         }
                     }
                 }
@@ -40,6 +89,17 @@ const docTemplate = `{
                 }
             }
         },
+        "presenter.FailureResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
         "presenter.SuccessResponse-health_healthResponse": {
             "type": "object",
             "properties": {
@@ -50,6 +110,51 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
+        },
+        "presenter.SuccessResponse-user_PostUserResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/user.PostUserResponse"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user.PostUserRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.PostUserResponse": {
+            "type": "object",
+            "required": [
+                "email",
+                "name"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
@@ -57,7 +162,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost",
+	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "TodoRestAPI",

@@ -6,19 +6,19 @@ import (
 	"github.com/kakkky/app/domain/user"
 )
 
-type editProfileUsecase struct {
+type EditProfileUsecase struct {
 	userRepository user.UserRepository
 }
 
 func NewEditProfileUsecase(
 	userRepository user.UserRepository,
-) *editProfileUsecase {
-	return &editProfileUsecase{
+) *EditProfileUsecase {
+	return &EditProfileUsecase{
 		userRepository: userRepository,
 	}
 }
 
-func (epu *editProfileUsecase) Run(ctx context.Context, input EditProfileUsecaseInputDTO) (
+func (epu *EditProfileUsecase) Run(ctx context.Context, input EditProfileUsecaseInputDTO) (
 	*EditProfileUsecaseOutputDTO, error,
 ) {
 	// 存在しているユーザーしか編集できない

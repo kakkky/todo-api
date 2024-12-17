@@ -25,7 +25,7 @@ type ErrDomain struct {
 // ドメインエラーのコンストラクタ
 func newErrDomain(errType, message string) *ErrDomain {
 	return &ErrDomain{
-		err: fmt.Errorf("errType => %v,Message => %v", errType, message),
+		err: fmt.Errorf("errType : %v , Message : %v", errType, message),
 	}
 }
 

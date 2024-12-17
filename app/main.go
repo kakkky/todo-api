@@ -15,7 +15,7 @@ import (
 // @title       TodoRestAPI
 // @version     1.0
 // @description This is TodoARestPI by golang.
-// @host        localhost
+// @host        localhost:8080
 // @BasePath    /
 func main() {
 	ctx := context.Background()

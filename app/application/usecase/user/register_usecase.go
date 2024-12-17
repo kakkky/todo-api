@@ -7,7 +7,7 @@ import (
 	"github.com/kakkky/app/domain/user"
 )
 
-type registerUsecase struct {
+type RegisterUsecase struct {
 	userRepository    user.UserRepository
 	userDomainService user.UserDomainService
 }
@@ -15,14 +15,14 @@ type registerUsecase struct {
 func NewRegisterUsecase(
 	userRepository user.UserRepository,
 	userDomainService user.UserDomainService,
-) *registerUsecase {
-	return &registerUsecase{
+) *RegisterUsecase {
+	return &RegisterUsecase{
 		userRepository:    userRepository,
 		userDomainService: userDomainService,
 	}
 }
 
-func (ru *registerUsecase) Run(ctx context.Context, input RegisterUsecaseInputDTO) (*RegisterUsecaseOutputDTO, error) {
+func (ru *RegisterUsecase) Run(ctx context.Context, input RegisterUsecaseInputDTO) (*RegisterUsecaseOutputDTO, error) {
 	// userインスタンスを生成
 	u, err := user.NewUser(
 		input.Email,

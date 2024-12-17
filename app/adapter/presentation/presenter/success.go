@@ -14,6 +14,10 @@ func RespondOK[T any](w http.ResponseWriter, respBody T) {
 	respondJsonSuccess(w, http.StatusOK, respBody)
 }
 
+func RespondCreated[T any](w http.ResponseWriter, respBody T) {
+	respondJsonSuccess(w, http.StatusCreated, respBody)
+}
+
 func respondJsonSuccess[T any](w http.ResponseWriter, statusCode int, respBody T) {
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
 	w.WriteHeader(statusCode)

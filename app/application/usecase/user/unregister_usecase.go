@@ -6,19 +6,19 @@ import (
 	"github.com/kakkky/app/domain/user"
 )
 
-type unregisterUsecase struct {
+type UnregisterUsecase struct {
 	userRepository user.UserRepository
 }
 
 func NewUnregisterUsecase(
 	userRepository user.UserRepository,
-) *unregisterUsecase {
-	return &unregisterUsecase{
+) *UnregisterUsecase {
+	return &UnregisterUsecase{
 		userRepository: userRepository,
 	}
 }
 
-func (uu *unregisterUsecase) Run(ctx context.Context, input UnregisterUsecaseInputDTO) error {
+func (uu *UnregisterUsecase) Run(ctx context.Context, input UnregisterUsecaseInputDTO) error {
 	// 存在しているユーザーしか削除できない
 	u, err := uu.userRepository.FindById(ctx, input.ID)
 	// エラーかユーザーがnilの場合はエラー

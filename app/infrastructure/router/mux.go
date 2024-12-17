@@ -2,15 +2,22 @@ package router
 
 import (
 	"net/http"
+
+	"github.com/kakkky/app/adapter/presentation/health"
+	swagger "github.com/swaggo/http-swagger"
 )
 
 // ルーティングを登録したマルチプレクサを返す
 func NewMux() http.Handler {
 	mux := http.NewServeMux()
+	// 開発用ルーティング
 	{
-		// 開発用ルーティング
-		handleHealth(mux)
-		handleSwagger(mux)
+		mux.HandleFunc("GET /health", health.HealthCheckHandler)
+		mux.Handle("GET /swagger/", swagger.WrapHandler)
+	}
+	// ユーザー系
+	{
+		handleUser(mux)
 	}
 
 	return mux
