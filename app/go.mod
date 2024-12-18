@@ -33,6 +33,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cncf/xds/go v0.0.0-20240822171458-6449f94b4d59 // indirect
 	github.com/containerd/continuity v0.4.3 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/docker/cli v26.1.4+incompatible // indirect
 	github.com/docker/docker v27.2.0+incompatible // indirect
 	github.com/docker/go-connections v0.5.0 // indirect
@@ -72,6 +73,7 @@ require (
 	github.com/ory/dockertest/v3 v3.11.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
+	github.com/redis/go-redis/v9 v9.7.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/swaggo/files v1.0.1 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect

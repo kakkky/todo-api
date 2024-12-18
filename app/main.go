@@ -8,6 +8,7 @@ import (
 	_ "github.com/kakkky/app/docs"
 	"github.com/kakkky/app/infrastructure/db"
 	"github.com/kakkky/app/infrastructure/db/sqlc"
+	"github.com/kakkky/app/infrastructure/kvs"
 	"github.com/kakkky/app/infrastructure/router"
 	"github.com/kakkky/app/infrastructure/server"
 )
@@ -35,6 +36,10 @@ func run(ctx context.Context, cfg *config.Config) error {
 
 	// sqlc を使用したクエリ実行のために、sqlcパッケージにクエリオブジェクト変数を設定
 	sqlc.SetQueries(db.GetDB())
+
+	// Redisクライアントに接続
+	redisClient := kvs.NewRedisClient(ctx, cfg)
+	defer redisClient.Close()
 
 	// サーバーを起動し、指定したポートでリクエストを処理
 	srv := server.NewServer(cfg.Server.Port, router.NewMux())
