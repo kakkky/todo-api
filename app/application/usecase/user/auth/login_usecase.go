@@ -47,7 +47,7 @@ func (lu *LoginUsecase) Run(ctx context.Context, input LoginUsecaseInputDTO) (
 	jwtId := ulid.NewUlid() //JWTトークンを識別するID
 	token := lu.tokenAuthenticator.GenerateToken(u.GetID(), jwtId)
 	// トークンをkvsに保存
-	if err := lu.tokenAuthenticatorRepository.Save(ctx, time.Duration(2*time.Hour), u.GetID(), jwtId); err != nil {
+	if err := lu.tokenAuthenticatorRepository.Save(ctx, time.Duration(24*time.Hour), u.GetID(), jwtId); err != nil {
 		return nil, err
 	}
 	// 署名済みトークンを発行

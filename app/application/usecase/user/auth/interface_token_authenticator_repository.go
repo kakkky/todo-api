@@ -11,4 +11,5 @@ import (
 type TokenAuthenticatorRepository interface {
 	Save(ctx context.Context, duration time.Duration, userID, jwtID string) error
 	Load(ctx context.Context, user_id string) (string, error)
+	Delete(ctx context.Context, user_id string) error
 }
