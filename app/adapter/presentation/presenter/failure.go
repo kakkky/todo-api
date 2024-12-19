@@ -18,6 +18,10 @@ func RespondInternalServerError(w http.ResponseWriter, message string) {
 	respondJsonFailure(w, http.StatusInternalServerError, message)
 }
 
+func RespondUnAuthorized(w http.ResponseWriter, message string) {
+	respondJsonFailure(w, http.StatusUnauthorized, message)
+}
+
 func respondJsonFailure(w http.ResponseWriter, statusCode int, message string) {
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
 	w.WriteHeader(statusCode)

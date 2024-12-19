@@ -11,8 +11,8 @@ import (
 )
 
 func TestAuth_LoginUsecase_Run(t *testing.T) {
+	t.Parallel()
 	user1, _ := user.NewUser("user1@test.com", "user1", "password")
-
 	tests := []struct {
 		name    string
 		mockFn  func(mur *user.MockUserRepository, ma *MockTokenAuthenticator, mar *MockTokenAuthenticatorRepository)
@@ -36,6 +36,17 @@ func TestAuth_LoginUsecase_Run(t *testing.T) {
 				SignedToken: "jwt",
 			},
 			wantErr: false,
+		},
+		{
+			name: "準正常系:パスワードが異なる",
+			mockFn: func(mur *user.MockUserRepository, ma *MockTokenAuthenticator, mar *MockTokenAuthenticatorRepository) {
+				mur.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(user1, nil)
+			},
+			input: LoginUsecaseInputDTO{
+				Email:    "user1@test.com",
+				Password: "invalid",
+			},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {

@@ -5,11 +5,13 @@ import (
 	"crypto/x509"
 	_ "embed"
 	"encoding/pem"
+
 	"fmt"
 	"log"
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/kakkky/app/domain/errors"
 )
 
 type JWTAuthenticator struct {
@@ -57,6 +59,10 @@ func parsePublicKey(pemData []byte) (*rsa.PublicKey, error) {
 	return pubKey, nil
 }
 
+func (ja *JWTAuthenticator) GetPublicKey() *rsa.PublicKey {
+	return ja.publicKey
+}
+
 func (ja *JWTAuthenticator) GenerateToken(sub, jwtId string) *jwt.Token {
 	claims := jwt.StandardClaims{
 		Id:        jwtId,
@@ -92,4 +98,30 @@ func (ja *JWTAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) 
 		return nil, fmt.Errorf("token is invalid")
 	}
 	return token, nil
+}
+
+func (ja *JWTAuthenticator) GetJWTIDFromClaim(token *jwt.Token) (string, error) {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", errors.New("invalid token claims")
+	}
+	return claims["jti"].(string), nil
+}
+func (ja *JWTAuthenticator) GetSubFromClaim(token *jwt.Token) (string, error) {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", errors.New("invalid token claims")
+	}
+	return claims["sub"].(string), nil
+}
+func (ja *JWTAuthenticator) VerifyExpiresAt(token *jwt.Token) error {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return errors.New("invalid token claims")
+	}
+	exp := claims["exp"].(float64)
+	if time.Now().Unix() > int64(exp) {
+		return errors.New("token has expired")
+	}
+	return nil
 }

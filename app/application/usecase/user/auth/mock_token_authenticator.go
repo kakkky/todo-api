@@ -10,6 +10,7 @@
 package auth
 
 import (
+	rsa "crypto/rsa"
 	reflect "reflect"
 
 	jwt "github.com/golang-jwt/jwt"
@@ -54,6 +55,50 @@ func (mr *MockTokenAuthenticatorMockRecorder) GenerateToken(sub, jwtID any) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateToken", reflect.TypeOf((*MockTokenAuthenticator)(nil).GenerateToken), sub, jwtID)
 }
 
+// GetJWTIDFromClaim mocks base method.
+func (m *MockTokenAuthenticator) GetJWTIDFromClaim(token *jwt.Token) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetJWTIDFromClaim", token)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetJWTIDFromClaim indicates an expected call of GetJWTIDFromClaim.
+func (mr *MockTokenAuthenticatorMockRecorder) GetJWTIDFromClaim(token any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetJWTIDFromClaim", reflect.TypeOf((*MockTokenAuthenticator)(nil).GetJWTIDFromClaim), token)
+}
+
+// GetPublicKey mocks base method.
+func (m *MockTokenAuthenticator) GetPublicKey() *rsa.PublicKey {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPublicKey")
+	ret0, _ := ret[0].(*rsa.PublicKey)
+	return ret0
+}
+
+// GetPublicKey indicates an expected call of GetPublicKey.
+func (mr *MockTokenAuthenticatorMockRecorder) GetPublicKey() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPublicKey", reflect.TypeOf((*MockTokenAuthenticator)(nil).GetPublicKey))
+}
+
+// GetSubFromClaim mocks base method.
+func (m *MockTokenAuthenticator) GetSubFromClaim(token *jwt.Token) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSubFromClaim", token)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSubFromClaim indicates an expected call of GetSubFromClaim.
+func (mr *MockTokenAuthenticatorMockRecorder) GetSubFromClaim(token any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSubFromClaim", reflect.TypeOf((*MockTokenAuthenticator)(nil).GetSubFromClaim), token)
+}
+
 // SignToken mocks base method.
 func (m *MockTokenAuthenticator) SignToken(token *jwt.Token) (string, error) {
 	m.ctrl.T.Helper()
@@ -67,6 +112,20 @@ func (m *MockTokenAuthenticator) SignToken(token *jwt.Token) (string, error) {
 func (mr *MockTokenAuthenticatorMockRecorder) SignToken(token any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SignToken", reflect.TypeOf((*MockTokenAuthenticator)(nil).SignToken), token)
+}
+
+// VerifyExpiresAt mocks base method.
+func (m *MockTokenAuthenticator) VerifyExpiresAt(token *jwt.Token) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "VerifyExpiresAt", token)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// VerifyExpiresAt indicates an expected call of VerifyExpiresAt.
+func (mr *MockTokenAuthenticatorMockRecorder) VerifyExpiresAt(token any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VerifyExpiresAt", reflect.TypeOf((*MockTokenAuthenticator)(nil).VerifyExpiresAt), token)
 }
 
 // VerifyToken mocks base method.
