@@ -1,7 +1,6 @@
 package user
 
 type UpdateUserRequest struct {
-	ID    string `json:"id" validate:"required"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }

@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/kakkky/app/adapter/presentation/middleware"
 	"github.com/kakkky/app/adapter/presentation/presenter"
+
 	"github.com/kakkky/app/application/usecase/user"
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/pkg/validation"
@@ -31,6 +33,7 @@ func NewUpdateUserHandler(updateUserUsecase *user.UpdateProfileUsecase) *UpdateU
 // @Failure     500     {object} presenter.FailureResponse                     "内部サーバーエラー"
 // @Router      /user [patch]
 func (uuh *UpdateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey{}).(string)
 	var params UpdateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
 		presenter.RespondBadRequest(w, err.Error())
@@ -41,7 +44,7 @@ func (uuh *UpdateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	input := user.UpdateProfileUsecaseInputDTO{
-		ID:    params.ID,
+		ID:    userID,
 		Email: params.Email,
 		Name:  params.Name,
 	}

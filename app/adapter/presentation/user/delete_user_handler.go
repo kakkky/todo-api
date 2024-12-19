@@ -29,11 +29,8 @@ func NewDeleteUserHandler(unregisterUsecase *user.UnregisterUsecase) *DeleteUser
 // @Failure     500 {object} presenter.FailureResponse "内部サーバーエラー"
 // @Router      /user/{id} [delete]
 func (duh *DeleteUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// リクエストスコープのコンテキストからuserIdを取得
 	id := r.Context().Value(middleware.UserIDKey{}).(string)
-	if id == "" {
-		presenter.RespondBadRequest(w, "include the user ID as a path parameter in the URL")
-		return
-	}
 	input := user.UnregisterUsecaseInputDTO{
 		ID: id,
 	}
