@@ -7,6 +7,7 @@ import (
 	"github.com/kakkky/app/infrastructure/db"
 	"github.com/kakkky/app/infrastructure/db/container"
 	"github.com/kakkky/app/infrastructure/db/sqlc"
+	"github.com/kakkky/app/infrastructure/kvs"
 )
 
 func TestMain(m *testing.M) {
@@ -29,5 +30,9 @@ func TestMain(m *testing.M) {
 	// sqlcパッケージ変数*Queriesをセット
 	sqlc.SetQueries(db.GetDB())
 	log.Println("dockertest & test-db settings complete")
+	// テスト用のredisサーバーを起動
+	cli := kvs.NewRedisTestClient()
+	defer cli.Close()
+
 	m.Run()
 }
