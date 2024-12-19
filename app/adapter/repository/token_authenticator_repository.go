@@ -14,18 +14,18 @@ func NewTokenAuthenticatorRepository() *tokenAuthenticatorRepository {
 	return &tokenAuthenticatorRepository{}
 }
 
-func (tar *tokenAuthenticatorRepository) Save(ctx context.Context, duration time.Duration, user_id, jwt_id string) error {
+func (tar *tokenAuthenticatorRepository) Save(ctx context.Context, duration time.Duration, userID, jwtID string) error {
 	cli := kvs.GetRedisClient()
-	status := cli.Set(ctx, user_id, jwt_id, duration)
+	status := cli.Set(ctx, userID, jwtID, duration)
 	if status.Err() != nil {
 		return status.Err()
 	}
 	return nil
 }
 
-func (tar *tokenAuthenticatorRepository) Load(ctx context.Context, user_id string) (string, error) {
+func (tar *tokenAuthenticatorRepository) Load(ctx context.Context, userID string) (string, error) {
 	cli := kvs.GetRedisClient()
-	status := cli.Get(ctx, user_id)
+	status := cli.Get(ctx, userID)
 	if status.Err() != nil {
 		if status.Err() == redis.Nil {
 			return "", nil

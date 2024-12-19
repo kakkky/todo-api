@@ -9,8 +9,8 @@ import (
 func TestTokenAuthenticatorRepository_Save_And_Load(t *testing.T) {
 	tokenAuthenticatorRepository := NewTokenAuthenticatorRepository()
 	type args struct {
-		user_id  string
-		jwt_id   string
+		userID   string
+		jwtID    string
 		duration time.Duration
 	}
 	tests := []struct {
@@ -20,10 +20,10 @@ func TestTokenAuthenticatorRepository_Save_And_Load(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "正常系: user_id:jwt_idのペアでredisに保存できる",
+			name: "正常系: userID:jwtIDのペアでredisに保存できる",
 			args: args{
-				user_id:  "1",
-				jwt_id:   "jwt",
+				userID:   "1",
+				jwtID:    "jwt",
 				duration: time.Duration(1 * time.Minute),
 			},
 			want:    "jwt",
@@ -34,10 +34,10 @@ func TestTokenAuthenticatorRepository_Save_And_Load(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
-			if err := tokenAuthenticatorRepository.Save(ctx, tt.args.duration, tt.args.user_id, tt.args.jwt_id); (err != nil) != tt.wantErr {
+			if err := tokenAuthenticatorRepository.Save(ctx, tt.args.duration, tt.args.userID, tt.args.jwtID); (err != nil) != tt.wantErr {
 				t.Errorf("tokenAuthenticatorRepository.Save() error=%v,wantErr %v", err, tt.wantErr)
 			}
-			got, err := tokenAuthenticatorRepository.Load(ctx, tt.args.user_id)
+			got, err := tokenAuthenticatorRepository.Load(ctx, tt.args.userID)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("tokenAuthenticatorRepository.Load() error=%v,wantErr %v", err, tt.wantErr)
 			}

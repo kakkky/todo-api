@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/kakkky/pkg/ulid"
 )
 
 type JWTAuthenticator struct {
@@ -58,9 +57,9 @@ func parsePublicKey(pemData []byte) (*rsa.PublicKey, error) {
 	return pubKey, nil
 }
 
-func (ja *JWTAuthenticator) GenerateToken(sub string) *jwt.Token {
+func (ja *JWTAuthenticator) GenerateToken(sub, jwtId string) *jwt.Token {
 	claims := jwt.StandardClaims{
-		Id:        ulid.NewUlid(),
+		Id:        jwtId,
 		ExpiresAt: time.Now().Add(2 * time.Hour).Unix(),
 		IssuedAt:  time.Now().Unix(),
 		Subject:   sub,
@@ -79,7 +78,7 @@ func (ja *JWTAuthenticator) SignToken(token *jwt.Token) (string, error) {
 
 // 署名済みのトークンを公開鍵によって解析する
 func (ja *JWTAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) {
-	parsedToken, err := jwt.Parse(signedToken, func(t *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(signedToken, func(t *jwt.Token) (interface{}, error) {
 		// トークンの署名アルゴリズムをチェック
 		if _, ok := t.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, fmt.Errorf("unexpected signing method")
@@ -89,8 +88,8 @@ func (ja *JWTAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) 
 	if err != nil {
 		return nil, err
 	}
-	if !parsedToken.Valid {
+	if !token.Valid {
 		return nil, fmt.Errorf("token is invalid")
 	}
-	return parsedToken, nil
+	return token, nil
 }

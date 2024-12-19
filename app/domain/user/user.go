@@ -17,7 +17,7 @@ func NewUser(
 	name string,
 	password string,
 ) (*User, error) {
-	validatedEmail, err := newEmail(email)
+	validatedEmail, err := NewEmail(email)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func UpdateUser(
 	name string,
 	hashedPassword string,
 ) (*User, error) {
-	validatedEmail, err := newEmail(email)
+	validatedEmail, err := NewEmail(email)
 	if err != nil {
 		return nil, err
 	}

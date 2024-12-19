@@ -10,7 +10,7 @@ type Email struct {
 	value string
 }
 
-func newEmail(value string) (Email, error) {
+func NewEmail(value string) (Email, error) {
 	// バリデーション
 	if _, err := mail.ParseAddress(value); err != nil {
 		return Email{}, errors.ErrInvalidEmail
