@@ -40,10 +40,12 @@ func requestLog(r *http.Request) {
 		"Timestamp  : %s\n"+
 		"Method     : %s\n"+
 		"URL        : %s\n"+
+		"Header     : %s\n"+
 		"Body       : \n%s\n",
 		time.Now().Format(time.RFC3339),
 		r.Method,
 		r.URL.Path,
+		r.Header.Get("Authorization"),
 		strReqBody)
 
 	// リクエストボディを再代入

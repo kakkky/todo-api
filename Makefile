@@ -113,6 +113,9 @@ ls:
 exec-db:
 	docker compose exec db /bin/bash
 
+exec-kvs:
+	docker compose exec kvs /bin/bash
+
 ########################
 ### DBマイグレーション ####
 ########################

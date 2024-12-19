@@ -13,7 +13,10 @@ import (
 
 func handleUser(mux *http.ServeMux) {
 	userRepository := repository.NewUserRepository()
-	authorization := middleware.AuthoricationController(auth.NewJWTAuthenticator(), repository.NewTokenAuthenticatorRepository())
+	authorization := middleware.Authorication(
+		auth.NewJWTAuthenticator(),
+		repository.NewTokenAuthenticatorRepository(),
+	)
 
 	mux.Handle("POST /user", composeMiddlewares(middleware.Logger)(
 		userHandler.NewPostUserHandler(
@@ -31,7 +34,7 @@ func handleUser(mux *http.ServeMux) {
 			userUsecase.NewListUsersUsecase(
 				userRepository,
 			))))
-	mux.Handle("PATCH /user", composeMiddlewares(middleware.Logger)(
+	mux.Handle("PATCH /user", composeMiddlewares(authorization, middleware.Logger)(
 		userHandler.NewUpdateUserHandler(userUsecase.NewUpdateProfileUsecase(
 			userRepository,
 		))))
