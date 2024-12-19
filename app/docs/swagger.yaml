@@ -1,5 +1,20 @@
 basePath: /
 definitions:
+  auth.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  auth.LoginResponse:
+    properties:
+      signed_token:
+        type: string
+    type: object
   health.healthResponse:
     properties:
       health_check:
@@ -18,6 +33,13 @@ definitions:
         items:
           $ref: '#/definitions/user.GetUsersResponse'
         type: array
+      status:
+        type: integer
+    type: object
+  presenter.SuccessResponse-auth_LoginResponse:
+    properties:
+      data:
+        $ref: '#/definitions/auth.LoginResponse'
       status:
         type: integer
     type: object
@@ -75,12 +97,8 @@ definitions:
     properties:
       email:
         type: string
-      id:
-        type: string
       name:
         type: string
-    required:
-    - id
     type: object
   user.UpdateUserResponse:
     properties:
@@ -109,7 +127,78 @@ paths:
       summary: apiのヘルスチェックを行う
       tags:
       - HealthCheck
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: メールアドレス・パスワードで認証し、署名されたトークンを返す
+      parameters:
+      - description: 認証に必要な情報
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 署名されたトークンを含む情報
+          schema:
+            $ref: '#/definitions/presenter.SuccessResponse-auth_LoginResponse'
+        "400":
+          description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "401":
+          description: パスワードが不一致
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      summary: ユーザーのログイン
+      tags:
+      - User/Auth
+  /logout:
+    delete:
+      description: メールアドレス・パスワードで認証し、署名されたトークンを返す
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      security:
+      - BearerAuth: []
+      summary: ユーザーのログアウト
+      tags:
+      - User/Auth
   /user:
+    delete:
+      description: ユーザーを退会させ、ユーザー情報を削除する
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      security:
+      - BearerAuth: []
+      summary: ユーザーの退会
+      tags:
+      - User
     patch:
       consumes:
       - application/json
@@ -136,6 +225,8 @@ paths:
           description: 内部サーバーエラー
           schema:
             $ref: '#/definitions/presenter.FailureResponse'
+      security:
+      - BearerAuth: []
       summary: ユーザーの更新
       tags:
       - User
@@ -168,31 +259,6 @@ paths:
       summary: ユーザーの登録
       tags:
       - User
-  /user/{id}:
-    delete:
-      description: ユーザーを退会させ、ユーザー情報を削除する
-      parameters:
-      - description: 削除するユーザーのid
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: 不正なリクエスト
-          schema:
-            $ref: '#/definitions/presenter.FailureResponse'
-        "500":
-          description: 内部サーバーエラー
-          schema:
-            $ref: '#/definitions/presenter.FailureResponse'
-      summary: ユーザーの退会
-      tags:
-      - User
   /users:
     get:
       description: 全てのユーザーのID・名前をリストで取得する
@@ -211,7 +277,14 @@ paths:
           description: 内部サーバーエラー
           schema:
             $ref: '#/definitions/presenter.FailureResponse'
+      security:
+      - BearerAuth: []
       summary: 全ユーザーを取得する
       tags:
       - User
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

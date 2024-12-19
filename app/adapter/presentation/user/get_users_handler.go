@@ -22,6 +22,7 @@ func NewGetUsersHandler(fetchAllUserUsecase *user.ListUsersUsecase) *GetUsersHan
 // @Description 全てのユーザーのID・名前をリストで取得する
 // @Tags        User
 // @Produce     json
+// @Security    BearerAuth
 // @Success     200 {object} presenter.SuccessResponse[[]GetUsersResponse] "登録されたユーザーの情報"
 // @Failure     400 {object} presenter.FailureResponse                     "不正なリクエスト"
 // @Failure     500 {object} presenter.FailureResponse                     "内部サーバーエラー"

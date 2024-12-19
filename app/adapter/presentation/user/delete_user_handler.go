@@ -23,11 +23,11 @@ func NewDeleteUserHandler(unregisterUsecase *user.UnregisterUsecase) *DeleteUser
 // @Description ユーザーを退会させ、ユーザー情報を削除する
 // @Tags        User
 // @Produce     json
-// @Param       id path string true "削除するユーザーのid"
+// @Security    BearerAuth
 // @Success     204
 // @Failure     400 {object} presenter.FailureResponse "不正なリクエスト"
 // @Failure     500 {object} presenter.FailureResponse "内部サーバーエラー"
-// @Router      /user/{id} [delete]
+// @Router      /user [delete]
 func (duh *DeleteUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// リクエストスコープのコンテキストからuserIdを取得
 	id := r.Context().Value(middleware.UserIDKey{}).(string)

@@ -18,6 +18,14 @@ func NewLogoutHandler(logoutUsecase *auth.LogoutUsecase) *LogoutHandler {
 	}
 }
 
+// @Summary     ユーザーのログアウト
+// @Description メールアドレス・パスワードで認証し、署名されたトークンを返す
+// @Tags        User/Auth
+// @Produce     json
+// @Security    BearerAuth
+// @Success     204
+// @Failure     500 {object} presenter.FailureResponse "内部サーバーエラー"
+// @Router      /logout [delete]
 func (lh *LogoutHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// 認可制御のミドルウェアでコンテキストに値が付加されている
 	// リクエストスコープのコンテキストからuserIDを取得する

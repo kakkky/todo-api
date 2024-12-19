@@ -27,9 +27,10 @@ func NewUpdateUserHandler(updateUserUsecase *user.UpdateProfileUsecase) *UpdateU
 // @Tags        User
 // @Accept      json
 // @Produce     json
+// @Security    BearerAuth
 // @Param       request body     UpdateUserRequest                             true "ユーザー更新のための情報"
 // @Success     200     {object} presenter.SuccessResponse[UpdateUserResponse] "登録されたユーザーの情報"
-// @Failure     400     {object} presenter.FailureResponse                      "不正なリクエスト"
+// @Failure     400     {object} presenter.FailureResponse                     "不正なリクエスト"
 // @Failure     500     {object} presenter.FailureResponse                     "内部サーバーエラー"
 // @Router      /user [patch]
 func (uuh *UpdateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

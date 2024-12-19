@@ -13,11 +13,14 @@ import (
 	"github.com/kakkky/app/infrastructure/server"
 )
 
-// @title       TodoRestAPI
-// @version     1.0
-// @description This is TodoARestPI by golang.
-// @host        localhost:8080
-// @BasePath    /
+// @title                      TodoRestAPI
+// @version                    1.0
+// @description                This is TodoARestPI by golang.
+// @host                       localhost:8080
+// @BasePath                   /
+// @securityDefinitions.apikey BearerAuth
+// @in                         header
+// @name                       Authorization
 func main() {
 	ctx := context.Background()
 	cfg, err := config.NewConfig()

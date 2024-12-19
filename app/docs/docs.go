@@ -33,6 +33,86 @@ const docTemplate = `{
                 }
             }
         },
+        "/login": {
+            "post": {
+                "description": "メールアドレス・パスワードで認証し、署名されたトークンを返す",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User/Auth"
+                ],
+                "summary": "ユーザーのログイン",
+                "parameters": [
+                    {
+                        "description": "認証に必要な情報",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "署名されたトークンを含む情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-auth_LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "パスワードが不一致",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "メールアドレス・パスワードで認証し、署名されたトークンを返す",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User/Auth"
+                ],
+                "summary": "ユーザーのログアウト",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "post": {
                 "description": "新しいユーザーを登録する",
@@ -78,7 +158,44 @@ const docTemplate = `{
                     }
                 }
             },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "ユーザーを退会させ、ユーザー情報を削除する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "ユーザーの退会",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "ユーザー情報（名前・メールアドレス）を更新する",
                 "consumes": [
                     "application/json"
@@ -123,46 +240,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/{id}": {
-            "delete": {
-                "description": "ユーザーを退会させ、ユーザー情報を削除する",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "ユーザーの退会",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "削除するユーザーのid",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "400": {
-                        "description": "不正なリクエスト",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.FailureResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "内部サーバーエラー",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.FailureResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/users": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "全てのユーザーのID・名前をリストで取得する",
                 "produces": [
                     "application/json"
@@ -195,6 +279,29 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "auth.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "signed_token": {
+                    "type": "string"
+                }
+            }
+        },
         "health.healthResponse": {
             "type": "object",
             "properties": {
@@ -222,6 +329,17 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/user.GetUsersResponse"
                     }
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.SuccessResponse-auth_LoginResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/auth.LoginResponse"
                 },
                 "status": {
                     "type": "integer"
@@ -307,14 +425,8 @@ const docTemplate = `{
         },
         "user.UpdateUserRequest": {
             "type": "object",
-            "required": [
-                "id"
-            ],
             "properties": {
                 "email": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "name": {
@@ -335,6 +447,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`
