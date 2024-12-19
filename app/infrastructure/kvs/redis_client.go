@@ -18,7 +18,7 @@ func GetRedisClient() *redis.Client {
 }
 
 func NewRedisClient(ctx context.Context, cfg *config.Config) *redis.Client {
-	// パッケージ変数にセット
+	// Redisクライアントを作成
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:         fmt.Sprintf("%s:%s", cfg.Redis.Host, cfg.Redis.Port),
 		ReadTimeout:  3 * time.Second,
@@ -26,6 +26,14 @@ func NewRedisClient(ctx context.Context, cfg *config.Config) *redis.Client {
 		// contextによるタイムアウトを許可
 		ContextTimeoutEnabled: true,
 	})
-	log.Println("success to connect to redis client")
+
+	// Redisが接続できるか確認するため、pingコマンドを実行
+	_, err := redisClient.Ping(ctx).Result()
+	if err != nil {
+		log.Fatalf("failed to connect to redis: %v", err)
+	} else {
+		log.Println("successfully connected to redis")
+	}
+
 	return redisClient
 }

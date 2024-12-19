@@ -3,6 +3,7 @@ package user
 import (
 	"net/http"
 
+	"github.com/kakkky/app/adapter/presentation/middleware"
 	"github.com/kakkky/app/adapter/presentation/presenter"
 	"github.com/kakkky/app/application/usecase/user"
 	"github.com/kakkky/app/domain/errors"
@@ -28,7 +29,7 @@ func NewDeleteUserHandler(unregisterUsecase *user.UnregisterUsecase) *DeleteUser
 // @Failure     500 {object} presenter.FailureResponse "内部サーバーエラー"
 // @Router      /user/{id} [delete]
 func (duh *DeleteUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
+	id := r.Context().Value(middleware.UserIDKey{}).(string)
 	if id == "" {
 		presenter.RespondBadRequest(w, "include the user ID as a path parameter in the URL")
 		return

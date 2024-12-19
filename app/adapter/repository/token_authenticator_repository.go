@@ -2,8 +2,10 @@ package repository
 
 import (
 	"context"
+
 	"time"
 
+	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/app/infrastructure/kvs"
 	"github.com/redis/go-redis/v9"
 )
@@ -16,6 +18,12 @@ func NewTokenAuthenticatorRepository() *tokenAuthenticatorRepository {
 
 func (tar *tokenAuthenticatorRepository) Save(ctx context.Context, duration time.Duration, userID, jwtID string) error {
 	cli := kvs.GetRedisClient()
+
+	// Redis クライアントが nil の場合はエラーを返す
+	if cli == nil {
+		return errors.New("failed to get Redis client")
+	}
+
 	status := cli.Set(ctx, userID, jwtID, duration)
 	if status.Err() != nil {
 		return status.Err()

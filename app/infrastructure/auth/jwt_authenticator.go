@@ -22,7 +22,7 @@ type JWTAuthenticator struct {
 //go:embed certificate/private.pem
 var rawPrivateKey []byte
 
-//go:embed certificate/private.pem
+//go:embed certificate/public.pem
 var rawPublicKey []byte
 
 func NewJWTAuthenticator() *JWTAuthenticator {
@@ -43,11 +43,15 @@ func NewJWTAuthenticator() *JWTAuthenticator {
 
 func parsePrivateKey(pemData []byte) (*rsa.PrivateKey, error) {
 	block, _ := pem.Decode(pemData)
-	key, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	key, err := x509.ParsePKCS8PrivateKey(block.Bytes)
 	if err != nil {
 		return nil, err
 	}
-	return key, nil
+	privateKey, ok := key.(*rsa.PrivateKey)
+	if !ok {
+		return nil, errors.New("unknown key type")
+	}
+	return privateKey, nil
 }
 func parsePublicKey(pemData []byte) (*rsa.PublicKey, error) {
 	block, _ := pem.Decode(pemData)
@@ -55,8 +59,8 @@ func parsePublicKey(pemData []byte) (*rsa.PublicKey, error) {
 	if err != nil {
 		return nil, err
 	}
-	pubKey, _ := key.(*rsa.PublicKey)
-	return pubKey, nil
+	publicKey, _ := key.(*rsa.PublicKey)
+	return publicKey, nil
 }
 
 func (ja *JWTAuthenticator) GetPublicKey() *rsa.PublicKey {

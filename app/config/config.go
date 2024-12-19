@@ -21,8 +21,8 @@ type mysql struct {
 }
 
 type redis struct {
-	Host string `envconfig:"KVS_HOST"`
-	Port string `envconfig:"KVS_PORT"`
+	Host string `envconfig:"TODO_KVS_HOST"`
+	Port string `envconfig:"TODO_KVS_PORT"`
 }
 
 func NewConfig() (*Config, error) {

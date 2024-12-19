@@ -18,6 +18,7 @@ func NewMux() http.Handler {
 	// ユーザー系
 	{
 		handleUser(mux)
+		handleAuth(mux)
 	}
 
 	return mux
