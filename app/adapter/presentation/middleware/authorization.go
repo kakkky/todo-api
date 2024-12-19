@@ -12,7 +12,7 @@ import (
 
 type UserIDKey struct{}
 
-func AuthoricationController(tokenAuthenticator auth.TokenAuthenticator, tokenAuthenticatorRepository auth.TokenAuthenticatorRepository) func(h http.Handler) http.Handler {
+func Authorication(tokenAuthenticator auth.TokenAuthenticator, tokenAuthenticatorRepository auth.TokenAuthenticatorRepository) func(h http.Handler) http.Handler {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			userID, err := authenticateRequest(r, tokenAuthenticator, tokenAuthenticatorRepository)
@@ -20,9 +20,9 @@ func AuthoricationController(tokenAuthenticator auth.TokenAuthenticator, tokenAu
 				presenter.RespondUnAuthorized(w, err.Error())
 				return
 			}
-
 			// コンテキストにuserIDを含める
 			ctx := context.WithValue(r.Context(), UserIDKey{}, userID)
+			// 後続の処理（ハンドラ）を実行する
 			h.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

@@ -41,6 +41,20 @@ func (m *MockTokenAuthenticatorRepository) EXPECT() *MockTokenAuthenticatorRepos
 	return m.recorder
 }
 
+// Delete mocks base method.
+func (m *MockTokenAuthenticatorRepository) Delete(ctx context.Context, user_id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, user_id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockTokenAuthenticatorRepositoryMockRecorder) Delete(ctx, user_id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockTokenAuthenticatorRepository)(nil).Delete), ctx, user_id)
+}
+
 // Load mocks base method.
 func (m *MockTokenAuthenticatorRepository) Load(ctx context.Context, user_id string) (string, error) {
 	m.ctrl.T.Helper()

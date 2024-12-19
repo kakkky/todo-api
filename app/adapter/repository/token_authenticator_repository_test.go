@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestTokenAuthenticatorRepository_Save_And_Load(t *testing.T) {
+func TestTokenAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
 	tokenAuthenticatorRepository := NewTokenAuthenticatorRepository()
 	type args struct {
 		userID   string
@@ -43,6 +43,9 @@ func TestTokenAuthenticatorRepository_Save_And_Load(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("tokenAuthenticatorRepository.Load() got %v, want %v", got, tt.want)
+			}
+			if err := tokenAuthenticatorRepository.Delete(ctx, tt.args.userID); (err != nil) != tt.wantErr {
+				t.Errorf("tokenAuthenticatorRepository.Delete() error=%v,wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

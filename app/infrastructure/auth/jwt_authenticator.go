@@ -70,7 +70,7 @@ func (ja *JWTAuthenticator) GetPublicKey() *rsa.PublicKey {
 func (ja *JWTAuthenticator) GenerateToken(sub, jwtId string) *jwt.Token {
 	claims := jwt.StandardClaims{
 		Id:        jwtId,
-		ExpiresAt: time.Now().Add(2 * time.Hour).Unix(),
+		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 		IssuedAt:  time.Now().Unix(),
 		Subject:   sub,
 	}

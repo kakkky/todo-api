@@ -23,7 +23,6 @@ func (tar *tokenAuthenticatorRepository) Save(ctx context.Context, duration time
 	if cli == nil {
 		return errors.New("failed to get Redis client")
 	}
-
 	status := cli.Set(ctx, userID, jwtID, duration)
 	if status.Err() != nil {
 		return status.Err()
@@ -41,4 +40,16 @@ func (tar *tokenAuthenticatorRepository) Load(ctx context.Context, userID string
 		return "", status.Err()
 	}
 	return status.Val(), nil
+}
+
+func (tar *tokenAuthenticatorRepository) Delete(ctx context.Context, userID string) error {
+	cli := kvs.GetRedisClient()
+	status := cli.Del(ctx, userID)
+	if status.Err() != nil {
+		if status.Err() == redis.Nil {
+			return nil
+		}
+		return status.Err()
+	}
+	return nil
 }
