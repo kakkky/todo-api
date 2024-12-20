@@ -7,15 +7,18 @@ import (
 	userHandler "github.com/kakkky/app/adapter/presentation/user"
 	"github.com/kakkky/app/adapter/repository"
 	userUsecase "github.com/kakkky/app/application/usecase/user"
+	"github.com/kakkky/app/application/usecase/user/auth"
 	"github.com/kakkky/app/domain/user"
-	"github.com/kakkky/app/infrastructure/auth"
+	authInfra "github.com/kakkky/app/infrastructure/auth"
 )
 
 func handleUser(mux *http.ServeMux) {
 	userRepository := repository.NewUserRepository()
 	authorization := middleware.Authorication(
-		auth.NewJWTAuthenticator(),
-		repository.NewTokenAuthenticatorRepository(),
+		auth.NewAuthorizationUsecase(
+			authInfra.NewJWTAuthenticator(),
+			repository.NewTokenAuthenticatorRepository(),
+		),
 	)
 
 	mux.Handle("POST /user", composeMiddlewares(middleware.Logger)(

@@ -7,13 +7,15 @@ import (
 	authHandler "github.com/kakkky/app/adapter/presentation/user/auth"
 	"github.com/kakkky/app/adapter/repository"
 	authUsecase "github.com/kakkky/app/application/usecase/user/auth"
-	"github.com/kakkky/app/infrastructure/auth"
+	authInfra "github.com/kakkky/app/infrastructure/auth"
 )
 
 func handleAuth(mux *http.ServeMux) {
 	authorization := middleware.Authorication(
-		auth.NewJWTAuthenticator(),
-		repository.NewTokenAuthenticatorRepository(),
+		authUsecase.NewAuthorizationUsecase(
+			authInfra.NewJWTAuthenticator(),
+			repository.NewTokenAuthenticatorRepository(),
+		),
 	)
 
 	mux.Handle("POST /login", composeMiddlewares(middleware.Logger)(
@@ -21,13 +23,13 @@ func handleAuth(mux *http.ServeMux) {
 			authUsecase.NewLoginUsecase(
 				repository.NewUserRepository(),
 				repository.NewTokenAuthenticatorRepository(),
-				auth.NewJWTAuthenticator(),
+				authInfra.NewJWTAuthenticator(),
 			))))
 
 	mux.Handle("DELETE /logout", composeMiddlewares(authorization, middleware.Logger)(
 		authHandler.NewLogoutHandler(
 			authUsecase.NewLogoutUsecase(
-				auth.NewJWTAuthenticator(),
+				authInfra.NewJWTAuthenticator(),
 				repository.NewTokenAuthenticatorRepository(),
 			),
 		),

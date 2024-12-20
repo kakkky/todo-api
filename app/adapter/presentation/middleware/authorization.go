@@ -12,14 +12,21 @@ import (
 
 type UserIDKey struct{}
 
-func Authorication(tokenAuthenticator auth.TokenAuthenticator, tokenAuthenticatorRepository auth.TokenAuthenticatorRepository) func(h http.Handler) http.Handler {
+func Authorication(authorizationUsecase *auth.AuthorizationUsecase) func(h http.Handler) http.Handler {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			userID, err := authenticateRequest(r, tokenAuthenticator, tokenAuthenticatorRepository)
+			signedToken, err := getSignedToken(r)
 			if err != nil {
 				presenter.RespondUnAuthorized(w, err.Error())
 				return
 			}
+			input := auth.AuthorizationInputDTO{SignedToken: signedToken}
+			output, err := authorizationUsecase.Run(r.Context(), input)
+			if err != nil {
+				presenter.RespondUnAuthorized(w, err.Error())
+				return
+			}
+			userID := output.UserID
 			// コンテキストにuserIDを含める
 			ctx := context.WithValue(r.Context(), UserIDKey{}, userID)
 			// 後続の処理（ハンドラ）を実行する
@@ -28,59 +35,15 @@ func Authorication(tokenAuthenticator auth.TokenAuthenticator, tokenAuthenticato
 	}
 }
 
-func authenticateRequest(r *http.Request, tokenAuthenticator auth.TokenAuthenticator, tokenAuthenticatorRepository auth.TokenAuthenticatorRepository) (string, error) {
-	// JWT トークンを取得
-	signedToken, err := getSignedToken(r)
-	if err != nil {
-		return "", err
-	}
-
-	// トークンを検証
-	token, err := tokenAuthenticator.VerifyToken(signedToken)
-	if err != nil {
-		return "", err
-	}
-
-	// トークンの有効期限を検証
-	if err := tokenAuthenticator.VerifyExpiresAt(token); err != nil {
-		return "", err
-	}
-
-	// JWT クレームから情報を取得
-	jti, err := tokenAuthenticator.GetJWTIDFromClaim(token)
-	if err != nil {
-		return "", err
-	}
-	userID, err := tokenAuthenticator.GetSubFromClaim(token)
-	if err != nil {
-		return "", err
-	}
-
-	// KVS から保存された jti を取得
-	jtiFromKVS, err := tokenAuthenticatorRepository.Load(r.Context(), userID)
-	if err != nil {
-		return "", err
-	}
-
-	// jti が一致しない場合はエラー
-	if jti != jtiFromKVS {
-		return "", errors.New("invalid JWT ID")
-	}
-
-	return userID, nil
-}
-
 func getSignedToken(r *http.Request) (string, error) {
 	authorizationHeader := r.Header.Get("Authorization")
 	if authorizationHeader == "" {
 		return "", errors.New("Authorization Header is missing")
 	}
-
 	// スペースを区切りとして最大２つに分割
 	parts := strings.SplitN(authorizationHeader, " ", 2)
 	if len(parts) != 2 || parts[0] != "Bearer" {
 		return "", errors.New("invalid Authorization header format")
 	}
-
 	return parts[1], nil
 }

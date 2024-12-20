@@ -30,10 +30,12 @@ func (tar *tokenAuthenticatorRepository) Save(ctx context.Context, duration time
 	return nil
 }
 
+// 存在しないKEYを指定した場合は空文字を返す
 func (tar *tokenAuthenticatorRepository) Load(ctx context.Context, userID string) (string, error) {
 	cli := kvs.GetRedisClient()
 	status := cli.Get(ctx, userID)
 	if status.Err() != nil {
+		// nilだったら空文字を返す
 		if status.Err() == redis.Nil {
 			return "", nil
 		}
