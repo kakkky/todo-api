@@ -10,7 +10,6 @@
 package auth
 
 import (
-	rsa "crypto/rsa"
 	reflect "reflect"
 
 	jwt "github.com/golang-jwt/jwt"
@@ -68,20 +67,6 @@ func (m *MockTokenAuthenticator) GetJWTIDFromClaim(token *jwt.Token) (string, er
 func (mr *MockTokenAuthenticatorMockRecorder) GetJWTIDFromClaim(token any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetJWTIDFromClaim", reflect.TypeOf((*MockTokenAuthenticator)(nil).GetJWTIDFromClaim), token)
-}
-
-// GetPublicKey mocks base method.
-func (m *MockTokenAuthenticator) GetPublicKey() *rsa.PublicKey {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPublicKey")
-	ret0, _ := ret[0].(*rsa.PublicKey)
-	return ret0
-}
-
-// GetPublicKey indicates an expected call of GetPublicKey.
-func (mr *MockTokenAuthenticatorMockRecorder) GetPublicKey() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPublicKey", reflect.TypeOf((*MockTokenAuthenticator)(nil).GetPublicKey))
 }
 
 // GetSubFromClaim mocks base method.
