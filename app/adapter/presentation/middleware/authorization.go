@@ -2,12 +2,12 @@ package middleware
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strings"
 
 	"github.com/kakkky/app/adapter/presentation/presenter"
-	"github.com/kakkky/app/application/usecase/user/auth"
-	"github.com/kakkky/app/domain/errors"
+	"github.com/kakkky/app/application/usecase/auth"
 )
 
 type UserIDKey struct{}

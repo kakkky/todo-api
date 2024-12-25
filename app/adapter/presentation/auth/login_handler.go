@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/kakkky/app/adapter/presentation/presenter"
-	"github.com/kakkky/app/application/usecase/user/auth"
+	"github.com/kakkky/app/application/usecase/auth"
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/pkg/validation"
 )
@@ -46,8 +46,8 @@ func (lh *LoginHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		Password: params.Password,
 	}
 	output, err := lh.loginUsecase.Run(r.Context(), input)
-	if (err != nil) && errors.Is(err, errors.ErrPasswordMismatch) {
-		presenter.RespondUnAuthorized(rw, err.Error())
+	if (err != nil) && errors.Is(err, errors.ErrPasswordMismatch) || errors.IsDomainErr(err) {
+		presenter.RespondUnAuthorized(rw, "email or password invalid")
 		return
 	}
 	if err != nil {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/kakkky/app/adapter/presentation/middleware"
 	"github.com/kakkky/app/adapter/presentation/presenter"
-	"github.com/kakkky/app/application/usecase/user/auth"
+	"github.com/kakkky/app/application/usecase/auth"
 )
 
 type LogoutHandler struct {
