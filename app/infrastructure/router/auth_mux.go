@@ -17,7 +17,6 @@ func handleAuth(mux *http.ServeMux) {
 			repository.NewTokenAuthenticatorRepository(),
 		),
 	)
-
 	mux.Handle("POST /login", composeMiddlewares(middleware.Logger)(
 		authHandler.NewLoginHandler(
 			authUsecase.NewLoginUsecase(
@@ -25,7 +24,6 @@ func handleAuth(mux *http.ServeMux) {
 				repository.NewTokenAuthenticatorRepository(),
 				authInfra.NewJWTAuthenticator(),
 			))))
-
 	mux.Handle("DELETE /logout", composeMiddlewares(authorization, middleware.Logger)(
 		authHandler.NewLogoutHandler(
 			authUsecase.NewLogoutUsecase(

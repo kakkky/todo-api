@@ -70,10 +70,10 @@ func connect(ctx context.Context, user, password, host, port, name string) (*sql
 		}
 
 		// 接続できなかったらリトライ
-		log.Printf("could not connect to db (attempt %d/%d), retrying in %v seconds...", i+1, maxRetriesCount, delay/time.Second)
+		log.Printf("failed to connect to db (attempt %d/%d), retrying in %v seconds...", i+1, maxRetriesCount, delay/time.Second)
 		time.Sleep(delay)
 	}
 
 	// 最大試行回数を超えても接続できなかった場合
-	return nil, nil, fmt.Errorf("could not connect to db after %d attempts", maxRetriesCount)
+	return nil, nil, fmt.Errorf("failed to connect to db after %d attempts", maxRetriesCount)
 }

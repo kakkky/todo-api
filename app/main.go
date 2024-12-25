@@ -27,12 +27,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to read config : %v", err)
 	}
-	if err := run(ctx, cfg); err != nil {
-		log.Printf("error occured in process: %v", err)
-	}
+	run(ctx, cfg)
 }
 
-func run(ctx context.Context, cfg *config.Config) error {
+func run(ctx context.Context, cfg *config.Config) {
 	// データベース接続を初期化し、終了時にクローズする
 	close := db.NewDB(ctx, cfg)
 	defer close()
@@ -47,6 +45,4 @@ func run(ctx context.Context, cfg *config.Config) error {
 	// サーバーを起動し、指定したポートでリクエストを処理
 	srv := server.NewServer(cfg.Server.Port, router.NewMux())
 	srv.Run(ctx)
-
-	return nil
 }
