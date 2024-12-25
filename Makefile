@@ -76,19 +76,12 @@ test-pkg:
 	@echo "Running tests in pkg..."
 	cd ./pkg && $(call tests)
 
-test-integration-write:
+test-integration:
 	$(eval TEST_PATH=$(or $(path),./...))
 	$(eval TEST_TAGS=$(tags))
 	$(eval TEST_OPTIONS=${opts})
-	@echo "Running tests in integration write..."
-	cd ./app/infrastructure/api_test/integration && $(call tests) -tags=integration_write
-
-test-integration-read:
-	$(eval TEST_PATH=$(or $(path),./...))
-	$(eval TEST_TAGS=$(tags))
-	$(eval TEST_OPTIONS=${opts})
-	@echo "Running tests in integration read..."
-	cd ./app/infrastructure/api_test/integration && $(call tests) -tags=integration_read
+	@echo "Running tests in integration"
+	cd ./app/infrastructure/api_test/integration && $(call tests)
 
 #####################
 ##### コンテナ操作 ####

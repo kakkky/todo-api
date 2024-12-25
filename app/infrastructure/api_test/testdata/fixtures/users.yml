@@ -1,0 +1,5 @@
+- id: 0
+  name: user0
+  email: user0@test.com
+  # passwordという文字列をハッシュ化した値
+  hashed_password: $2a$10$GJ6IGQeueUpFmo/kGXQEiOaVjD/Mma.3OlWwcr9P82L32gkUm6UqG%

@@ -6,8 +6,8 @@ import (
 	"github.com/kakkky/app/adapter/presentation/middleware"
 	userHandler "github.com/kakkky/app/adapter/presentation/user"
 	"github.com/kakkky/app/adapter/repository"
+	"github.com/kakkky/app/application/usecase/auth"
 	userUsecase "github.com/kakkky/app/application/usecase/user"
-	"github.com/kakkky/app/application/usecase/user/auth"
 	"github.com/kakkky/app/domain/user"
 	authInfra "github.com/kakkky/app/infrastructure/auth"
 )
