@@ -16,6 +16,7 @@ var (
 
 // タスク関係のドメインエラー
 var (
+	ErrNotFoundTask     = newErrDomain("ErrNotFoundTask", "user not task")
 	ErrContentEmpty     = newErrDomain("ErrContentEmpty", "Do not empty the content")
 	ErrInvalidTaskState = newErrDomain("ErrInvalidTaskState", "invalid task state , please select todo/doing/done")
 )

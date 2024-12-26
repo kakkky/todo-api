@@ -54,6 +54,21 @@ func (mr *MockTaskRepositoryMockRecorder) Delete(ctx, task any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockTaskRepository)(nil).Delete), ctx, task)
 }
 
+// FindById mocks base method.
+func (m *MockTaskRepository) FindById(ctx context.Context, id string) (*Task, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindById", ctx, id)
+	ret0, _ := ret[0].(*Task)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindById indicates an expected call of FindById.
+func (mr *MockTaskRepositoryMockRecorder) FindById(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockTaskRepository)(nil).FindById), ctx, id)
+}
+
 // Save mocks base method.
 func (m *MockTaskRepository) Save(ctx context.Context, task *Task) error {
 	m.ctrl.T.Helper()
