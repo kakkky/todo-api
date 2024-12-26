@@ -34,7 +34,7 @@ func handleUser(mux *http.ServeMux) {
 			))))
 	mux.Handle("GET /users", composeMiddlewares(authorization, middleware.Logger)(
 		userHandler.NewGetUsersHandler(
-			userUsecase.NewListUsersUsecase(
+			userUsecase.NewFetchUsersUsecase(
 				userRepository,
 			))))
 	mux.Handle("PATCH /user", composeMiddlewares(authorization, middleware.Logger)(

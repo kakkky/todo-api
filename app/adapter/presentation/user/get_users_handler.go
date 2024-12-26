@@ -9,10 +9,10 @@ import (
 )
 
 type GetUsersHandler struct {
-	fetchAllUserUsecase *user.ListUsersUsecase
+	fetchAllUserUsecase *user.FetchUsersUsecase
 }
 
-func NewGetUsersHandler(fetchAllUserUsecase *user.ListUsersUsecase) *GetUsersHandler {
+func NewGetUsersHandler(fetchAllUserUsecase *user.FetchUsersUsecase) *GetUsersHandler {
 	return &GetUsersHandler{
 		fetchAllUserUsecase: fetchAllUserUsecase,
 	}

@@ -9,11 +9,11 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestUser_ListUserUsecase_Run(t *testing.T) {
+func TestUser_FetchUserUsecase_Run(t *testing.T) {
 	tests := []struct {
 		name    string
 		mockFn  func(mr *user.MockUserRepository)
-		want    []*ListUsersUsecaseOutputDTO
+		want    []*FetchUsersUsecaseOutputDTO
 		wantErr bool
 	}{
 		{
@@ -27,7 +27,7 @@ func TestUser_ListUserUsecase_Run(t *testing.T) {
 					}, nil,
 				)
 			},
-			want: []*ListUsersUsecaseOutputDTO{
+			want: []*FetchUsersUsecaseOutputDTO{
 				{
 					ID:   "1",
 					Name: "user1",
@@ -52,14 +52,14 @@ func TestUser_ListUserUsecase_Run(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			mockUserRepository := user.NewMockUserRepository(ctrl)
 			tt.mockFn(mockUserRepository)
-			listUsersUsecase := NewListUsersUsecase(mockUserRepository)
+			FetchUsersUsecase := NewFetchUsersUsecase(mockUserRepository)
 			ctx := context.Background()
-			got, err := listUsersUsecase.Run(ctx)
+			got, err := FetchUsersUsecase.Run(ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("listUsersUsecase.Run = error:%v,wantErr:%v", err, tt.wantErr)
+				t.Errorf("FetchUsersUsecase.Run = error:%v,wantErr:%v", err, tt.wantErr)
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("listUsersUsecase.Run() -got,+want :%v ", diff)
+				t.Errorf("FetchUsersUsecase.Run() -got,+want :%v ", diff)
 			}
 
 		})
