@@ -66,13 +66,16 @@ func TestNewUser(t *testing.T) {
 		})
 	}
 }
-func TestUpdateUser(t *testing.T) {
+func TestUser_UpdateUser(t *testing.T) {
+	user, _ := NewUser(
+		"email@test.com",
+		"testuser",
+		"password",
+	)
 	t.Parallel()
 	type args struct {
-		id       string
-		name     string
-		email    string
-		password string
+		email string
+		name  string
 	}
 	tests := []struct {
 		name    string
@@ -84,23 +87,22 @@ func TestUpdateUser(t *testing.T) {
 		{
 			name: "正常系",
 			args: args{
-				id:       "1",
-				name:     "test",
-				email:    "example@test.com",
-				password: "password",
+				email: "example@test.com",
+				name:  "test",
 			},
 			want: &User{
 				id:             "1",
 				email:          Email{value: "example@test.com"},
 				name:           "test",
-				hashedPassword: HashedPassword{value: "password"},
+				hashedPassword: HashedPassword{value: "hashedPassword"},
 			},
 			wantErr: false,
 		},
 		{
 			name: "準正常系：emailアドレスが不正",
 			args: args{
-				email: "test.com",
+				email: "invalid-email",
+				name:  "test",
 			},
 			errType: errors.ErrInvalidEmail,
 			wantErr: true,
@@ -110,12 +112,15 @@ func TestUpdateUser(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			got, err := UpdateUser(tt.args.id, tt.args.email, tt.args.name, tt.args.password)
-			if (err != nil) != tt.wantErr && errors.Is(err, tt.errType) {
-				t.Fatalf("NewUser() error=%v,but wantErr %v", err, tt.wantErr)
+			got, err := user.UpdateUser(tt.args.email, tt.args.name)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("UpdateUser() error=%v, wantErr=%v", err, tt.wantErr)
+			}
+			if err != nil && !errors.Is(err, tt.errType) {
+				t.Fatalf("UpdateUser() error type=%v, wantErr type=%v", err, tt.errType)
 			}
 			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(User{}, Email{}, HashedPassword{}), cmpopts.IgnoreFields(User{}, "id", "hashedPassword")); diff != "" {
-				t.Errorf("NewProduct() -got,+want :%v ", diff)
+				t.Errorf("UpdateUser() -got,+want :%v", diff)
 			}
 		})
 	}

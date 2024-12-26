@@ -50,21 +50,19 @@ func ReconstructUser(
 }
 
 // ユーザーオブジェクト更新
-func UpdateUser(
-	id string,
+func (u *User) UpdateUser(
 	email string,
 	name string,
-	hashedPassword string,
 ) (*User, error) {
 	validatedEmail, err := NewEmail(email)
 	if err != nil {
 		return nil, err
 	}
 	return &User{
-		id:             id,
+		id:             u.id,
 		email:          validatedEmail,
 		name:           name,
-		hashedPassword: reconstructHashedPassword(hashedPassword),
+		hashedPassword: u.hashedPassword,
 	}, nil
 }
 

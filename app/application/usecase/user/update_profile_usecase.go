@@ -35,11 +35,9 @@ func (epu *UpdateProfileUsecase) Run(ctx context.Context, input UpdateProfileUse
 		input.Email = u.GetEmail().Value()
 	}
 	// input情報をもとに、更新情報を反映したインスタンスを作成
-	updatedUser, err := user.UpdateUser(
-		input.ID,
+	updatedUser, err := u.UpdateUser(
 		input.Email,
 		input.Name,
-		u.GetHashedPassword().Value(), //パスワードはそのまま
 	)
 	if err != nil {
 		return nil, err
