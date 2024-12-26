@@ -20,3 +20,7 @@ func newContent(value string) (content, error) {
 func reconstructContent(value string) content {
 	return content{value: value}
 }
+
+func (c content) Value() string {
+	return c.value
+}

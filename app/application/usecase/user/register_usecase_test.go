@@ -69,6 +69,7 @@ func TestUser_RegisterUsecase_Run(t *testing.T) {
 			// 期待するエラー型を設定していた場合はエラー型を比較して検証する
 			if tt.errType != nil && !errors.Is(err, tt.errType) {
 				t.Errorf("registerUsecase.Run = error:%v,want errYType:%v", err, tt.errType)
+				return
 			}
 			if (err != nil) != tt.wantErr {
 				t.Errorf("registerUsecase.Run = error:%v,wantErr:%v", err, tt.wantErr)

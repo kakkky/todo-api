@@ -59,3 +59,16 @@ func (t *Task) UpdateState(
 		state:   validatedState,
 	}, nil
 }
+
+func (t *Task) GetID() string {
+	return t.id
+}
+func (t *Task) GetUserId() string {
+	return t.userId
+}
+func (t *Task) GetContent() content {
+	return t.content
+}
+func (t *Task) GetState() state {
+	return t.state
+}
