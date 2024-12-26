@@ -15,7 +15,10 @@ var (
 )
 
 // タスク関係のドメインエラー
-var ()
+var (
+	ErrContentEmpty     = newErrDomain("ErrContentEmpty", "Do not empty the content")
+	ErrInvalidTaskState = newErrDomain("ErrInvalidTaskState", "invalid task state , please select todo/doing/done")
+)
 
 // ドメインエラー
 type ErrDomain struct {
