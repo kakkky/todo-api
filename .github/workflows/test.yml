@@ -60,3 +60,5 @@ jobs:
           run: go work init ./pkg ./app
         - name: Run Api-Write Integration Test
           run: make test-integration tags="integration_write"
+        - name: Run Api-Read Integration Test
+          run: make test-integration tags="integration_read"

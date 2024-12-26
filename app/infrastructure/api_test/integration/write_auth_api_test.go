@@ -11,7 +11,7 @@ import (
 
 	"github.com/kakkky/app/adapter/presentation/auth"
 	"github.com/kakkky/app/infrastructure/api_test/testhelper"
-	dbTesthelper "github.com/kakkky/app/infrastructure/db/test_helper"
+	dbTesthelper "github.com/kakkky/app/infrastructure/db/testhelper"
 	"github.com/sebdah/goldie/v2"
 )
 
@@ -86,23 +86,30 @@ func TestAuth_Logout(t *testing.T) {
 			wantCode: http.StatusNoContent,
 			isLogin:  true,
 		},
+		{
+			name:     "準正常系:id=0のユーザーをログアウトさせる",
+			wantCode: http.StatusUnauthorized,
+			isLogin:  false,
+		},
 	}
 	for _, tt := range tests {
-		dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
+		t.Run(tt.name, func(t *testing.T) {
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
 
-		r := httptest.NewRequest(http.MethodDelete, "/logout", nil)
-		rw := httptest.NewRecorder()
-		// ログイン状態をセットアップ
-		// Authorizationヘッダーを付加する
-		if tt.isLogin {
-			signedToken := testhelper.SetupLogin("0")
-			r.Header.Set("Authorization", "Bearer "+signedToken)
-		}
-		// リクエストを送信
-		mux.ServeHTTP(rw, r)
-		// ステータスコードを検証
-		if rw.Code != tt.wantCode {
-			t.Errorf("got %d , but want Code %d", rw.Code, tt.wantCode)
-		}
+			r := httptest.NewRequest(http.MethodDelete, "/logout", nil)
+			rw := httptest.NewRecorder()
+			// ログイン状態をセットアップ
+			// Authorizationヘッダーを付加する
+			if tt.isLogin {
+				signedToken := testhelper.SetupLogin("0")
+				r.Header.Set("Authorization", "Bearer "+signedToken)
+			}
+			// リクエストを送信
+			mux.ServeHTTP(rw, r)
+			// ステータスコードを検証
+			if rw.Code != tt.wantCode {
+				t.Errorf("got %d , but want Code %d", rw.Code, tt.wantCode)
+			}
+		})
 	}
 }

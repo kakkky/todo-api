@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/app/domain/user"
-	testhelper "github.com/kakkky/app/infrastructure/db/test_helper"
+	testhelper "github.com/kakkky/app/infrastructure/db/testhelper"
 )
 
 func TestUserRepository_Save(t *testing.T) {
