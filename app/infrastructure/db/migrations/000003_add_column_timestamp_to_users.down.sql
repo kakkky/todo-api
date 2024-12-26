@@ -1,1 +1,1 @@
-alter table users drop (created_at,updated_at);
+alter table users drop column created_at,drop column updated_at;
