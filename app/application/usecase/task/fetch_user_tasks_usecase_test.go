@@ -9,14 +9,14 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestTask_FetchLoggedInUserTasksUsecase_Run(t *testing.T) {
+func TestTask_FetchUserTasksUsecase_Run(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name    string
 		mockFn  func(mq *MockTaskQueryService)
-		input   FetchLoggedInUserTasksUsecaseInputDTO
+		input   FetchUserTasksUsecaseInputDTO
 		errType error
-		want    []*FetchLoggedInUserTasksUsecaseOutputDTO
+		want    []*FetchUserTasksUsecaseOutputDTO
 		wantErr bool
 	}{
 		{
@@ -41,10 +41,10 @@ func TestTask_FetchLoggedInUserTasksUsecase_Run(t *testing.T) {
 					}, nil,
 				)
 			},
-			input: FetchLoggedInUserTasksUsecaseInputDTO{
+			input: FetchUserTasksUsecaseInputDTO{
 				UserId: "user_id",
 			},
-			want: []*FetchLoggedInUserTasksUsecaseOutputDTO{
+			want: []*FetchUserTasksUsecaseOutputDTO{
 				{
 					ID:      "id",
 					Content: "content",
@@ -67,20 +67,20 @@ func TestTask_FetchLoggedInUserTasksUsecase_Run(t *testing.T) {
 			mockTaskQueryService := NewMockTaskQueryService(ctrl)
 			tt.mockFn(mockTaskQueryService)
 			// ユースケースオブジェクト
-			sut := NewFetchLoggedInUserTasksUsecase(mockTaskQueryService)
+			sut := NewFetchUserTasksUsecase(mockTaskQueryService)
 			ctx := context.Background()
 			got, err := sut.Run(ctx, tt.input)
 			// 期待するエラー型を設定していた場合はエラー型を比較して検証する
 			if tt.errType != nil && !errors.Is(err, tt.errType) {
-				t.Errorf("fetchLoggedInUserTasksUsecase.Run = error:%v,want errYType:%v", err, tt.errType)
+				t.Errorf("FetchUserTasksUsecase.Run = error:%v,want errYType:%v", err, tt.errType)
 				return
 			}
 			if (err != nil) != tt.wantErr {
-				t.Errorf("fetchLoggedInUserTasksUsecase.Run = error:%v,wantErr:%v", err, tt.wantErr)
+				t.Errorf("FetchUserTasksUsecase.Run = error:%v,wantErr:%v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("fetchLoggedInUserTasksUsecase.Run() -got,+want :%v ", diff)
+				t.Errorf("FetchUserTasksUsecase.Run() -got,+want :%v ", diff)
 			}
 		})
 	}
