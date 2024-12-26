@@ -31,7 +31,7 @@ func TestNewTask(t *testing.T) {
 			},
 			want: &Task{
 				userId:  "1",
-				content: content{value: "This is a task"},
+				content: Content{value: "This is a task"},
 				state:   todo,
 			},
 			wantErr: false,
@@ -63,7 +63,7 @@ func TestNewTask(t *testing.T) {
 			if (err != nil) != tt.wantErr && errors.Is(err, tt.errType) {
 				t.Fatalf("NewTask() error=%v, but wantErr %v", err, tt.wantErr)
 			}
-			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(Task{}, "id"), cmp.AllowUnexported(Task{}, content{}, state{})); diff != "" {
+			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(Task{}, "id"), cmp.AllowUnexported(Task{}, Content{}, State{})); diff != "" {
 				t.Errorf("NewTask() -got,+want :%v", diff)
 			}
 		})
@@ -118,7 +118,7 @@ func TestTask_UpdateState(t *testing.T) {
 			if err != nil && !errors.Is(err, tt.errType) {
 				t.Fatalf("UpdateState() error type=%v, wantErr type=%v", err, tt.errType)
 			}
-			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(Task{}, "id"), cmp.AllowUnexported(Task{}, content{}, state{})); diff != "" {
+			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(Task{}, "id"), cmp.AllowUnexported(Task{}, Content{}, State{})); diff != "" {
 				t.Errorf("UpdateState() -got,+want :%v", diff)
 			}
 		})

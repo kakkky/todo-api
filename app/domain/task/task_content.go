@@ -6,21 +6,21 @@ import (
 	"github.com/kakkky/app/domain/errors"
 )
 
-type content struct {
+type Content struct {
 	value string
 }
 
-func newContent(value string) (content, error) {
+func newContent(value string) (Content, error) {
 	if utf8.RuneCountInString(value) == 0 {
-		return content{}, errors.ErrContentEmpty
+		return Content{}, errors.ErrContentEmpty
 	}
-	return content{value: value}, nil
+	return Content{value: value}, nil
 }
 
-func reconstructContent(value string) content {
-	return content{value: value}
+func reconstructContent(value string) Content {
+	return Content{value: value}
 }
 
-func (c content) Value() string {
+func (c Content) Value() string {
 	return c.value
 }

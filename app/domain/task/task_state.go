@@ -2,17 +2,17 @@ package task
 
 import "github.com/kakkky/app/domain/errors"
 
-type state struct {
+type State struct {
 	value int
 }
 
 var (
-	todo  = state{value: 0}
-	doing = state{value: 1}
-	done  = state{value: 2}
+	todo  = State{value: 0}
+	doing = State{value: 1}
+	done  = State{value: 2}
 )
 
-func newState(s string) (state, error) {
+func newState(s string) (State, error) {
 	if s == "todo" {
 		return todo, nil
 	}
@@ -22,10 +22,10 @@ func newState(s string) (state, error) {
 	if s == "done" {
 		return done, nil
 	}
-	return state{}, errors.ErrInvalidTaskState
+	return State{}, errors.ErrInvalidTaskState
 }
 
-func reconstructState(value int) state {
+func reconstructState(value int) State {
 	if value == 1 {
 		return doing
 	}
@@ -35,7 +35,7 @@ func reconstructState(value int) state {
 	return todo
 }
 
-func (s state) Value() string {
+func (s State) StrValue() string {
 	if s.value == 1 {
 		return "doing"
 	}
@@ -43,4 +43,7 @@ func (s state) Value() string {
 		return "done"
 	}
 	return "todo"
+}
+func (s State) IntValue() int {
+	return s.value
 }

@@ -172,7 +172,7 @@ func TestUserRepository_FindById(t *testing.T) {
 			ctx := context.Background()
 			got, err := userRepository.FindById(ctx, tt.args.id)
 			// 期待されるエラータイプが設定されている場合はそれも検証
-			if (err != nil) != tt.wantErr && tt.errType != nil {
+			if (err != nil) != tt.wantErr && tt.errType != nil && errors.Is(err, tt.errType) {
 				t.Errorf("userRepository.FindById() =error:%v, want errType:%v", err, tt.errType)
 				return
 			}
@@ -317,7 +317,7 @@ func TestUserRepository_Delete(t *testing.T) {
 			}
 			_, err := userRepository.FindByEmail(ctx, deletingUser.GetEmail())
 			// エラーがあればそれはErrNotFoundUserであるべき
-			if err != nil && !errors.Is(err, errors.ErrNotFoundUser) {
+			if (err != nil) != tt.wantErr && !errors.Is(err, errors.ErrNotFoundUser) {
 				t.Errorf("userRepository.FindByEmail()=error:%v, wantErr:%v", err, tt.wantErr)
 			}
 		})

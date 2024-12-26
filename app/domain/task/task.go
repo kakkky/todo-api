@@ -5,8 +5,8 @@ import "github.com/kakkky/pkg/ulid"
 type Task struct {
 	id      string
 	userId  string
-	content content
-	state   state
+	content Content
+	state   State
 }
 
 func NewTask(
@@ -66,9 +66,9 @@ func (t *Task) GetID() string {
 func (t *Task) GetUserId() string {
 	return t.userId
 }
-func (t *Task) GetContent() content {
+func (t *Task) GetContent() Content {
 	return t.content
 }
-func (t *Task) GetState() state {
+func (t *Task) GetState() State {
 	return t.state
 }

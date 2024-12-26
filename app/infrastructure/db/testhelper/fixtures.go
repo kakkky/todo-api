@@ -8,14 +8,14 @@ import (
 	"github.com/kakkky/app/infrastructure/db"
 )
 
-func SetupFixtures(t *testing.T, fixture_path string) {
+func SetupFixtures(t *testing.T, fixture_path ...string) {
 	t.Helper()
 	fixtures, err := testfixtures.New(
 		testfixtures.Database(db.GetDB()),
 		testfixtures.Dialect("mysql"),
 		testfixtures.SkipResetSequences(),
 		testfixtures.Files(
-			fixture_path,
+			fixture_path...,
 		),
 	)
 	if err != nil {

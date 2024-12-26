@@ -29,6 +29,6 @@ func (ctu *CreateTaskUsecase) Run(ctx context.Context, input CreateTaskUsecaseIn
 		ID:      t.GetID(),
 		UserId:  t.GetUserId(),
 		Content: t.GetContent().Value(),
-		State:   t.GetState().Value(),
+		State:   t.GetState().StrValue(),
 	}, nil
 }
