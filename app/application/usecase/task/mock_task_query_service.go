@@ -55,21 +55,6 @@ func (mr *MockTaskQueryServiceMockRecorder) FetchTaskById(ctx, id any) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchTaskById", reflect.TypeOf((*MockTaskQueryService)(nil).FetchTaskById), ctx, id)
 }
 
-// FetchTaskByUserId mocks base method.
-func (m *MockTaskQueryService) FetchTaskByUserId(ctx context.Context, userId string) ([]*FetchTaskDTO, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FetchTaskByUserId", ctx, userId)
-	ret0, _ := ret[0].([]*FetchTaskDTO)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FetchTaskByUserId indicates an expected call of FetchTaskByUserId.
-func (mr *MockTaskQueryServiceMockRecorder) FetchTaskByUserId(ctx, userId any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchTaskByUserId", reflect.TypeOf((*MockTaskQueryService)(nil).FetchTaskByUserId), ctx, userId)
-}
-
 // FetchTasks mocks base method.
 func (m *MockTaskQueryService) FetchTasks(ctx context.Context) ([]*FetchTaskDTO, error) {
 	m.ctrl.T.Helper()
@@ -83,4 +68,19 @@ func (m *MockTaskQueryService) FetchTasks(ctx context.Context) ([]*FetchTaskDTO,
 func (mr *MockTaskQueryServiceMockRecorder) FetchTasks(ctx any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchTasks", reflect.TypeOf((*MockTaskQueryService)(nil).FetchTasks), ctx)
+}
+
+// FetchUserTasks mocks base method.
+func (m *MockTaskQueryService) FetchUserTasks(ctx context.Context, userId string) ([]*FetchTaskDTO, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FetchUserTasks", ctx, userId)
+	ret0, _ := ret[0].([]*FetchTaskDTO)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FetchUserTasks indicates an expected call of FetchUserTasks.
+func (mr *MockTaskQueryServiceMockRecorder) FetchUserTasks(ctx, userId any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchUserTasks", reflect.TypeOf((*MockTaskQueryService)(nil).FetchUserTasks), ctx, userId)
 }

@@ -8,6 +8,15 @@ import (
 	"database/sql"
 )
 
+type Task struct {
+	ID        string
+	UserID    string
+	Content   string
+	State     int32
+	CreatedAt sql.NullTime
+	UpdatedAt sql.NullTime
+}
+
 type User struct {
 	ID             string
 	Email          string

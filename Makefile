@@ -140,13 +140,21 @@ migrate-create:
 # コマンド例: $ make migrate-up
 migrate-up:
 	@echo "Applying migrations..."
-	docker compose run app migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose up
+	docker compose run --rm app migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose up
 
 # マイグレーションをロールバック
 # コマンド例: $ make migrate-down
 migrate-down:
 	@echo "Rolling back migrations..."
-	docker compose run app migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose down
+	docker compose run --rm app migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" -verbose down
+
+# マイグレーションのバージョンをセット
+# migration-upが失敗した時は、最後のバージョンにforceしなおしてから再度upするようにする
+# コマンド例: $ make migrate-force version=<version_number>
+migrate-force:
+	@echo "Forcing database migration version to $(version)..."
+	docker compose run --rm app migrate --path $(MIGRATE_PATH) --database "$(DB_URL)" force $(version)
+
 
 #############
 ### sqlc ####

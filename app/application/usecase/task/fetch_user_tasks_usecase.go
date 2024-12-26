@@ -15,7 +15,7 @@ func NewFetchUserTasksUsecase(taskQueryService TaskQueryService) *FetchUserTasks
 func (fltu *FetchUserTasksUsecase) Run(ctx context.Context, input FetchUserTasksUsecaseInputDTO) (
 	[]*FetchUserTasksUsecaseOutputDTO, error,
 ) {
-	dtos, err := fltu.taskQueryService.FetchTaskByUserId(ctx, input.UserId)
+	dtos, err := fltu.taskQueryService.FetchUserTasks(ctx, input.UserId)
 	if err != nil {
 		return nil, err
 	}

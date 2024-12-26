@@ -22,7 +22,7 @@ func TestTask_FetchUserTasksUsecase_Run(t *testing.T) {
 		{
 			name: "正常系",
 			mockFn: func(mq *MockTaskQueryService) {
-				mq.EXPECT().FetchTaskByUserId(gomock.Any(), gomock.Any()).Return(
+				mq.EXPECT().FetchUserTasks(gomock.Any(), gomock.Any()).Return(
 					[]*FetchTaskDTO{
 						{
 							ID:       "id",
