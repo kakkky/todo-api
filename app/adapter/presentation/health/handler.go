@@ -12,9 +12,9 @@ import (
 // @Tags        HealthCheck
 // @Success     200 {object} presenter.SuccessResponse[healthResponse] "Health check message""
 // @Router      /health [get]
-func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
+func HealthCheckHandler(rw http.ResponseWriter, r *http.Request) {
 	resp := healthResponse{
 		HealthCheck: "ok",
 	}
-	presenter.RespondOK(w, resp)
+	presenter.RespondOK(rw, resp)
 }

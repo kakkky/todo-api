@@ -10,24 +10,24 @@ type FailureResponse struct {
 	Message string `json:"message"`
 }
 
-func RespondBadRequest(w http.ResponseWriter, message string) {
-	respondJsonFailure(w, http.StatusBadRequest, message)
+func RespondBadRequest(rw http.ResponseWriter, message string) {
+	respondJsonFailure(rw, http.StatusBadRequest, message)
 }
 
-func RespondInternalServerError(w http.ResponseWriter, message string) {
-	respondJsonFailure(w, http.StatusInternalServerError, message)
+func RespondInternalServerError(rw http.ResponseWriter, message string) {
+	respondJsonFailure(rw, http.StatusInternalServerError, message)
 }
 
-func RespondUnAuthorized(w http.ResponseWriter, message string) {
-	respondJsonFailure(w, http.StatusUnauthorized, message)
+func RespondUnAuthorized(rw http.ResponseWriter, message string) {
+	respondJsonFailure(rw, http.StatusUnauthorized, message)
 }
 
-func respondJsonFailure(w http.ResponseWriter, statusCode int, message string) {
-	w.Header().Set("Content-Type", "application/json;charset=utf-8")
-	w.WriteHeader(statusCode)
+func respondJsonFailure(rw http.ResponseWriter, statusCode int, message string) {
+	rw.Header().Set("Content-Type", "application/json;charset=utf-8")
+	rw.WriteHeader(statusCode)
 	jsonResp := FailureResponse{
 		Status:  statusCode,
 		Message: message,
 	}
-	json.NewEncoder(w).Encode(jsonResp)
+	json.NewEncoder(rw).Encode(jsonResp)
 }

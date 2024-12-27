@@ -10,26 +10,26 @@ type SuccessResponse[T any] struct {
 	Data   T   `json:"data"`
 }
 
-func RespondOK[T any](w http.ResponseWriter, respBody T) {
-	respondJsonSuccess(w, http.StatusOK, respBody)
+func RespondOK[T any](rw http.ResponseWriter, respBody T) {
+	respondJsonSuccess(rw, http.StatusOK, respBody)
 }
 
-func RespondCreated[T any](w http.ResponseWriter, respBody T) {
-	respondJsonSuccess(w, http.StatusCreated, respBody)
+func RespondCreated[T any](rw http.ResponseWriter, respBody T) {
+	respondJsonSuccess(rw, http.StatusCreated, respBody)
 }
 
-func RespondNoContent(w http.ResponseWriter) {
-	w.WriteHeader(http.StatusNoContent)
+func RespondNoContent(rw http.ResponseWriter) {
+	rw.WriteHeader(http.StatusNoContent)
 }
 
-func respondJsonSuccess[T any](w http.ResponseWriter, statusCode int, respBody T) {
-	w.Header().Set("Content-Type", "application/json;charset=utf-8")
-	w.WriteHeader(statusCode)
+func respondJsonSuccess[T any](rw http.ResponseWriter, statusCode int, respBody T) {
+	rw.Header().Set("Content-Type", "application/json;charset=utf-8")
+	rw.WriteHeader(statusCode)
 	jsonResp := SuccessResponse[T]{
 		Status: statusCode,
 		Data:   respBody,
 	}
-	if err := json.NewEncoder(w).Encode(jsonResp); err != nil {
-		RespondInternalServerError(w, err.Error())
+	if err := json.NewEncoder(rw).Encode(jsonResp); err != nil {
+		RespondInternalServerError(rw, err.Error())
 	}
 }

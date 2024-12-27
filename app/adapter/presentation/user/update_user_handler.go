@@ -33,15 +33,15 @@ func NewUpdateUserHandler(updateUserUsecase *user.UpdateProfileUsecase) *UpdateU
 // @Failure     400     {object} presenter.FailureResponse                     "不正なリクエスト"
 // @Failure     500     {object} presenter.FailureResponse                     "内部サーバーエラー"
 // @Router      /user [patch]
-func (uuh *UpdateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (uuh *UpdateUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey{}).(string)
 	var params UpdateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
-		presenter.RespondBadRequest(w, err.Error())
+		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
 	if err := validation.NewValidation().Struct(&params); err != nil {
-		presenter.RespondBadRequest(w, err.Error())
+		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
 	input := user.UpdateProfileUsecaseInputDTO{
@@ -52,11 +52,11 @@ func (uuh *UpdateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 	ctx := r.Context()
 	output, err := uuh.updateUserUsecase.Run(ctx, input)
 	if (err != nil) && errors.IsDomainErr(err) {
-		presenter.RespondBadRequest(w, err.Error())
+		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
 	if err != nil {
-		presenter.RespondInternalServerError(w, err.Error())
+		presenter.RespondInternalServerError(rw, err.Error())
 		return
 	}
 	resp := UpdateUserResponse{
@@ -64,5 +64,5 @@ func (uuh *UpdateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		Email: output.Email,
 		Name:  output.Name,
 	}
-	presenter.RespondOK(w, resp)
+	presenter.RespondOK(rw, resp)
 }

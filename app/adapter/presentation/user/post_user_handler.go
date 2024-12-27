@@ -30,15 +30,15 @@ func NewPostUserHandler(registerUsecase *user.RegisterUsecase) *PostUserHandler 
 // @Failure     400     {object} presenter.FailureResponse                   "不正なリクエスト"
 // @Failure     500     {object} presenter.FailureResponse                   "内部サーバーエラー"
 // @Router      /user [post]
-func (puh *PostUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (puh *PostUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// jsonをデコード
 	var params PostUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
-		presenter.RespondBadRequest(w, err.Error())
+		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
 	if err := validation.NewValidation().Struct(&params); err != nil {
-		presenter.RespondBadRequest(w, err.Error())
+		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
 	// DTOに詰め替える
@@ -51,11 +51,11 @@ func (puh *PostUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	output, err := puh.registerUsecase.Run(ctx, input)
 	if (err != nil) && errors.IsDomainErr(err) {
-		presenter.RespondBadRequest(w, err.Error())
+		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
 	if err != nil {
-		presenter.RespondInternalServerError(w, err.Error())
+		presenter.RespondInternalServerError(rw, err.Error())
 		return
 	}
 	resp := PostUserResponse{
@@ -63,5 +63,5 @@ func (puh *PostUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Email: output.Email,
 		Name:  output.Name,
 	}
-	presenter.RespondCreated(w, resp)
+	presenter.RespondCreated(rw, resp)
 }

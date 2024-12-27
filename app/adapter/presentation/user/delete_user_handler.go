@@ -28,7 +28,7 @@ func NewDeleteUserHandler(unregisterUsecase *user.UnregisterUsecase) *DeleteUser
 // @Failure     400 {object} presenter.FailureResponse "不正なリクエスト"
 // @Failure     500 {object} presenter.FailureResponse "内部サーバーエラー"
 // @Router      /user [delete]
-func (duh *DeleteUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (duh *DeleteUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// リクエストスコープのコンテキストからuserIdを取得
 	id := r.Context().Value(middleware.UserIDKey{}).(string)
 	input := user.UnregisterUsecaseInputDTO{
@@ -37,12 +37,12 @@ func (duh *DeleteUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 	ctx := r.Context()
 	err := duh.unregisterUsecase.Run(ctx, input)
 	if (err != nil) && errors.IsDomainErr(err) {
-		presenter.RespondBadRequest(w, err.Error())
+		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
 	if err != nil {
-		presenter.RespondInternalServerError(w, err.Error())
+		presenter.RespondInternalServerError(rw, err.Error())
 		return
 	}
-	presenter.RespondNoContent(w)
+	presenter.RespondNoContent(rw)
 }

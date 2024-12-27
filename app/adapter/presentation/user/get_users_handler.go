@@ -27,15 +27,15 @@ func NewGetUsersHandler(fetchAllUserUsecase *user.FetchUsersUsecase) *GetUsersHa
 // @Failure     400 {object} presenter.FailureResponse                     "不正なリクエスト"
 // @Failure     500 {object} presenter.FailureResponse                     "内部サーバーエラー"
 // @Router      /users [get]
-func (guh *GetUsersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (guh *GetUsersHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	outputs, err := guh.fetchAllUserUsecase.Run(ctx)
 	if (err != nil) && errors.IsDomainErr(err) {
-		presenter.RespondBadRequest(w, err.Error())
+		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
 	if err != nil {
-		presenter.RespondInternalServerError(w, err.Error())
+		presenter.RespondInternalServerError(rw, err.Error())
 		return
 	}
 	resp := make([]GetUsersResponse, 0, len(outputs))
@@ -45,6 +45,6 @@ func (guh *GetUsersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			Name: output.Name,
 		})
 	}
-	presenter.RespondOK(w, resp)
+	presenter.RespondOK(rw, resp)
 
 }

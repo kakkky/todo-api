@@ -14,23 +14,23 @@ type UserIDKey struct{}
 
 func Authorication(authorizationUsecase *auth.AuthorizationUsecase) func(h http.Handler) http.Handler {
 	return func(h http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 			signedToken, err := getSignedToken(r)
 			if err != nil {
-				presenter.RespondUnAuthorized(w, err.Error())
+				presenter.RespondUnAuthorized(rw, err.Error())
 				return
 			}
 			input := auth.AuthorizationInputDTO{SignedToken: signedToken}
 			output, err := authorizationUsecase.Run(r.Context(), input)
 			if err != nil {
-				presenter.RespondUnAuthorized(w, err.Error())
+				presenter.RespondUnAuthorized(rw, err.Error())
 				return
 			}
 			userID := output.UserID
 			// コンテキストにuserIDを含める
 			ctx := context.WithValue(r.Context(), UserIDKey{}, userID)
 			// 後続の処理（ハンドラ）を実行する
-			h.ServeHTTP(w, r.WithContext(ctx))
+			h.ServeHTTP(rw, r.WithContext(ctx))
 		})
 	}
 }
@@ -38,7 +38,7 @@ func Authorication(authorizationUsecase *auth.AuthorizationUsecase) func(h http.
 func getSignedToken(r *http.Request) (string, error) {
 	authorizationHeader := r.Header.Get("Authorization")
 	if authorizationHeader == "" {
-		return "", errors.New("Authorization Header is missing")
+		return "", errors.New("authorization Header is missing")
 	}
 	// スペースを区切りとして最大２つに分割
 	parts := strings.SplitN(authorizationHeader, " ", 2)
