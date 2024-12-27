@@ -47,13 +47,13 @@ func (q *Queries) FetchTaskById(ctx context.Context, id string) (FetchTaskByIdRo
 	return i, err
 }
 
-const fetchTaskss = `-- name: FetchTaskss :many
+const fetchTasks = `-- name: FetchTasks :many
 select t.id,u.name,t.user_id,t.content,t.state
 from tasks as t inner join users as u
 on t.user_id = u.id
 `
 
-type FetchTaskssRow struct {
+type FetchTasksRow struct {
 	ID      string
 	Name    string
 	UserID  string
@@ -61,15 +61,15 @@ type FetchTaskssRow struct {
 	State   int32
 }
 
-func (q *Queries) FetchTaskss(ctx context.Context) ([]FetchTaskssRow, error) {
-	rows, err := q.db.QueryContext(ctx, fetchTaskss)
+func (q *Queries) FetchTasks(ctx context.Context) ([]FetchTasksRow, error) {
+	rows, err := q.db.QueryContext(ctx, fetchTasks)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []FetchTaskssRow{}
+	items := []FetchTasksRow{}
 	for rows.Next() {
-		var i FetchTaskssRow
+		var i FetchTasksRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,

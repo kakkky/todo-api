@@ -15,7 +15,7 @@ from tasks as t inner join users as u
 on t.user_id = u.id
 where t.user_id = sqlc.arg(user_id);
 
--- name: FetchTaskss :many
+-- name: FetchTasks :many
 select t.id,u.name,t.user_id,t.content,t.state
 from tasks as t inner join users as u
 on t.user_id = u.id;

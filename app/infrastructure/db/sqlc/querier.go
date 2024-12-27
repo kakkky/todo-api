@@ -13,7 +13,7 @@ type Querier interface {
 	DeleteUser(ctx context.Context, id string) error
 	FetchAllUser(ctx context.Context) ([]FetchAllUserRow, error)
 	FetchTaskById(ctx context.Context, id string) (FetchTaskByIdRow, error)
-	FetchTaskss(ctx context.Context) ([]FetchTaskssRow, error)
+	FetchTasks(ctx context.Context) ([]FetchTasksRow, error)
 	FetchUserTasks(ctx context.Context, userID string) ([]FetchUserTasksRow, error)
 	FindTaskById(ctx context.Context, id string) (FindTaskByIdRow, error)
 	FindUserByEmail(ctx context.Context, email string) (FindUserByEmailRow, error)
