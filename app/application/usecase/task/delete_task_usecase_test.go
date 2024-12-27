@@ -28,7 +28,8 @@ func TestTask_DeleteTaskUsecase_Run(t *testing.T) {
 				mr.EXPECT().Delete(gomock.Any(), gomock.Any()).Return(nil)
 			},
 			input: DeleteTaskUsecaseInputDTO{
-				ID: "user_id",
+				LoggedInUserID: "user_id",
+				ID:             "id",
 			},
 			wantErr: false,
 		},
@@ -41,9 +42,25 @@ func TestTask_DeleteTaskUsecase_Run(t *testing.T) {
 				)
 			},
 			input: DeleteTaskUsecaseInputDTO{
-				ID: "user_id",
+				LoggedInUserID: "user_id",
+				ID:             "id",
 			},
 			wantErr: true,
+		},
+		{
+			name: "準正常系:異なるuser_idで操作するとエラーが返る",
+			mockFn: func(mr *task.MockTaskRepository) {
+				mr.EXPECT().FindById(gomock.Any(), gomock.Any()).Return(
+					task.ReconstructTask("id", "user_id", "this is content", 0),
+					nil,
+				)
+			},
+			input: DeleteTaskUsecaseInputDTO{
+				LoggedInUserID: "orther_user_id",
+				ID:             "id",
+			},
+			wantErr: true,
+			errType: errors.ErrForbiddenTaskOperation,
 		},
 	}
 	for _, tt := range tests {

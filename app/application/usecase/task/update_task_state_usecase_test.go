@@ -30,8 +30,9 @@ func TestTask_UpdateTaskStateUsecase_Run(t *testing.T) {
 				mr.EXPECT().Update(gomock.Any(), gomock.Any()).Return(nil)
 			},
 			input: UpdateTaskStateUsecaseInputDTO{
-				ID:    "id",
-				State: "done",
+				ID:             "id",
+				LoggedInUserID: "user_id",
+				State:          "done",
 			},
 			want: &UpdateTaskStateUsecaseOutputDTO{
 				ID:      "id",
@@ -51,8 +52,9 @@ func TestTask_UpdateTaskStateUsecase_Run(t *testing.T) {
 			},
 			errType: errors.ErrInvalidTaskState,
 			input: UpdateTaskStateUsecaseInputDTO{
-				ID:    "id",
-				State: "invalid",
+				ID:             "id",
+				LoggedInUserID: "user_id",
+				State:          "invalid",
 			},
 			wantErr: true,
 		},
@@ -66,8 +68,25 @@ func TestTask_UpdateTaskStateUsecase_Run(t *testing.T) {
 			},
 			errType: errors.ErrNotFoundTask,
 			input: UpdateTaskStateUsecaseInputDTO{
-				ID:    "id",
-				State: "doing",
+				ID:             "id",
+				LoggedInUserID: "user_id",
+				State:          "doing",
+			},
+			wantErr: true,
+		},
+		{
+			name: "準正常系:異なるuser_idで操作するとエラーが返る",
+			mockFn: func(mr *task.MockTaskRepository) {
+				mr.EXPECT().FindById(gomock.Any(), gomock.Any()).Return(
+					task.ReconstructTask("id", "user_id", "this is content", 0),
+					nil,
+				)
+			},
+			errType: errors.ErrForbiddenTaskOperation,
+			input: UpdateTaskStateUsecaseInputDTO{
+				ID:             "id",
+				LoggedInUserID: "other_user_id",
+				State:          "doing",
 			},
 			wantErr: true,
 		},

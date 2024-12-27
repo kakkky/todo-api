@@ -1,6 +1,9 @@
 package task
 
-import "github.com/kakkky/pkg/ulid"
+import (
+	"github.com/kakkky/app/domain/errors"
+	"github.com/kakkky/pkg/ulid"
+)
 
 type Task struct {
 	id      string
@@ -58,6 +61,13 @@ func (t *Task) UpdateState(
 		content: t.content,
 		state:   validatedState,
 	}, nil
+}
+
+func (t *Task) IsOperableBy(userId string) error {
+	if t.userId != userId {
+		return errors.ErrForbiddenTaskOperation
+	}
+	return nil
 }
 
 func (t *Task) GetID() string {

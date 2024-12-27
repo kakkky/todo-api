@@ -1,5 +1,6 @@
 package task
 
 type DeleteTaskUsecaseInputDTO struct {
-	ID string
+	ID             string
+	LoggedInUserID string
 }
