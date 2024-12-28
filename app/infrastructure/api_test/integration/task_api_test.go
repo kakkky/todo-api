@@ -247,7 +247,7 @@ func TestTask_PostTask(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				rw.Body.Bytes(),
+				testhelper.NormalizeULID(rw.Body.Bytes()),
 			)
 			g := goldie.New(
 				t,
