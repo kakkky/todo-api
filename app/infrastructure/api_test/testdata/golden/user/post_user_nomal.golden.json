@@ -2,7 +2,7 @@
   "status": 201,
   "data": {
     "id": "ulid",
-    "email": "user1@test.com",
-    "name": "user1"
+    "email": "user0@test.com",
+    "name": "user0"
   }
 }

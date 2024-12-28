@@ -47,7 +47,7 @@ func TestTaskQueryService_FetchTaskById(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
+			testhelper.SetupFixtures("testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
 			ctx := context.Background()
 			got, err := taskQueryService.FetchTaskById(ctx, tt.args.id)
 			if (err != nil) != tt.wantErr && tt.errType != nil && errors.Is(err, tt.errType) {
@@ -109,7 +109,7 @@ func TestTaskQueryService_FetchUserTasks(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
+			testhelper.SetupFixtures("testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
 			ctx := context.Background()
 			got, err := taskQueryService.FetchUserTasks(ctx, tt.args.user_id)
 			if (err != nil) != tt.wantErr {
@@ -174,7 +174,7 @@ func TestTaskQueryService_FetchTasks(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
+			testhelper.SetupFixtures("testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
 			ctx := context.Background()
 			got, err := taskQueryService.FetchTasks(ctx)
 			if (err != nil) != tt.wantErr {

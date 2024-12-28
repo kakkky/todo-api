@@ -20,6 +20,10 @@ func NewMux() http.Handler {
 		handleUser(mux)
 		handleAuth(mux)
 	}
+	// タスク系
+	{
+		handleTask(mux)
+	}
 
 	return mux
 }

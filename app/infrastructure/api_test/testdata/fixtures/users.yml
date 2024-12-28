@@ -1,35 +1,30 @@
-- id: 0
-  name: user0
-  email: user0@test.com
+- id: 1
+  name: user1
+  email: user1@test.com
   # passwordという文字列をハッシュ化した値
   hashed_password: $2a$10$GJ6IGQeueUpFmo/kGXQEiOaVjD/Mma.3OlWwcr9P82L32gkUm6UqG%
 
 - id: 2
   name: user2
   email: user2@test.com
-  # passwordという文字列をハッシュ化した値
   hashed_password: $2a$10$GJ6IGQeueUpFmo/kGXQEiOaVjD/Mma.3OlWwcr9P82L32gkUm6UqG%
 
 - id: 3
   name: user3
   email: user3@test.com
-  # passwordという文字列をハッシュ化した値
   hashed_password: $2a$10$GJ6IGQeueUpFmo/kGXQEiOaVjD/Mma.3OlWwcr9P82L32gkUm6UqG%
 
 - id: 4
   name: user4
   email: user4@test.com
-  # passwordという文字列をハッシュ化した値
   hashed_password: $2a$10$GJ6IGQeueUpFmo/kGXQEiOaVjD/Mma.3OlWwcr9P82L32gkUm6UqG%
 
 - id: 5
   name: user5
   email: user5@test.com
-  # passwordという文字列をハッシュ化した値
   hashed_password: $2a$10$GJ6IGQeueUpFmo/kGXQEiOaVjD/Mma.3OlWwcr9P82L32gkUm6UqG%
 
 - id: 6
   name: user6
   email: user6@test.com
-  # passwordという文字列をハッシュ化した値
   hashed_password: $2a$10$GJ6IGQeueUpFmo/kGXQEiOaVjD/Mma.3OlWwcr9P82L32gkUm6UqG%

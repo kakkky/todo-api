@@ -1,4 +1,4 @@
-//go:build integration_write
+//go:build integration
 
 package integration
 
@@ -26,7 +26,7 @@ func TestAuth_Login(t *testing.T) {
 			name:     "正常系",
 			wantCode: http.StatusOK,
 			req: auth.LoginRequest{
-				Email:    "user0@test.com",
+				Email:    "user1@test.com",
 				Password: "password",
 			},
 			gfName: "login_nomal",
@@ -35,7 +35,7 @@ func TestAuth_Login(t *testing.T) {
 			name:     "準正常系:パスワードが異なる",
 			wantCode: http.StatusUnauthorized,
 			req: auth.LoginRequest{
-				Email:    "user0@test.com",
+				Email:    "user1@test.com",
 				Password: "invalid",
 			},
 			gfName: "login_seminomal_password_mismatch",
@@ -52,7 +52,8 @@ func TestAuth_Login(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
+			// テストデータを投入
+			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
 			r := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBuffer(b))
@@ -94,14 +95,13 @@ func TestAuth_Logout(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
-
+			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
 			r := httptest.NewRequest(http.MethodDelete, "/logout", nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				signedToken := testhelper.SetupLogin("0")
+				signedToken := testhelper.SetupLogin("1")
 				r.Header.Set("Authorization", "Bearer "+signedToken)
 			}
 			// リクエストを送信
