@@ -18,6 +18,15 @@ func NewGetTasksHandler(fetchTasksUsecase *task.FetchTasksUsease) *GetTasksHandl
 	}
 }
 
+// @Summary     全てのタスクを表示する
+// @Description 全ユーザーのタスクを全て表示する
+// @Tags        Task
+// @Produce     json
+// @Security    BearerAuth
+// @Success     200 {object} presenter.SuccessResponse[[]GetTaskResponse] "タスクの情報"
+// @Failure     400 {object} presenter.FailureResponse                    "不正なリクエスト"
+// @Failure     500 {object} presenter.FailureResponse                    "内部サーバーエラー"
+// @Router      /tasks [get]
 func (gth *GetTasksHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	outputs, err := gth.fetchTasksUsecase.Run(r.Context())
 	if err != nil && errors.IsDomainErr(err) {

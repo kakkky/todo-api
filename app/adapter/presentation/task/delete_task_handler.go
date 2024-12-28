@@ -19,6 +19,16 @@ func NewDeleteTaskHandler(deleteTaskUsease *task.DeleteTaskUsecase) *DeleteTaskH
 	}
 }
 
+// @Summary     タスクを削除する
+// @Description 指定したidのタスクを削除する
+// @Tags        Task
+// @Produce     json
+// @Security    BearerAuth
+// @Success     204
+// @Failure     400 {object} presenter.FailureResponse "不正なリクエスト"
+// @Failure     403 {object} presenter.FailureResponse "権限エラー"
+// @Failure     500 {object} presenter.FailureResponse "内部サーバーエラー"
+// @Router      /task/{id} [delete]
 func (dth *DeleteTaskHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// パスパラメータから取得
 	id := r.PathValue("id")

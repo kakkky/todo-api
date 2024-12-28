@@ -43,7 +43,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User/Auth"
+                    "Auth"
                 ],
                 "summary": "ユーザーのログイン",
                 "parameters": [
@@ -97,12 +97,224 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User/Auth"
+                    "Auth"
                 ],
                 "summary": "ユーザーのログアウト",
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/task": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "内容、タスク状態からユーザーに紐づくタスクを作成する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "タスクを作成する",
+                "parameters": [
+                    {
+                        "description": "タスク作成のための情報",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/task.PostTaskRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "作成したタスクの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-task_PostTaskResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "タスクの状態(todo/doing/done)を 指定して更新する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "タスク状態を更新する",
+                "parameters": [
+                    {
+                        "description": "タスク更新のための情報",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/task.UpdateTaskStateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "更新したタスクの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-task_UpdateTaskStateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "権限エラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "idを指定してタスクを表示する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "タスクを表示する",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-task_GetTaskResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "指定したidのタスクを削除する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "タスクを削除する",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "権限エラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "全ユーザーのタスクを全て表示する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "全てのタスクを表示する",
+                "responses": {
+                    "200": {
+                        "description": "タスクの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-array_task_GetTaskResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
                     },
                     "500": {
                         "description": "内部サーバーエラー",
@@ -240,6 +452,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/tasks": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "ログインしているユーザーのタスクを全て表示する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "ユーザーが持つ全てのタスクを表示する",
+                "responses": {
+                    "200": {
+                        "description": "タスクの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-array_task_GetTaskResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "security": [
@@ -321,6 +570,20 @@ const docTemplate = `{
                 }
             }
         },
+        "presenter.SuccessResponse-array_task_GetTaskResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/task.GetTaskResponse"
+                    }
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
         "presenter.SuccessResponse-array_user_GetUsersResponse": {
             "type": "object",
             "properties": {
@@ -357,6 +620,39 @@ const docTemplate = `{
                 }
             }
         },
+        "presenter.SuccessResponse-task_GetTaskResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/task.GetTaskResponse"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.SuccessResponse-task_PostTaskResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/task.PostTaskResponse"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.SuccessResponse-task_UpdateTaskStateResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/task.UpdateTaskStateResponse"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
         "presenter.SuccessResponse-user_PostUserResponse": {
             "type": "object",
             "properties": {
@@ -376,6 +672,90 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "task.GetTaskResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "task.PostTaskRequest": {
+            "type": "object",
+            "required": [
+                "content",
+                "state"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                }
+            }
+        },
+        "task.PostTaskResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "task.UpdateTaskStateRequest": {
+            "type": "object",
+            "required": [
+                "id",
+                "state"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                }
+            }
+        },
+        "task.UpdateTaskStateResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },

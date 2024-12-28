@@ -21,6 +21,17 @@ func NewUpdateTaskStateHandler(updateTaskStateUsecase *task.UpdateTaskStateUseca
 	}
 }
 
+// @Summary     タスク状態を更新する
+// @Description タスクの状態(todo/doing/done)を 指定して更新する
+// @Tags        Task
+// @Produce     json
+// @Param       request body UpdateTaskStateRequest true "タスク更新のための情報"
+// @Security    BearerAuth
+// @Success     201 {object} presenter.SuccessResponse[UpdateTaskStateResponse] "更新したタスクの情報"
+// @Failure     400 {object} presenter.FailureResponse                          "不正なリクエスト"
+// @Failure     403 {object} presenter.FailureResponse                          "権限エラー"
+// @Failure     500 {object} presenter.FailureResponse                          "内部サーバーエラー"
+// @Router      /task [patch]
 func (utsh *UpdateTaskStateHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// jsonをデコード
 	var params UpdateTaskStateRequest

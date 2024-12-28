@@ -19,6 +19,15 @@ func NewGetUserTasksHandler(fetchUserTasksUsecase *task.FetchUserTasksUsecase) *
 	}
 }
 
+// @Summary ユーザーが持つ全てのタスクを表示する
+// @Description　ログインしているユーザーのタスクを全て表示する
+// @Tags     Task
+// @Produce  json
+// @Security BearerAuth
+// @Success  200 {object} presenter.SuccessResponse[[]GetTaskResponse] "タスクの情報"
+// @Failure  400 {object} presenter.FailureResponse                    "不正なリクエスト"
+// @Failure  500 {object} presenter.FailureResponse                    "内部サーバーエラー"
+// @Router   /user/tasks [get]
 func (guth *GetUserTasksHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value(middleware.UserIDKey{}).(string)
 	input := task.FetchUserTasksUsecaseInputDTO{

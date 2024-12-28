@@ -22,7 +22,7 @@ func NewLoginHandler(loginUsecase *auth.LoginUsecase) *LoginHandler {
 
 // @Summary     ユーザーのログイン
 // @Description メールアドレス・パスワードで認証し、署名されたトークンを返す
-// @Tags        User/Auth
+// @Tags        Auth
 // @Accept      json
 // @Produce     json
 // @Param       request body     LoginRequest                             true "認証に必要な情報"

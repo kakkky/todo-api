@@ -21,6 +21,16 @@ func NewPostTaskHandler(createPostUsecase *task.CreateTaskUsecase) *PostTaskHand
 	}
 }
 
+// @Summary     タスクを作成する
+// @Description 内容、タスク状態からユーザーに紐づくタスクを作成する
+// @Tags        Task
+// @Produce     json
+// @Param       request body PostTaskRequest true "タスク作成のための情報"
+// @Security    BearerAuth
+// @Success     201 {object} presenter.SuccessResponse[PostTaskResponse] "作成したタスクの情報"
+// @Failure     400 {object} presenter.FailureResponse                   "不正なリクエスト"
+// @Failure     500 {object} presenter.FailureResponse                   "内部サーバーエラー"
+// @Router      /task [post]
 func (pth *PostTaskHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// jsonをデコード
 	var params PostTaskRequest

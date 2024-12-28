@@ -20,7 +20,7 @@ func NewLogoutHandler(logoutUsecase *auth.LogoutUsecase) *LogoutHandler {
 
 // @Summary     ユーザーのログアウト
 // @Description メールアドレス・パスワードで認証し、署名されたトークンを返す
-// @Tags        User/Auth
+// @Tags        Auth
 // @Produce     json
 // @Security    BearerAuth
 // @Success     204

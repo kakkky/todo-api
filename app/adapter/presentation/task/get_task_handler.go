@@ -18,6 +18,15 @@ func NewGetTaskHandler(fetchTaskUsecase *task.FetchTaskUsease) *GetTaskHandler {
 	}
 }
 
+// @Summary     タスクを表示する
+// @Description idを指定してタスクを表示する
+// @Tags        Task
+// @Produce     json
+// @Security    BearerAuth
+// @Success     200 {object} presenter.SuccessResponse[GetTaskResponse] 　　"タスクの情報"
+// @Failure     400 {object} presenter.FailureResponse                  "不正なリクエスト"
+// @Failure     500 {object} presenter.FailureResponse                  "内部サーバーエラー"
+// @Router      /task/{id} [get]
 func (gth *GetTaskHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// パスパラメータから取得
 	id := r.PathValue("id")
