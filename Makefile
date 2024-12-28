@@ -88,7 +88,7 @@ test-integration:
 	$(eval TEST_TAGS=$(tags))
 	$(eval TEST_OPTIONS=${opts})
 	@echo "Running tests in integration"
-	cd ./app/infrastructure/api_test/integration && $(call tests)
+	cd ./app/infrastructure/api_test/integration && $(call tests) -tags=integration
 
 #####################
 ##### コンテナ操作 ####

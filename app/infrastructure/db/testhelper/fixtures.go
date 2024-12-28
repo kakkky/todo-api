@@ -2,14 +2,12 @@ package testhelper
 
 import (
 	"log"
-	"testing"
 
 	"github.com/go-testfixtures/testfixtures/v3"
 	"github.com/kakkky/app/infrastructure/db"
 )
 
-func SetupFixtures(t *testing.T, fixture_path ...string) {
-	t.Helper()
+func SetupFixtures(fixture_path ...string) {
 	fixtures, err := testfixtures.New(
 		testfixtures.Database(db.GetDB()),
 		testfixtures.Dialect("mysql"),
