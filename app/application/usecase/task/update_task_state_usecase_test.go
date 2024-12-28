@@ -30,9 +30,9 @@ func TestTask_UpdateTaskStateUsecase_Run(t *testing.T) {
 				mr.EXPECT().Update(gomock.Any(), gomock.Any()).Return(nil)
 			},
 			input: UpdateTaskStateUsecaseInputDTO{
-				ID:             "id",
-				LoggedInUserID: "user_id",
-				State:          "done",
+				ID:     "id",
+				UserId: "user_id",
+				State:  "done",
 			},
 			want: &UpdateTaskStateUsecaseOutputDTO{
 				ID:      "id",
@@ -52,9 +52,9 @@ func TestTask_UpdateTaskStateUsecase_Run(t *testing.T) {
 			},
 			errType: errors.ErrInvalidTaskState,
 			input: UpdateTaskStateUsecaseInputDTO{
-				ID:             "id",
-				LoggedInUserID: "user_id",
-				State:          "invalid",
+				ID:     "id",
+				UserId: "user_id",
+				State:  "invalid",
 			},
 			wantErr: true,
 		},
@@ -68,9 +68,9 @@ func TestTask_UpdateTaskStateUsecase_Run(t *testing.T) {
 			},
 			errType: errors.ErrNotFoundTask,
 			input: UpdateTaskStateUsecaseInputDTO{
-				ID:             "id",
-				LoggedInUserID: "user_id",
-				State:          "doing",
+				ID:     "id",
+				UserId: "user_id",
+				State:  "doing",
 			},
 			wantErr: true,
 		},
@@ -84,9 +84,9 @@ func TestTask_UpdateTaskStateUsecase_Run(t *testing.T) {
 			},
 			errType: errors.ErrForbiddenTaskOperation,
 			input: UpdateTaskStateUsecaseInputDTO{
-				ID:             "id",
-				LoggedInUserID: "other_user_id",
-				State:          "doing",
+				ID:     "id",
+				UserId: "other_user_id",
+				State:  "doing",
 			},
 			wantErr: true,
 		},

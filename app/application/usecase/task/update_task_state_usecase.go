@@ -24,7 +24,7 @@ func (utu *UpdateTaskStateUsecase) Run(ctx context.Context, input UpdateTaskStat
 		return nil, err
 	}
 	// ログインしているユーザーIDと一致したら
-	if err := t.IsOperableBy(input.LoggedInUserID); err != nil {
+	if err := t.IsOperableBy(input.UserId); err != nil {
 		return nil, err
 	}
 	updatedTask, err := t.UpdateState(input.State)

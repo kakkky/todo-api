@@ -22,6 +22,10 @@ func RespondUnAuthorized(rw http.ResponseWriter, message string) {
 	respondJsonFailure(rw, http.StatusUnauthorized, message)
 }
 
+func RespondForbidden(rw http.ResponseWriter, message string) {
+	respondJsonFailure(rw, http.StatusForbidden, message)
+}
+
 func respondJsonFailure(rw http.ResponseWriter, statusCode int, message string) {
 	rw.Header().Set("Content-Type", "application/json;charset=utf-8")
 	rw.WriteHeader(statusCode)

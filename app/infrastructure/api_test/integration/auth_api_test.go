@@ -80,16 +80,19 @@ func TestAuth_Logout(t *testing.T) {
 	tests := []struct {
 		name     string
 		wantCode int
+		gfName   string
 		isLogin  bool
 	}{
 		{
-			name:     "正常系:id=0のユーザーをログアウトさせる",
+			name:     "正常系",
 			wantCode: http.StatusNoContent,
+			gfName:   "logout_nomal",
 			isLogin:  true,
 		},
 		{
-			name:     "準正常系:id=0のユーザーをログアウトさせる",
+			name:     "準正常系:ログインしていないとログアウトできない",
 			wantCode: http.StatusUnauthorized,
+			gfName:   "logout_seminomal_not_loggedin",
 			isLogin:  false,
 		},
 	}
@@ -110,6 +113,19 @@ func TestAuth_Logout(t *testing.T) {
 			if rw.Code != tt.wantCode {
 				t.Errorf("got %d , but want Code %d", rw.Code, tt.wantCode)
 			}
+			// 204ステータスコードなら、JSONは返らないのでここで終了
+			if rw.Code == http.StatusNoContent {
+				return
+			}
+			resp := testhelper.FormatJSON(
+				t,
+				testhelper.NormalizeULID(rw.Body.Bytes()),
+			)
+			g := goldie.New(
+				t,
+				goldie.WithFixtureDir("../testdata/golden/auth"),
+				goldie.WithNameSuffix(".golden.json"))
+			g.Assert(t, tt.gfName, resp)
 		})
 	}
 }

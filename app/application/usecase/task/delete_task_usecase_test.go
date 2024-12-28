@@ -28,8 +28,8 @@ func TestTask_DeleteTaskUsecase_Run(t *testing.T) {
 				mr.EXPECT().Delete(gomock.Any(), gomock.Any()).Return(nil)
 			},
 			input: DeleteTaskUsecaseInputDTO{
-				LoggedInUserID: "user_id",
-				ID:             "id",
+				UserId: "user_id",
+				ID:     "id",
 			},
 			wantErr: false,
 		},
@@ -42,8 +42,8 @@ func TestTask_DeleteTaskUsecase_Run(t *testing.T) {
 				)
 			},
 			input: DeleteTaskUsecaseInputDTO{
-				LoggedInUserID: "user_id",
-				ID:             "id",
+				UserId: "user_id",
+				ID:     "id",
 			},
 			wantErr: true,
 		},
@@ -56,8 +56,8 @@ func TestTask_DeleteTaskUsecase_Run(t *testing.T) {
 				)
 			},
 			input: DeleteTaskUsecaseInputDTO{
-				LoggedInUserID: "orther_user_id",
-				ID:             "id",
+				UserId: "orther_user_id",
+				ID:     "id",
 			},
 			wantErr: true,
 			errType: errors.ErrForbiddenTaskOperation,

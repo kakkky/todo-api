@@ -36,7 +36,6 @@ func TestUser_GetUsers(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
 
@@ -172,6 +171,61 @@ func TestUser_UpdateUser(t *testing.T) {
 			// ステータスコードを検証
 			if rw.Code != tt.wantCode {
 				t.Errorf("got %d , but want Code %d", rw.Code, tt.wantCode)
+			}
+			resp := testhelper.FormatJSON(
+				t,
+				testhelper.NormalizeULID(rw.Body.Bytes()),
+			)
+			g := goldie.New(
+				t,
+				goldie.WithFixtureDir("../testdata/golden/user"),
+				goldie.WithNameSuffix(".golden.json"))
+			g.Assert(t, tt.gfName, resp)
+		})
+	}
+}
+
+func TestUser_DeleteUser(t *testing.T) {
+	tests := []struct {
+		name     string
+		gfName   string
+		wantCode int
+		isLogin  bool
+	}{
+		{
+			name:     "正常系:id=1のユーザーを削除",
+			wantCode: http.StatusNoContent,
+			gfName:   "delete_user_nomal",
+			isLogin:  true,
+		},
+		{
+			name:     "準正常系:未ログイン",
+			wantCode: http.StatusUnauthorized,
+			gfName:   "delete_user_seminomal_not_loggedin",
+			isLogin:  false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
+
+			r := httptest.NewRequest(http.MethodDelete, "/user", nil)
+			rw := httptest.NewRecorder()
+			// ログイン状態をセットアップ
+			// Authorizationヘッダーを付加する
+			if tt.isLogin {
+				signedToken := testhelper.SetupLogin("1")
+				defer testhelper.CleanupLogin("1")
+				r.Header.Set("Authorization", "Bearer "+signedToken)
+			}
+			mux.ServeHTTP(rw, r)
+			// ステータスコードを検証
+			if rw.Code != tt.wantCode {
+				t.Errorf("got %d , but want Code %d", rw.Code, tt.wantCode)
+			}
+			// 204ステータスコードなら、JSONは返らないのでここで終了
+			if rw.Code == http.StatusNoContent {
+				return
 			}
 			resp := testhelper.FormatJSON(
 				t,

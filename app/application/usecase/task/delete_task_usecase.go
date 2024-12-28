@@ -22,7 +22,7 @@ func (dtu *DeleteTaskUsecase) Run(ctx context.Context, input DeleteTaskUsecaseIn
 		return err
 	}
 	// ログインしているユーザーIDと一致したら
-	if err := t.IsOperableBy(input.LoggedInUserID); err != nil {
+	if err := t.IsOperableBy(input.UserId); err != nil {
 		return err
 	}
 	if err := dtu.taskRepository.Delete(ctx, t); err != nil {

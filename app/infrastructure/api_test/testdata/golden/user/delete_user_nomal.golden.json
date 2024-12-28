@@ -1,0 +1,4 @@
+{
+  "status": 400,
+  "message": "errType : ErrNotFoundUser , Message : user not found"
+}

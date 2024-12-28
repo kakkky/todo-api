@@ -1,9 +1,9 @@
 package task
 
 type UpdateTaskStateUsecaseInputDTO struct {
-	ID             string
-	LoggedInUserID string
-	State          string
+	ID     string
+	UserId string
+	State  string
 }
 
 type UpdateTaskStateUsecaseOutputDTO struct {
