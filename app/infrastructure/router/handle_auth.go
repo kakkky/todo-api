@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	authHandler "github.com/kakkky/app/adapter/presentation/auth"
+	authHandler "github.com/kakkky/app/adapter/presentation/handler/auth"
 	"github.com/kakkky/app/adapter/presentation/middleware"
 	"github.com/kakkky/app/adapter/repository"
 	"github.com/kakkky/app/application/usecase/auth"

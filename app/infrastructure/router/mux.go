@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/kakkky/app/adapter/presentation/health"
+	"github.com/kakkky/app/adapter/presentation/handler/health"
 	swagger "github.com/swaggo/http-swagger"
 )
 

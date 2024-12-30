@@ -2,11 +2,15 @@ FROM golang:1.23.1
 
 WORKDIR /src
 
+COPY ./app/go.mod ./app/go.mod
+COPY ./app/go.sum ./app/go.sum
+WORKDIR /src/app
+# github.com/[あなたの名前]/appモジュールの依存関係を全てコンテナ内にダウンロード
+RUN go mod download
+# srcディレクトリ配下にローカルのソースコードをコピー
 COPY ./ ./
 
 WORKDIR /src/app
-
-RUN go mod download
 
 # 必要なツールをインストール
 

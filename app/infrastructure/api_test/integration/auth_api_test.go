@@ -9,7 +9,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/kakkky/app/adapter/presentation/auth"
+	"github.com/kakkky/app/adapter/presentation/handler/auth"
 	"github.com/kakkky/app/infrastructure/api_test/testhelper"
 	dbTesthelper "github.com/kakkky/app/infrastructure/db/testhelper"
 	"github.com/sebdah/goldie/v2"

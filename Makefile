@@ -55,26 +55,7 @@ test-query:
 	@echo "Running tests in query_service..."
 	cd ./app/adapter/query_service && $(call tests)
 
-# リポジトリのテスト
-# コマンド例: $ make test-presentation path=./... opts="-run TestXxx"
-test-presentation:
-	$(eval TEST_PATH=$(or $(path),./...))
-	$(eval TEST_TAGS=$(tags))
-	$(eval TEST_OPTIONS=${opts})
-	@echo "Running tests in presentation..."
-	cd ./app/adapter/presentation && $(call tests)
-
-
-# インフラ層のテスト
-# コマンド例: $ make test-infra path=./... opts="-run TestXxx"
-test-infra:
-	$(eval TEST_PATH=$(or $(path),./...))
-	$(eval TEST_TAGS=$(tags))
-	$(eval TEST_OPTIONS=${opts})
-	@echo "Running tests in infrastructure..."
-	cd ./app/infrastructure && $(call tests)
-
-# pkgのテスト
+# pkgディレクトリのテスト
 # コマンド例: $ make test-pkg path=./... opts="-run TestXxx"
 test-pkg:
 	$(eval TEST_PATH=$(or $(path),./...))

@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 
+	userHandler "github.com/kakkky/app/adapter/presentation/handler/user"
 	"github.com/kakkky/app/adapter/presentation/middleware"
-	userHandler "github.com/kakkky/app/adapter/presentation/user"
 	"github.com/kakkky/app/adapter/repository"
 	"github.com/kakkky/app/application/usecase/auth"
 	userUsecase "github.com/kakkky/app/application/usecase/user"
