@@ -51,7 +51,7 @@ func TestTaskRepository_Save(t *testing.T) {
 			if (err != nil) != tt.wantErr {
 				t.Errorf("taskRepository.FindById() =　error %v,but wantErr :%v", err, tt.wantErr)
 			}
-			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(task.Task{}, task.Content{}, task.State{}), cmpopts.IgnoreFields(task.Task{}, "id")); diff != "" {
+			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(task.Task{}, task.Content{}), cmpopts.IgnoreFields(task.Task{}, "id")); diff != "" {
 				t.Errorf("userRepository.FindByEmail() -got,+want :%v ", diff)
 			}
 		})
@@ -108,7 +108,7 @@ func TestTaskRepository_FindById(t *testing.T) {
 			if (err != nil) != tt.wantErr {
 				t.Errorf("taskRepository.FindById() = error %v, wantErr %v", err, tt.wantErr)
 			}
-			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(task.Task{}, task.Content{}, task.State{})); diff != "" {
+			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(task.Task{}, task.Content{})); diff != "" {
 				t.Errorf("taskRepository.FindById() -got,+want : %v", diff)
 			}
 		})
@@ -158,7 +158,7 @@ func TestTaskRepository_Update(t *testing.T) {
 			if (err != nil) != tt.wantErr {
 				t.Errorf("taskRepository.FindById() = error %v, wantErr %v", err, tt.wantErr)
 			}
-			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(task.Task{}, task.Content{}, task.State{})); diff != "" {
+			if diff := cmp.Diff(got, tt.want, cmp.AllowUnexported(task.Task{}, task.Content{})); diff != "" {
 				t.Errorf("taskRepository.FindById() -got,+want : %v", diff)
 			}
 		})

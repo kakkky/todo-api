@@ -174,6 +174,6 @@ get-app:
 get-pkg:
 	cd ./pkg && go get $(name)
 
-# github.com/kakkky/app、/pkgにおいてgo modする
+# github.com/kakkky/app、/pkgにおいてgo mod tidyする
 mod-tidy:
 	cd ./app && go mod tidy && cd ../pkg && go mod tidy
