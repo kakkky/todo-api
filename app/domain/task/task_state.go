@@ -10,8 +10,8 @@ const (
 	Done
 )
 
-func newState(s string) (State, error) {
-	switch s {
+func newState(value string) (State, error) {
+	switch value {
 	case "todo":
 		return Todo, nil
 	case "doing":
