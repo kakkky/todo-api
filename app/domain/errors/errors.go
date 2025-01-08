@@ -27,7 +27,7 @@ type ErrDomain struct {
 	err error
 }
 
-// ドメインエラーのコンストラクタ
+// ドメインエラーのファクトリ関数
 func newErrDomain(errType, message string) *ErrDomain {
 	return &ErrDomain{
 		err: fmt.Errorf("errType : %v , Message : %v", errType, message),
@@ -45,8 +45,7 @@ func (e *ErrDomain) Error() string {
 	return e.err.Error()
 }
 
-// errors.Isをラップ
-// パッケージ名の衝突を考慮
+// パッケージ名の衝突を考慮して関数をラップしている
 func Is(err, target error) bool {
 	return errors.Is(err, target)
 }

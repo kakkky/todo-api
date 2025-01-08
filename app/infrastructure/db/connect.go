@@ -46,12 +46,13 @@ func NewDB(ctx context.Context, cfg *config.Config) func() {
 
 const (
 	maxRetriesCount = 5
-	delay           = 5 * time.Second
+	initialDelay    = 5 * time.Second
 )
 
 // DBへ接続
-// 失敗したらリトライさせる
+// 失敗したらリトライさせ、待機時間を2倍ずつ指数的に増やす(エクスポネンシャルバックオフ)
 func connect(ctx context.Context, user, password, host, port, name string) (*sql.DB, func(), error) {
+	delay := initialDelay
 	for i := 0; i < maxRetriesCount; i++ {
 		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, password, host, port, name)
 		db, err := sql.Open("mysql", dsn)
@@ -72,6 +73,8 @@ func connect(ctx context.Context, user, password, host, port, name string) (*sql
 		// 接続できなかったらリトライ
 		log.Printf("failed to connect to db (attempt %d/%d), retrying in %v seconds...", i+1, maxRetriesCount, delay/time.Second)
 		time.Sleep(delay)
+		// 待機時間を２倍
+		delay *= 2
 	}
 
 	// 最大試行回数を超えても接続できなかった場合

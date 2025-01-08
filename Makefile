@@ -37,6 +37,15 @@ test-domain:
 	@echo "Running tests in domain..."
 	cd ./app/domain && $(call tests)
 
+# ユースケースのテスト
+# コマンド例: $ make test-usecase path=./... opts="-run TestXxx"
+test-usecase:
+	$(eval TEST_PATH=$(or $(path),./...))
+	$(eval TEST_TAGS=$(tags))
+	$(eval TEST_OPTIONS=${opts})
+	@echo "Running tests in usecase..."
+	cd ./app/application/usecase && $(call tests)
+
 # リポジトリのテスト
 # コマンド例: $ make test-repo path=./... opts="-run TestXxx"
 test-repo:
@@ -177,3 +186,9 @@ get-pkg:
 # github.com/kakkky/app、/pkgにおいてgo mod tidyする
 mod-tidy:
 	cd ./app && go mod tidy && cd ../pkg && go mod tidy
+
+###################
+### go generate ###
+###################
+go-gen:
+	cd ./app && go generate ./...
