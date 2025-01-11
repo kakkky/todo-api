@@ -2,7 +2,7 @@ package task
 
 import "context"
 
-//go:generate mockgen -package=task -source=./interface_task_query_service.go -destination=./mock_task_query_service.go
+//go:generate mockgen -package=task -source=./interface_task_queryservice.go -destination=./mock_task_queryservice.go
 type TaskQueryService interface {
 	FetchTaskById(ctx context.Context, id string) (*FetchTaskDTO, error)
 	FetchUserTasks(ctx context.Context, userId string) ([]*FetchTaskDTO, error)

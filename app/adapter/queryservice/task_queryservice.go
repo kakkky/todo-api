@@ -7,7 +7,6 @@ import (
 	taskUsecase "github.com/kakkky/app/application/usecase/task"
 	"github.com/kakkky/app/domain/errors"
 	taskDomain "github.com/kakkky/app/domain/task"
-	// "github.com/kakkky/app/infrastructure/db/sqlc"
 )
 
 type taskQueryService struct {

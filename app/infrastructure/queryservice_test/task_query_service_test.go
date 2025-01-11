@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	queryservice "github.com/kakkky/app/adapter/query_service"
+	"github.com/kakkky/app/adapter/queryservice"
 	"github.com/kakkky/app/application/usecase/task"
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/app/infrastructure/db/sqlc"

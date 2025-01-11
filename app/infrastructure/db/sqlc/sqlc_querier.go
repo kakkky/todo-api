@@ -3,7 +3,7 @@ package sqlc
 import (
 	"context"
 
-	queryservice "github.com/kakkky/app/adapter/query_service"
+	"github.com/kakkky/app/adapter/queryservice"
 	"github.com/kakkky/app/adapter/repository"
 	"github.com/kakkky/app/infrastructure/db"
 )

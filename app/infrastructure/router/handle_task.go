@@ -5,7 +5,7 @@ import (
 
 	taskHandler "github.com/kakkky/app/adapter/presentation/handler/task"
 	"github.com/kakkky/app/adapter/presentation/middleware"
-	queryservice "github.com/kakkky/app/adapter/query_service"
+	"github.com/kakkky/app/adapter/queryservice"
 	"github.com/kakkky/app/adapter/repository"
 	"github.com/kakkky/app/application/usecase/auth"
 	taskUsecase "github.com/kakkky/app/application/usecase/task"
