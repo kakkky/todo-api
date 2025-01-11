@@ -7,7 +7,6 @@ import (
 
 	"github.com/kakkky/app/infrastructure/db"
 	"github.com/kakkky/app/infrastructure/db/container"
-	"github.com/kakkky/app/infrastructure/db/sqlc"
 	"github.com/kakkky/app/infrastructure/kvs"
 	"github.com/kakkky/app/infrastructure/router"
 )
@@ -31,8 +30,6 @@ func TestMain(m *testing.M) {
 	log.Println("success to apply migrations")
 	// dbパッケージ変数にテスト用DBをセット
 	db.SetDB(testDB)
-	// sqlcパッケージ変数*Queriesをセット
-	sqlc.SetQueries(db.GetDB())
 	log.Println("dockertest & test-db settings complete")
 
 	// テスト用のredisサーバーを起動

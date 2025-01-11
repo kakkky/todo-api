@@ -1,13 +1,15 @@
-package repository
+package repository_test
 
 import (
 	"context"
 	"testing"
 	"time"
+
+	"github.com/kakkky/app/adapter/repository"
 )
 
 func TestTokenAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
-	tokenAuthenticatorRepository := NewTokenAuthenticatorRepository()
+	tokenAuthenticatorRepository := repository.NewTokenAuthenticatorRepository()
 	type args struct {
 		userID   string
 		jwtID    string

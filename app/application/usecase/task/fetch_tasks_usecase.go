@@ -15,7 +15,7 @@ func NewFetchTasksUsease(taskQueryService TaskQueryService) *FetchTasksUsease {
 func (ftu *FetchTasksUsease) Run(ctx context.Context) (
 	[]*FetchTaskUsecaseOutputDTO, error,
 ) {
-	dtos, err := ftu.taskQueryService.FetchTasks(ctx)
+	dtos, err := ftu.taskQueryService.FetchAllTasks(ctx)
 	if err != nil {
 		return nil, err
 	}

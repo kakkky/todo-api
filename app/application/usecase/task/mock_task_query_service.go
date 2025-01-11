@@ -40,6 +40,21 @@ func (m *MockTaskQueryService) EXPECT() *MockTaskQueryServiceMockRecorder {
 	return m.recorder
 }
 
+// FetchAllTasks mocks base method.
+func (m *MockTaskQueryService) FetchAllTasks(ctx context.Context) ([]*FetchTaskDTO, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FetchAllTasks", ctx)
+	ret0, _ := ret[0].([]*FetchTaskDTO)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FetchAllTasks indicates an expected call of FetchAllTasks.
+func (mr *MockTaskQueryServiceMockRecorder) FetchAllTasks(ctx any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchAllTasks", reflect.TypeOf((*MockTaskQueryService)(nil).FetchAllTasks), ctx)
+}
+
 // FetchTaskById mocks base method.
 func (m *MockTaskQueryService) FetchTaskById(ctx context.Context, id string) (*FetchTaskDTO, error) {
 	m.ctrl.T.Helper()
@@ -53,21 +68,6 @@ func (m *MockTaskQueryService) FetchTaskById(ctx context.Context, id string) (*F
 func (mr *MockTaskQueryServiceMockRecorder) FetchTaskById(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchTaskById", reflect.TypeOf((*MockTaskQueryService)(nil).FetchTaskById), ctx, id)
-}
-
-// FetchTasks mocks base method.
-func (m *MockTaskQueryService) FetchTasks(ctx context.Context) ([]*FetchTaskDTO, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FetchTasks", ctx)
-	ret0, _ := ret[0].([]*FetchTaskDTO)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FetchTasks indicates an expected call of FetchTasks.
-func (mr *MockTaskQueryServiceMockRecorder) FetchTasks(ctx any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchTasks", reflect.TypeOf((*MockTaskQueryService)(nil).FetchTasks), ctx)
 }
 
 // FetchUserTasks mocks base method.

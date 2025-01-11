@@ -5,13 +5,15 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	queryservice "github.com/kakkky/app/adapter/query_service"
 	"github.com/kakkky/app/application/usecase/task"
 	"github.com/kakkky/app/domain/errors"
+	"github.com/kakkky/app/infrastructure/db/sqlc"
 	"github.com/kakkky/app/infrastructure/db/testhelper"
 )
 
 func TestTaskQueryService_FetchTaskById(t *testing.T) {
-	taskQueryService := NewTaskQueryService()
+	taskQueryService := queryservice.NewTaskQueryService(sqlc.NewSqlcQuerier())
 	type args struct {
 		id string
 	}
@@ -66,7 +68,7 @@ func TestTaskQueryService_FetchTaskById(t *testing.T) {
 }
 
 func TestTaskQueryService_FetchUserTasks(t *testing.T) {
-	taskQueryService := NewTaskQueryService()
+	taskQueryService := queryservice.NewTaskQueryService(sqlc.NewSqlcQuerier())
 	type args struct {
 		user_id string
 	}
@@ -124,7 +126,7 @@ func TestTaskQueryService_FetchUserTasks(t *testing.T) {
 }
 
 func TestTaskQueryService_FetchTasks(t *testing.T) {
-	taskQueryService := NewTaskQueryService()
+	taskQueryService := queryservice.NewTaskQueryService(sqlc.NewSqlcQuerier())
 	tests := []struct {
 		name    string
 		want    []*task.FetchTaskDTO
@@ -176,7 +178,7 @@ func TestTaskQueryService_FetchTasks(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			testhelper.SetupFixtures("testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
 			ctx := context.Background()
-			got, err := taskQueryService.FetchTasks(ctx)
+			got, err := taskQueryService.FetchAllTasks(ctx)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("taskQueryService.FetchUserTasks = error %v, wantErr %v", err, tt.wantErr)
 				return

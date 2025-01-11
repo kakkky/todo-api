@@ -19,27 +19,27 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) error {
 	return err
 }
 
-const fetchAllUser = `-- name: FetchAllUser :many
+const fetchAllUsers = `-- name: FetchAllUsers :many
 select id,email,name,hashed_password
 from users
 `
 
-type FetchAllUserRow struct {
+type FetchAllUsersRow struct {
 	ID             string
 	Email          string
 	Name           string
 	HashedPassword string
 }
 
-func (q *Queries) FetchAllUser(ctx context.Context) ([]FetchAllUserRow, error) {
-	rows, err := q.db.QueryContext(ctx, fetchAllUser)
+func (q *Queries) FetchAllUsers(ctx context.Context) ([]FetchAllUsersRow, error) {
+	rows, err := q.db.QueryContext(ctx, fetchAllUsers)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []FetchAllUserRow{}
+	items := []FetchAllUsersRow{}
 	for rows.Next() {
-		var i FetchAllUserRow
+		var i FetchAllUsersRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Email,

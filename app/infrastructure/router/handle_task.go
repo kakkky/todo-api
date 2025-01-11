@@ -10,11 +10,13 @@ import (
 	"github.com/kakkky/app/application/usecase/auth"
 	taskUsecase "github.com/kakkky/app/application/usecase/task"
 	authInfra "github.com/kakkky/app/infrastructure/auth"
+	"github.com/kakkky/app/infrastructure/db/sqlc"
 )
 
 func handleTask(mux *http.ServeMux) {
-	taskRepository := repository.NewTaskRepository()
-	taskQueryService := queryservice.NewTaskQueryService()
+	sqlc := sqlc.NewSqlcQuerier()
+	taskRepository := repository.NewTaskRepository(sqlc)
+	taskQueryService := queryservice.NewTaskQueryService(sqlc)
 	authorization := middleware.Authorication(
 		auth.NewAuthorizationUsecase(
 			authInfra.NewJWTAuthenticator(),

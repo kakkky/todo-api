@@ -6,18 +6,20 @@ import (
 
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/app/domain/task"
-	"github.com/kakkky/app/infrastructure/db/sqlc"
 )
 
-type taskRepository struct{}
+type taskRepository struct {
+	querier Querier
+}
 
-func NewTaskRepository() task.TaskRepository {
-	return &taskRepository{}
+func NewTaskRepository(querier Querier) task.TaskRepository {
+	return &taskRepository{
+		querier: querier,
+	}
 }
 
 func (tr *taskRepository) FindById(ctx context.Context, id string) (*task.Task, error) {
-	queries := sqlc.GetQueries()
-	t, err := queries.FindTaskById(ctx, id)
+	t, err := tr.querier.FindTaskById(ctx, id)
 	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return nil, errors.ErrNotFoundTask
 	}
@@ -34,34 +36,31 @@ func (tr *taskRepository) FindById(ctx context.Context, id string) (*task.Task, 
 }
 
 func (tr *taskRepository) Save(ctx context.Context, task *task.Task) error {
-	queries := sqlc.GetQueries()
-	params := sqlc.InsertTaskParams{
+	arg := InsertTaskParams{
 		ID:      task.GetID(),
 		UserID:  task.GetUserId(),
 		Content: task.GetContent().Value(),
 		State:   int32(task.GetState().IntValue()),
 	}
-	if err := queries.InsertTask(ctx, params); err != nil {
+	if err := tr.querier.InsertTask(ctx, arg); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (tr *taskRepository) Update(ctx context.Context, task *task.Task) error {
-	queries := sqlc.GetQueries()
-	params := sqlc.UpdateTaskParams{
+	arg := UpdateTaskParams{
 		ID:    task.GetID(),
 		State: int32(task.GetState().IntValue()),
 	}
-	if err := queries.UpdateTask(ctx, params); err != nil {
+	if err := tr.querier.UpdateTask(ctx, arg); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (tr *taskRepository) Delete(ctx context.Context, task *task.Task) error {
-	queries := sqlc.GetQueries()
-	if err := queries.DeleteTask(ctx, task.GetID()); err != nil {
+	if err := tr.querier.DeleteTask(ctx, task.GetID()); err != nil {
 		return err
 	}
 	return nil

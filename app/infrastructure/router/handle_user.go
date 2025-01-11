@@ -10,10 +10,12 @@ import (
 	userUsecase "github.com/kakkky/app/application/usecase/user"
 	"github.com/kakkky/app/domain/user"
 	authInfra "github.com/kakkky/app/infrastructure/auth"
+	"github.com/kakkky/app/infrastructure/db/sqlc"
 )
 
 func handleUser(mux *http.ServeMux) {
-	userRepository := repository.NewUserRepository()
+	sqlc := sqlc.NewSqlcQuerier()
+	userRepository := repository.NewUserRepository(sqlc)
 	authorization := middleware.Authorication(
 		auth.NewAuthorizationUsecase(
 			authInfra.NewJWTAuthenticator(),

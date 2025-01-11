@@ -6,32 +6,33 @@ import (
 
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/app/domain/user"
-	"github.com/kakkky/app/infrastructure/db/sqlc"
 )
 
-type userRepository struct{}
+type userRepository struct {
+	querier Querier
+}
 
-func NewUserRepository() user.UserRepository {
-	return &userRepository{}
+func NewUserRepository(querier Querier) user.UserRepository {
+	return &userRepository{
+		querier: querier,
+	}
 }
 
 func (ur *userRepository) Save(ctx context.Context, user *user.User) error {
-	queries := sqlc.GetQueries()
-	params := sqlc.InsertUserParams{
+	arg := InsertUserParams{
 		ID:             user.GetID(),
 		Name:           user.GetName(),
 		Email:          user.GetEmail().Value(),
 		HashedPassword: user.GetHashedPassword().Value(),
 	}
-	if err := queries.InsertUser(ctx, params); err != nil {
+	if err := ur.querier.InsertUser(ctx, arg); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (ur *userRepository) FindByEmail(ctx context.Context, email user.Email) (*user.User, error) {
-	queries := sqlc.GetQueries()
-	u, err := queries.FindUserByEmail(ctx, email.Value())
+	u, err := ur.querier.FindUserByEmail(ctx, email.Value())
 	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return nil, errors.ErrNotFoundUser
 	}
@@ -48,8 +49,7 @@ func (ur *userRepository) FindByEmail(ctx context.Context, email user.Email) (*u
 }
 
 func (ur *userRepository) FindById(ctx context.Context, id string) (*user.User, error) {
-	queries := sqlc.GetQueries()
-	u, err := queries.FindUserById(ctx, id)
+	u, err := ur.querier.FindUserById(ctx, id)
 	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return nil, errors.ErrNotFoundUser
 	}
@@ -66,8 +66,7 @@ func (ur *userRepository) FindById(ctx context.Context, id string) (*user.User, 
 }
 
 func (ur *userRepository) FetchAllUsers(ctx context.Context) (user.Users, error) {
-	queries := sqlc.GetQueries()
-	us, err := queries.FetchAllUser(ctx)
+	us, err := ur.querier.FetchAllUser(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -86,21 +85,19 @@ func (ur *userRepository) FetchAllUsers(ctx context.Context) (user.Users, error)
 }
 
 func (ur *userRepository) Update(ctx context.Context, user *user.User) error {
-	queries := sqlc.GetQueries()
-	params := sqlc.UpdateUserParams{
+	params := UpdateUserParams{
 		Name:  user.GetName(),
 		Email: user.GetEmail().Value(),
 		ID:    user.GetID(),
 	}
-	if err := queries.UpdateUser(ctx, params); err != nil {
+	if err := ur.querier.UpdateUser(ctx, params); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (ur *userRepository) Delete(ctx context.Context, user *user.User) error {
-	queries := sqlc.GetQueries()
-	if err := queries.DeleteUser(ctx, user.GetID()); err != nil {
+	if err := ur.querier.DeleteUser(ctx, user.GetID()); err != nil {
 		return err
 	}
 	return nil

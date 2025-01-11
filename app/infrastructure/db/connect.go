@@ -65,9 +65,10 @@ func connect(ctx context.Context, user, password, host, port, name string) (*sql
 				// 成功した場合、呼び出し元でdb.Close()を実行できるようにする
 				log.Printf("successfully connected to db (attempt %d/%d)", i+1, maxRetriesCount)
 				return db, func() { db.Close() }, nil
+			} else {
+				// 接続できた場合のエラーメッセージ
+				log.Printf("failed to ping db: %v", err)
 			}
-			// 接続できた場合のエラーメッセージ
-			log.Printf("failed to ping db: %v", err)
 		}
 
 		// 接続できなかったらリトライ

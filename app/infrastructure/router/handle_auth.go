@@ -9,6 +9,7 @@ import (
 	"github.com/kakkky/app/application/usecase/auth"
 	authUsecase "github.com/kakkky/app/application/usecase/auth"
 	authInfra "github.com/kakkky/app/infrastructure/auth"
+	"github.com/kakkky/app/infrastructure/db/sqlc"
 )
 
 func handleAuth(mux *http.ServeMux) {
@@ -22,7 +23,7 @@ func handleAuth(mux *http.ServeMux) {
 	mux.Handle("POST /login", composeMiddlewares(middleware.Logger)(
 		authHandler.NewLoginHandler(
 			authUsecase.NewLoginUsecase(
-				repository.NewUserRepository(),
+				repository.NewUserRepository(sqlc.NewSqlcQuerier()),
 				repository.NewTokenAuthenticatorRepository(),
 				authInfra.NewJWTAuthenticator(),
 			))))

@@ -1,4 +1,4 @@
-package repository
+package repository_test
 
 import (
 	"context"
@@ -6,13 +6,15 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/kakkky/app/adapter/repository"
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/app/domain/task"
+	"github.com/kakkky/app/infrastructure/db/sqlc"
 	testhelper "github.com/kakkky/app/infrastructure/db/testhelper"
 )
 
 func TestTaskRepository_Save(t *testing.T) {
-	taskRepository := NewTaskRepository()
+	taskRepository := repository.NewTaskRepository(sqlc.NewSqlcQuerier())
 	ta, _ := task.NewTask(
 		"1",
 		"content",
@@ -59,7 +61,7 @@ func TestTaskRepository_Save(t *testing.T) {
 }
 
 func TestTaskRepository_FindById(t *testing.T) {
-	taskRepository := NewTaskRepository()
+	taskRepository := repository.NewTaskRepository(sqlc.NewSqlcQuerier())
 	task1 := task.ReconstructTask(
 		"1",
 		"1",
@@ -116,7 +118,7 @@ func TestTaskRepository_FindById(t *testing.T) {
 }
 
 func TestTaskRepository_Update(t *testing.T) {
-	taskRepository := NewTaskRepository()
+	taskRepository := repository.NewTaskRepository(sqlc.NewSqlcQuerier())
 	// 更新するタスク
 	updatingTask := task.ReconstructTask(
 		"1",
@@ -166,7 +168,7 @@ func TestTaskRepository_Update(t *testing.T) {
 }
 
 func TestTaskRepository_Delete(t *testing.T) {
-	taskRepository := NewTaskRepository()
+	taskRepository := repository.NewTaskRepository(sqlc.NewSqlcQuerier())
 	// 更新するタスク
 	deletingTask := task.ReconstructTask(
 		"1",

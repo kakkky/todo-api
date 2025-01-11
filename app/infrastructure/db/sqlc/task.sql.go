@@ -19,6 +19,49 @@ func (q *Queries) DeleteTask(ctx context.Context, id string) error {
 	return err
 }
 
+const fetchAllTasks = `-- name: FetchAllTasks :many
+select t.id,u.name,t.user_id,t.content,t.state
+from tasks as t inner join users as u
+on t.user_id = u.id
+`
+
+type FetchAllTasksRow struct {
+	ID      string
+	Name    string
+	UserID  string
+	Content string
+	State   int32
+}
+
+func (q *Queries) FetchAllTasks(ctx context.Context) ([]FetchAllTasksRow, error) {
+	rows, err := q.db.QueryContext(ctx, fetchAllTasks)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []FetchAllTasksRow{}
+	for rows.Next() {
+		var i FetchAllTasksRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.UserID,
+			&i.Content,
+			&i.State,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const fetchTaskById = `-- name: FetchTaskById :one
 select t.id,u.name,t.user_id,t.content,t.state
 from tasks as t inner join users as u
@@ -45,49 +88,6 @@ func (q *Queries) FetchTaskById(ctx context.Context, id string) (FetchTaskByIdRo
 		&i.State,
 	)
 	return i, err
-}
-
-const fetchTasks = `-- name: FetchTasks :many
-select t.id,u.name,t.user_id,t.content,t.state
-from tasks as t inner join users as u
-on t.user_id = u.id
-`
-
-type FetchTasksRow struct {
-	ID      string
-	Name    string
-	UserID  string
-	Content string
-	State   int32
-}
-
-func (q *Queries) FetchTasks(ctx context.Context) ([]FetchTasksRow, error) {
-	rows, err := q.db.QueryContext(ctx, fetchTasks)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []FetchTasksRow{}
-	for rows.Next() {
-		var i FetchTasksRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.UserID,
-			&i.Content,
-			&i.State,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }
 
 const fetchUserTasks = `-- name: FetchUserTasks :many

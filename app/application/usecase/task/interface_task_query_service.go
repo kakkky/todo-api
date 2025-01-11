@@ -6,7 +6,7 @@ import "context"
 type TaskQueryService interface {
 	FetchTaskById(ctx context.Context, id string) (*FetchTaskDTO, error)
 	FetchUserTasks(ctx context.Context, userId string) ([]*FetchTaskDTO, error)
-	FetchTasks(ctx context.Context) ([]*FetchTaskDTO, error)
+	FetchAllTasks(ctx context.Context) ([]*FetchTaskDTO, error)
 }
 
 type FetchTaskDTO struct {

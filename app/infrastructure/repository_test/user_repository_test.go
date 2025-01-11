@@ -1,4 +1,4 @@
-package repository
+package repository_test
 
 import (
 	"context"
@@ -7,13 +7,15 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/kakkky/app/adapter/repository"
 	"github.com/kakkky/app/domain/errors"
 	"github.com/kakkky/app/domain/user"
+	"github.com/kakkky/app/infrastructure/db/sqlc"
 	testhelper "github.com/kakkky/app/infrastructure/db/testhelper"
 )
 
 func TestUserRepository_Save(t *testing.T) {
-	userRepository := NewUserRepository()
+	userRepository := repository.NewUserRepository(sqlc.NewSqlcQuerier())
 	// ユーザーインスタンスを用意
 	user0, _ := user.NewUser(
 		"user0@example.com",
@@ -63,7 +65,7 @@ func TestUserRepository_Save(t *testing.T) {
 }
 
 func TestUserRepository_FindByEmail(t *testing.T) {
-	userRepository := NewUserRepository()
+	userRepository := repository.NewUserRepository(sqlc.NewSqlcQuerier())
 	user1, _ := user.NewUser(
 		"user1@test.com",
 		"user1",
@@ -124,7 +126,7 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 	}
 }
 func TestUserRepository_FindById(t *testing.T) {
-	userRepository := NewUserRepository()
+	userRepository := repository.NewUserRepository(sqlc.NewSqlcQuerier())
 	user1 := user.ReconstructUser(
 		"1",
 		"user1@test.com",
@@ -187,7 +189,7 @@ func TestUserRepository_FindById(t *testing.T) {
 }
 
 func TestUserRepository_FetchAllUsers(t *testing.T) {
-	userRepository := NewUserRepository()
+	userRepository := repository.NewUserRepository(sqlc.NewSqlcQuerier())
 	var users user.Users
 	for i := 0; i < 3; i++ {
 		u, _ := user.NewUser(
@@ -225,7 +227,7 @@ func TestUserRepository_FetchAllUsers(t *testing.T) {
 }
 
 func TestUserRepository_Update(t *testing.T) {
-	userRepository := NewUserRepository()
+	userRepository := repository.NewUserRepository(sqlc.NewSqlcQuerier())
 	// 更新情報を詰め替えて再構成したユーザー
 	updatingUser := user.ReconstructUser(
 		"1",
@@ -284,7 +286,7 @@ func TestUserRepository_Update(t *testing.T) {
 	}
 }
 func TestUserRepository_Delete(t *testing.T) {
-	userRepository := NewUserRepository()
+	userRepository := repository.NewUserRepository(sqlc.NewSqlcQuerier())
 	deletingUser := user.ReconstructUser(
 		"1",
 		"user1@test.com",

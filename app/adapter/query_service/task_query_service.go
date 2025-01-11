@@ -7,18 +7,21 @@ import (
 	taskUsecase "github.com/kakkky/app/application/usecase/task"
 	"github.com/kakkky/app/domain/errors"
 	taskDomain "github.com/kakkky/app/domain/task"
-	"github.com/kakkky/app/infrastructure/db/sqlc"
+	// "github.com/kakkky/app/infrastructure/db/sqlc"
 )
 
-type taskQueryService struct{}
+type taskQueryService struct {
+	querier Querier
+}
 
-func NewTaskQueryService() taskUsecase.TaskQueryService {
-	return &taskQueryService{}
+func NewTaskQueryService(querier Querier) taskUsecase.TaskQueryService {
+	return &taskQueryService{
+		querier: querier,
+	}
 }
 
 func (tqs *taskQueryService) FetchTaskById(ctx context.Context, id string) (*taskUsecase.FetchTaskDTO, error) {
-	queries := sqlc.GetQueries()
-	r, err := queries.FetchTaskById(ctx, id)
+	r, err := tqs.querier.FetchTaskById(ctx, id)
 	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return nil, errors.ErrNotFoundTask
 	}
@@ -44,8 +47,8 @@ func (tqs *taskQueryService) FetchTaskById(ctx context.Context, id string) (*tas
 }
 
 func (tqs *taskQueryService) FetchUserTasks(ctx context.Context, userId string) ([]*taskUsecase.FetchTaskDTO, error) {
-	queries := sqlc.GetQueries()
-	rs, err := queries.FetchUserTasks(ctx, userId)
+
+	rs, err := tqs.querier.FetchUserTasks(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -68,9 +71,8 @@ func (tqs *taskQueryService) FetchUserTasks(ctx context.Context, userId string) 
 	return dtos, nil
 }
 
-func (tqs *taskQueryService) FetchTasks(ctx context.Context) ([]*taskUsecase.FetchTaskDTO, error) {
-	queries := sqlc.GetQueries()
-	rs, err := queries.FetchTasks(ctx)
+func (tqs *taskQueryService) FetchAllTasks(ctx context.Context) ([]*taskUsecase.FetchTaskDTO, error) {
+	rs, err := tqs.querier.FetchAllTasks(ctx)
 	if err != nil {
 		return nil, err
 	}

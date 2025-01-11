@@ -8,7 +8,7 @@ select id,email,name,hashed_password
 from users
 where id = sqlc.arg(id);
 
--- name: FetchAllUser :many
+-- name: FetchAllUsers :many
 select id,email,name,hashed_password
 from users;
 
