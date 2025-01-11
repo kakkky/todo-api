@@ -1,13 +1,11 @@
 package router
 
 import (
-	"log"
 	"net/http"
 
 	authHandler "github.com/kakkky/app/adapter/presentation/handler/auth"
 	"github.com/kakkky/app/adapter/presentation/middleware"
 	"github.com/kakkky/app/adapter/repository"
-	"github.com/kakkky/app/application/usecase/auth"
 	authUsecase "github.com/kakkky/app/application/usecase/auth"
 	authInfra "github.com/kakkky/app/infrastructure/auth"
 	"github.com/kakkky/app/infrastructure/db/sqlc"
@@ -15,14 +13,10 @@ import (
 )
 
 func handleAuth(mux *http.ServeMux) {
-	redisCom, err := kvs.NewRedisCommander()
-	if err != nil {
-		log.Fatalln(err)
-	}
 	authorization := middleware.Authorication(
-		auth.NewAuthorizationUsecase(
+		authUsecase.NewAuthorizationUsecase(
 			authInfra.NewJWTAuthenticator(),
-			repository.NewTokenAuthenticatorRepository(redisCom),
+			repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander()),
 		),
 	)
 
@@ -30,7 +24,7 @@ func handleAuth(mux *http.ServeMux) {
 		authHandler.NewLoginHandler(
 			authUsecase.NewLoginUsecase(
 				repository.NewUserRepository(sqlc.NewSqlcQuerier()),
-				repository.NewTokenAuthenticatorRepository(redisCom),
+				repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander()),
 				authInfra.NewJWTAuthenticator(),
 			))))
 
@@ -38,7 +32,7 @@ func handleAuth(mux *http.ServeMux) {
 		authHandler.NewLogoutHandler(
 			authUsecase.NewLogoutUsecase(
 				authInfra.NewJWTAuthenticator(),
-				repository.NewTokenAuthenticatorRepository(redisCom),
+				repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander()),
 			),
 		),
 	))

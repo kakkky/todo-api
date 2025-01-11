@@ -10,11 +10,7 @@ import (
 )
 
 func TestTokenAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
-	redisCom, err := kvs.NewRedisCommander()
-	if err != nil {
-		t.Fatal(err)
-	}
-	tokenAuthenticatorRepository := repository.NewTokenAuthenticatorRepository(redisCom)
+	tokenAuthenticatorRepository := repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander())
 	type args struct {
 		userID   string
 		jwtID    string

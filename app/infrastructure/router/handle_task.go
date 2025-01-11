@@ -1,7 +1,6 @@
 package router
 
 import (
-	"log"
 	"net/http"
 
 	taskHandler "github.com/kakkky/app/adapter/presentation/handler/task"
@@ -19,14 +18,10 @@ func handleTask(mux *http.ServeMux) {
 	sqlc := sqlc.NewSqlcQuerier()
 	taskRepository := repository.NewTaskRepository(sqlc)
 	taskQueryService := queryservice.NewTaskQueryService(sqlc)
-	redisCom, err := kvs.NewRedisCommander()
-	if err != nil {
-		log.Fatalln(err)
-	}
 	authorization := middleware.Authorication(
 		auth.NewAuthorizationUsecase(
 			authInfra.NewJWTAuthenticator(),
-			repository.NewTokenAuthenticatorRepository(redisCom),
+			repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander()),
 		),
 	)
 
