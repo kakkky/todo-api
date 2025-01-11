@@ -53,7 +53,7 @@ test-repo:
 	$(eval TEST_TAGS=$(tags))
 	$(eval TEST_OPTIONS=${opts})
 	@echo "Running tests in repository..."
-	cd ./app/adapter/repository && $(call tests)
+	cd ./app/infrastructure/repository_test && $(call tests)
 
 # クエリサービスのテスト
 # コマンド例: $ make test-query path=./... opts="-run TestXxx"
@@ -61,8 +61,8 @@ test-query:
 	$(eval TEST_PATH=$(or $(path),./...))
 	$(eval TEST_TAGS=$(tags))
 	$(eval TEST_OPTIONS=${opts})
-	@echo "Running tests in query_service..."
-	cd ./app/adapter/query_service && $(call tests)
+	@echo "Running tests in queryservice..."
+	cd ./app/infrastructure/queryservice_test && $(call tests)
 
 # pkgディレクトリのテスト
 # コマンド例: $ make test-pkg path=./... opts="-run TestXxx"

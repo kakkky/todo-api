@@ -6,10 +6,15 @@ import (
 	"time"
 
 	"github.com/kakkky/app/adapter/repository"
+	"github.com/kakkky/app/infrastructure/kvs"
 )
 
 func TestTokenAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
-	tokenAuthenticatorRepository := repository.NewTokenAuthenticatorRepository()
+	redisCom, err := kvs.NewRedisCommander()
+	if err != nil {
+		t.Fatal(err)
+	}
+	tokenAuthenticatorRepository := repository.NewTokenAuthenticatorRepository(redisCom)
 	type args struct {
 		userID   string
 		jwtID    string

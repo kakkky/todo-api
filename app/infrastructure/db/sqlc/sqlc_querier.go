@@ -8,6 +8,8 @@ import (
 	"github.com/kakkky/app/infrastructure/db"
 )
 
+// Querierインターフェースを満たす
+// sqlcはここから利用する
 type SqlcQuerier struct {
 	queries *Queries
 }
@@ -30,12 +32,7 @@ func (sq *SqlcQuerier) FetchAllUser(ctx context.Context) ([]repository.FetchAllU
 	rows, err := sq.queries.FetchAllUsers(ctx)
 	var r []repository.FetchAllUsersRow
 	for _, row := range rows {
-		r = append(r, repository.FetchAllUsersRow{
-			ID:             row.ID,
-			Email:          row.Email,
-			Name:           row.Name,
-			HashedPassword: row.HashedPassword,
-		})
+		r = append(r, repository.FetchAllUsersRow(row))
 	}
 	return r, err
 }

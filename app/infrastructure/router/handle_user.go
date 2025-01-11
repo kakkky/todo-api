@@ -1,6 +1,7 @@
 package router
 
 import (
+	"log"
 	"net/http"
 
 	userHandler "github.com/kakkky/app/adapter/presentation/handler/user"
@@ -11,15 +12,20 @@ import (
 	"github.com/kakkky/app/domain/user"
 	authInfra "github.com/kakkky/app/infrastructure/auth"
 	"github.com/kakkky/app/infrastructure/db/sqlc"
+	"github.com/kakkky/app/infrastructure/kvs"
 )
 
 func handleUser(mux *http.ServeMux) {
 	sqlc := sqlc.NewSqlcQuerier()
 	userRepository := repository.NewUserRepository(sqlc)
+	redisCom, err := kvs.NewRedisCommander()
+	if err != nil {
+		log.Fatalln(err)
+	}
 	authorization := middleware.Authorication(
 		auth.NewAuthorizationUsecase(
 			authInfra.NewJWTAuthenticator(),
-			repository.NewTokenAuthenticatorRepository(),
+			repository.NewTokenAuthenticatorRepository(redisCom),
 		),
 	)
 
