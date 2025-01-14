@@ -57,16 +57,17 @@ func SetupDB() {
 
 const migrationsRelativePath = "../migrations"
 
-// どこからSetupDBを呼び出してもmigrationsファイルへのパスを取得できるようにする
+// どこからSetupDBを呼び出しても/migrationsへのパスを取得できるようにする
 func getMigrationsPath() string {
-	// コールスタックを遡って、Callerを呼んだ階層の情報を取得する
-	// Callerを呼んだ階層とは、つまりこのcontainerディレクトリのこと
+	// Callerを呼んだファイル名（ファイルパス）を取得する
 	_, callerFile, _, ok := runtime.Caller(0)
+	print(callerFile)
 	if !ok {
 		log.Fatal("failed to get caller directory")
 	}
-
-	callerPath := filepath.Dir(callerFile)
-	migratiionsAbsPath := "file://" + filepath.Join(callerPath, migrationsRelativePath)
-	return migratiionsAbsPath
+	// ファイルパスからディレクトリ部分を取り出す
+	callerDir := filepath.Dir(callerFile)
+	// /migrationsへの絶対パスを作成
+	migrationsAbsPath := "file://" + filepath.Join(callerDir, migrationsRelativePath)
+	return migrationsAbsPath
 }
