@@ -268,8 +268,9 @@ func TestTask_UpdateTaskState(t *testing.T) {
 		isLogin   bool //ログインさせるか
 	}{
 		{
-			name:     "正常系",
-			wantCode: http.StatusOK,
+			name:      "正常系",
+			wantCode:  http.StatusOK,
+			pathParam: "1",
 			req: task.UpdateTaskStateRequest{
 				State: "doing",
 			},
