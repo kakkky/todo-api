@@ -30,7 +30,7 @@ func NewPostTaskHandler(createPostUsecase *task.CreateTaskUsecase) *PostTaskHand
 // @Success     201 {object} presenter.SuccessResponse[PostTaskResponse] "作成したタスクの情報"
 // @Failure     400 {object} presenter.FailureResponse                   "不正なリクエスト"
 // @Failure     500 {object} presenter.FailureResponse                   "内部サーバーエラー"
-// @Router      /task [post]
+// @Router      /tasks [post]
 func (pth *PostTaskHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// jsonをデコード
 	var params PostTaskRequest

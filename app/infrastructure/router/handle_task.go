@@ -25,28 +25,28 @@ func handleTask(mux *http.ServeMux) {
 		),
 	)
 
-	mux.Handle("POST /task", composeMiddlewares(authorization, middleware.Logger)(
+	mux.Handle("POST /tasks", composeMiddlewares(authorization, middleware.Logger)(
 		taskHandler.NewPostTaskHandler(
 			taskUsecase.NewCreateTaskUsecase(
 				taskRepository,
 			),
 		),
 	))
-	mux.Handle("DELETE /task/{id}", composeMiddlewares(authorization, middleware.Logger)(
+	mux.Handle("DELETE /tasks/{id}", composeMiddlewares(authorization, middleware.Logger)(
 		taskHandler.NewDeleteTaskHandler(
 			taskUsecase.NewDeleteTaskUsecase(
 				taskRepository,
 			),
 		),
 	))
-	mux.Handle("PATCH /task", composeMiddlewares(authorization, middleware.Logger)(
+	mux.Handle("PATCH /tasks/{id}", composeMiddlewares(authorization, middleware.Logger)(
 		taskHandler.NewUpdateTaskStateHandler(
 			taskUsecase.NewUpdateTaskStateUsecase(
 				taskRepository,
 			),
 		),
 	))
-	mux.Handle("GET /task/{id}", composeMiddlewares(authorization, middleware.Logger)(
+	mux.Handle("GET /tasks/{id}", composeMiddlewares(authorization, middleware.Logger)(
 		taskHandler.NewGetTaskHandler(
 			taskUsecase.NewFetchTaskUsease(
 				taskQueryService,

@@ -130,12 +130,9 @@ definitions:
     type: object
   task.UpdateTaskStateRequest:
     properties:
-      id:
-        type: string
       state:
         type: string
     required:
-    - id
     - state
     type: object
   task.UpdateTaskStateResponse:
@@ -263,29 +260,18 @@ paths:
       summary: ユーザーのログアウト
       tags:
       - Auth
-  /task:
-    patch:
-      description: タスクの状態(todo/doing/done)を 指定して更新する
-      parameters:
-      - description: タスク更新のための情報
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/task.UpdateTaskStateRequest'
+  /tasks:
+    get:
+      description: 全ユーザーのタスクを全て表示する
       produces:
       - application/json
       responses:
-        "201":
-          description: 更新したタスクの情報
+        "200":
+          description: タスクの情報
           schema:
-            $ref: '#/definitions/presenter.SuccessResponse-task_UpdateTaskStateResponse'
+            $ref: '#/definitions/presenter.SuccessResponse-array_task_GetTaskResponse'
         "400":
           description: 不正なリクエスト
-          schema:
-            $ref: '#/definitions/presenter.FailureResponse'
-        "403":
-          description: 権限エラー
           schema:
             $ref: '#/definitions/presenter.FailureResponse'
         "500":
@@ -294,7 +280,7 @@ paths:
             $ref: '#/definitions/presenter.FailureResponse'
       security:
       - BearerAuth: []
-      summary: タスク状態を更新する
+      summary: 全てのタスクを表示する
       tags:
       - Task
     post:
@@ -326,7 +312,7 @@ paths:
       summary: タスクを作成する
       tags:
       - Task
-  /task/{id}:
+  /tasks/{id}:
     delete:
       description: 指定したidのタスクを削除する
       produces:
@@ -373,18 +359,28 @@ paths:
       summary: タスクを表示する
       tags:
       - Task
-  /tasks:
-    get:
-      description: 全ユーザーのタスクを全て表示する
+    patch:
+      description: タスクの状態(todo/doing/done)を 指定して更新する
+      parameters:
+      - description: タスク更新のための情報
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/task.UpdateTaskStateRequest'
       produces:
       - application/json
       responses:
-        "200":
-          description: タスクの情報
+        "201":
+          description: 更新したタスクの情報
           schema:
-            $ref: '#/definitions/presenter.SuccessResponse-array_task_GetTaskResponse'
+            $ref: '#/definitions/presenter.SuccessResponse-task_UpdateTaskStateResponse'
         "400":
           description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "403":
+          description: 権限エラー
           schema:
             $ref: '#/definitions/presenter.FailureResponse'
         "500":
@@ -393,7 +389,7 @@ paths:
             $ref: '#/definitions/presenter.FailureResponse'
       security:
       - BearerAuth: []
-      summary: 全てのタスクを表示する
+      summary: タスク状態を更新する
       tags:
       - Task
   /user:

@@ -49,7 +49,7 @@ func TestTask_GetTask(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			// リクエストボディをマーシャル（→json）
-			r := httptest.NewRequest(http.MethodGet, "/task/"+tt.pathParam, nil)
+			r := httptest.NewRequest(http.MethodGet, "/tasks/"+tt.pathParam, nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
@@ -232,7 +232,7 @@ func TestTask_PostTask(t *testing.T) {
 			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
-			r := httptest.NewRequest(http.MethodPost, "/task", bytes.NewBuffer(b))
+			r := httptest.NewRequest(http.MethodPost, "/tasks", bytes.NewBuffer(b))
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
@@ -260,57 +260,57 @@ func TestTask_PostTask(t *testing.T) {
 
 func TestTask_UpdateTaskState(t *testing.T) {
 	tests := []struct {
-		name     string
-		req      task.UpdateTaskStateRequest
-		wantCode int
-		gfName   string
-		isLogin  bool //ログインさせるか
+		name      string
+		req       task.UpdateTaskStateRequest
+		pathParam string
+		wantCode  int
+		gfName    string
+		isLogin   bool //ログインさせるか
 	}{
 		{
 			name:     "正常系",
 			wantCode: http.StatusOK,
 			req: task.UpdateTaskStateRequest{
-				ID:    "1",
 				State: "doing",
 			},
 			gfName:  "update_task_nomal",
 			isLogin: true,
 		},
 		{
-			name:     "準正常系：未ログイン",
-			wantCode: http.StatusUnauthorized,
+			name:      "準正常系：未ログイン",
+			wantCode:  http.StatusUnauthorized,
+			pathParam: "1",
 			req: task.UpdateTaskStateRequest{
-				ID:    "1",
 				State: "done",
 			},
 			gfName:  "update_task_seminomal_not_loggedin",
 			isLogin: false,
 		},
 		{
-			name:     "準正常系：タスク状態の値が不正",
-			wantCode: http.StatusBadRequest,
+			name:      "準正常系：タスク状態の値が不正",
+			wantCode:  http.StatusBadRequest,
+			pathParam: "1",
 			req: task.UpdateTaskStateRequest{
-				ID:    "1",
 				State: "invalid",
 			},
 			gfName:  "update_task_seminomal_invalid_state",
 			isLogin: true,
 		},
 		{
-			name:     "準正常系：他ユーザーのタスクは操作できない",
-			wantCode: http.StatusForbidden,
+			name:      "準正常系：他ユーザーのタスクは操作できない",
+			wantCode:  http.StatusForbidden,
+			pathParam: "3", //user2のタスク
 			req: task.UpdateTaskStateRequest{
-				ID:    "3", //user2のタスク
 				State: "done",
 			},
 			gfName:  "update_task_seminomal_forbidden_operate_others_task",
 			isLogin: true,
 		},
 		{
-			name:     "準正常系：存在しないタスクはエラーが返る",
-			wantCode: http.StatusBadRequest,
+			name:      "準正常系：存在しないタスクはエラーが返る",
+			wantCode:  http.StatusBadRequest,
+			pathParam: "0", //存在しない
 			req: task.UpdateTaskStateRequest{
-				ID:    "0", //存在しない
 				State: "done",
 			},
 			gfName:  "update_task_seminomal_not_found",
@@ -322,7 +322,7 @@ func TestTask_UpdateTaskState(t *testing.T) {
 			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
-			r := httptest.NewRequest(http.MethodPatch, "/task", bytes.NewBuffer(b))
+			r := httptest.NewRequest(http.MethodPatch, "/tasks/"+tt.pathParam, bytes.NewBuffer(b))
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
@@ -389,7 +389,7 @@ func TestTask_DeleteTask(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 
-			r := httptest.NewRequest(http.MethodDelete, "/task/"+tt.pathParam, nil)
+			r := httptest.NewRequest(http.MethodDelete, "/tasks/"+tt.pathParam, nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する

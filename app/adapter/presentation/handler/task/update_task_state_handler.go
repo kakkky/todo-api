@@ -31,7 +31,7 @@ func NewUpdateTaskStateHandler(updateTaskStateUsecase *task.UpdateTaskStateUseca
 // @Failure     400 {object} presenter.FailureResponse                          "不正なリクエスト"
 // @Failure     403 {object} presenter.FailureResponse                          "権限エラー"
 // @Failure     500 {object} presenter.FailureResponse                          "内部サーバーエラー"
-// @Router      /task [patch]
+// @Router      /tasks/{id} [patch]
 func (utsh *UpdateTaskStateHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// jsonをデコード
 	var params UpdateTaskStateRequest
@@ -43,11 +43,13 @@ func (utsh *UpdateTaskStateHandler) ServeHTTP(rw http.ResponseWriter, r *http.Re
 		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
+	// idをパスパラメータから取得
+	id := r.PathValue("id")
 	// contextからuserIdを取得
 	userId := r.Context().Value(middleware.UserIDKey{}).(string)
 	// inputDTOに詰め替える
 	input := task.UpdateTaskStateUsecaseInputDTO{
-		ID:     params.ID,
+		ID:     id,
 		UserId: userId,
 		State:  params.State,
 	}

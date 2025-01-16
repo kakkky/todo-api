@@ -113,7 +113,42 @@ const docTemplate = `{
                 }
             }
         },
-        "/task": {
+        "/tasks": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "全ユーザーのタスクを全て表示する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "全てのタスクを表示する",
+                "responses": {
+                    "200": {
+                        "description": "タスクの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-array_task_GetTaskResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -159,61 +194,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "patch": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "タスクの状態(todo/doing/done)を 指定して更新する",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Task"
-                ],
-                "summary": "タスク状態を更新する",
-                "parameters": [
-                    {
-                        "description": "タスク更新のための情報",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/task.UpdateTaskStateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "更新したタスクの情報",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.SuccessResponse-task_UpdateTaskStateResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "不正なリクエスト",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.FailureResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "権限エラー",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.FailureResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "内部サーバーエラー",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.FailureResponse"
-                        }
-                    }
-                }
             }
         },
-        "/task/{id}": {
+        "/tasks/{id}": {
             "get": {
                 "security": [
                     {
@@ -286,32 +269,47 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/tasks": {
-            "get": {
+            },
+            "patch": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "全ユーザーのタスクを全て表示する",
+                "description": "タスクの状態(todo/doing/done)を 指定して更新する",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Task"
                 ],
-                "summary": "全てのタスクを表示する",
-                "responses": {
-                    "200": {
-                        "description": "タスクの情報",
+                "summary": "タスク状態を更新する",
+                "parameters": [
+                    {
+                        "description": "タスク更新のための情報",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "$ref": "#/definitions/presenter.SuccessResponse-array_task_GetTaskResponse"
+                            "$ref": "#/definitions/task.UpdateTaskStateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "更新したタスクの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-task_UpdateTaskStateResponse"
                         }
                     },
                     "400": {
                         "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "権限エラー",
                         "schema": {
                             "$ref": "#/definitions/presenter.FailureResponse"
                         }
@@ -730,13 +728,9 @@ const docTemplate = `{
         "task.UpdateTaskStateRequest": {
             "type": "object",
             "required": [
-                "id",
                 "state"
             ],
             "properties": {
-                "id": {
-                    "type": "string"
-                },
                 "state": {
                     "type": "string"
                 }

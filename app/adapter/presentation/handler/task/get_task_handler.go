@@ -26,7 +26,7 @@ func NewGetTaskHandler(fetchTaskUsecase *task.FetchTaskUsease) *GetTaskHandler {
 // @Success     200 {object} presenter.SuccessResponse[GetTaskResponse] 　　"タスクの情報"
 // @Failure     400 {object} presenter.FailureResponse                  "不正なリクエスト"
 // @Failure     500 {object} presenter.FailureResponse                  "内部サーバーエラー"
-// @Router      /task/{id} [get]
+// @Router      /tasks/{id} [get]
 func (gth *GetTaskHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// パスパラメータから取得
 	id := r.PathValue("id")

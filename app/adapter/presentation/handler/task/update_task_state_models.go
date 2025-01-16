@@ -1,7 +1,6 @@
 package task
 
 type UpdateTaskStateRequest struct {
-	ID    string `json:"id" validate:"required"`
 	State string `json:"state" validate:"required"`
 }
 type UpdateTaskStateResponse struct {
