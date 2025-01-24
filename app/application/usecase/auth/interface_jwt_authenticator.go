@@ -11,7 +11,7 @@ type JwtAuthenticator interface {
 	GenerateToken(sub, jwtID string) *jwt.Token
 	SignToken(token *jwt.Token) (string, error)
 	VerifyToken(signedToken string) (*jwt.Token, error)
-	GetJWTIDFromClaim(token *jwt.Token) (string, error)
+	GetJwtIDFromClaim(token *jwt.Token) (string, error)
 	GetSubFromClaim(token *jwt.Token) (string, error)
 	VerifyExpiresAt(token *jwt.Token) error
 }

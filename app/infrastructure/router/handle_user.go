@@ -18,7 +18,7 @@ func handleUser(mux *http.ServeMux) {
 	userRepository := repository.NewUserRepository(sqlc.NewSqlcQuerier())
 	authorization := middleware.Authorication(
 		auth.NewAuthorizationUsecase(
-			authInfra.NewJWTAuthenticator(),
+			authInfra.NewJwtAuthenticator(),
 			repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander()),
 		),
 	)

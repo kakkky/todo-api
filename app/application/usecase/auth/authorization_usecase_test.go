@@ -26,7 +26,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 			mockFn: func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				ma.EXPECT().VerifyToken(gomock.Any()).Return(&jwt.Token{}, nil)
 				ma.EXPECT().VerifyExpiresAt(&jwt.Token{}).Return(nil)
-				ma.EXPECT().GetJWTIDFromClaim(&jwt.Token{}).Return("jti", nil)
+				ma.EXPECT().GetJwtIDFromClaim(&jwt.Token{}).Return("jti", nil)
 				ma.EXPECT().GetSubFromClaim(&jwt.Token{}).Return("userID", nil)
 				mar.EXPECT().Load(gomock.Any(), "userID").Return("jti", nil)
 			},
@@ -43,7 +43,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 			mockFn: func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				ma.EXPECT().VerifyToken(gomock.Any()).Return(&jwt.Token{}, nil)
 				ma.EXPECT().VerifyExpiresAt(&jwt.Token{}).Return(nil)
-				ma.EXPECT().GetJWTIDFromClaim(&jwt.Token{}).Return("jti", nil)
+				ma.EXPECT().GetJwtIDFromClaim(&jwt.Token{}).Return("jti", nil)
 				ma.EXPECT().GetSubFromClaim(&jwt.Token{}).Return("userID", nil)
 				mar.EXPECT().Load(gomock.Any(), "userID").Return("", nil)
 			},

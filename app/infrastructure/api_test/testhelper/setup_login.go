@@ -10,7 +10,7 @@ import (
 )
 
 func SetupLogin(id string) string {
-	jwtAuthenticator := auth.NewJWTAuthenticator()
+	jwtAuthenticator := auth.NewJwtAuthenticator()
 	// トークン生成
 	token := jwtAuthenticator.GenerateToken(id, "jti")
 	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())

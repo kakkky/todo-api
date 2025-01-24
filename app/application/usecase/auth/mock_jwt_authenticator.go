@@ -54,19 +54,19 @@ func (mr *MockJwtAuthenticatorMockRecorder) GenerateToken(sub, jwtID any) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateToken", reflect.TypeOf((*MockJwtAuthenticator)(nil).GenerateToken), sub, jwtID)
 }
 
-// GetJWTIDFromClaim mocks base method.
-func (m *MockJwtAuthenticator) GetJWTIDFromClaim(token *jwt.Token) (string, error) {
+// GetJwtIDFromClaim mocks base method.
+func (m *MockJwtAuthenticator) GetJwtIDFromClaim(token *jwt.Token) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetJWTIDFromClaim", token)
+	ret := m.ctrl.Call(m, "GetJwtIDFromClaim", token)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetJWTIDFromClaim indicates an expected call of GetJWTIDFromClaim.
-func (mr *MockJwtAuthenticatorMockRecorder) GetJWTIDFromClaim(token any) *gomock.Call {
+// GetJwtIDFromClaim indicates an expected call of GetJwtIDFromClaim.
+func (mr *MockJwtAuthenticatorMockRecorder) GetJwtIDFromClaim(token any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetJWTIDFromClaim", reflect.TypeOf((*MockJwtAuthenticator)(nil).GetJWTIDFromClaim), token)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetJwtIDFromClaim", reflect.TypeOf((*MockJwtAuthenticator)(nil).GetJwtIDFromClaim), token)
 }
 
 // GetSubFromClaim mocks base method.

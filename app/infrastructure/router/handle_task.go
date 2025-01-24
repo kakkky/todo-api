@@ -20,7 +20,7 @@ func handleTask(mux *http.ServeMux) {
 	taskQueryService := queryservice.NewTaskQueryService(sqlc)
 	authorization := middleware.Authorication(
 		auth.NewAuthorizationUsecase(
-			authInfra.NewJWTAuthenticator(),
+			authInfra.NewJwtAuthenticator(),
 			repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander()),
 		),
 	)

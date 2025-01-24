@@ -12,7 +12,7 @@ import (
 	"github.com/kakkky/app/domain/errors"
 )
 
-type JWTAuthenticator struct {
+type jwtAuthenticator struct {
 	privateKey *rsa.PrivateKey
 	publicKey  *rsa.PublicKey
 }
@@ -23,7 +23,7 @@ var rawPrivateKey []byte
 //go:embed certificate/public.pem
 var rawPublicKey []byte
 
-func NewJWTAuthenticator() *JWTAuthenticator {
+func NewJwtAuthenticator() *jwtAuthenticator {
 	// *rsa.PrivateKeyにパース
 	privateKey, err := parsePrivateKey(rawPrivateKey)
 	if err != nil {
@@ -33,13 +33,13 @@ func NewJWTAuthenticator() *JWTAuthenticator {
 	if err != nil {
 		log.Fatalf("public key parse error :%v", err)
 	}
-	return &JWTAuthenticator{
+	return &jwtAuthenticator{
 		privateKey: privateKey,
 		publicKey:  publicKey,
 	}
 }
 
-func (ja *JWTAuthenticator) GenerateToken(sub, jwtId string) *jwt.Token {
+func (ja *jwtAuthenticator) GenerateToken(sub, jwtId string) *jwt.Token {
 	claims := jwt.StandardClaims{
 		Id:        jwtId,
 		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
@@ -50,7 +50,7 @@ func (ja *JWTAuthenticator) GenerateToken(sub, jwtId string) *jwt.Token {
 	return token
 }
 
-func (ja *JWTAuthenticator) SignToken(token *jwt.Token) (string, error) {
+func (ja *jwtAuthenticator) SignToken(token *jwt.Token) (string, error) {
 	signedToken, err := token.SignedString(ja.privateKey)
 	if err != nil {
 		return "", err
@@ -59,7 +59,7 @@ func (ja *JWTAuthenticator) SignToken(token *jwt.Token) (string, error) {
 }
 
 // 署名済みのトークンを公開鍵によって解析する
-func (ja *JWTAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) {
+func (ja *jwtAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) {
 	token, err := jwt.Parse(signedToken, func(t *jwt.Token) (interface{}, error) {
 		// トークンの署名アルゴリズムをチェック
 		if _, ok := t.Method.(*jwt.SigningMethodRSA); !ok {
@@ -76,21 +76,21 @@ func (ja *JWTAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) 
 	return token, nil
 }
 
-func (ja *JWTAuthenticator) GetJWTIDFromClaim(token *jwt.Token) (string, error) {
+func (ja *jwtAuthenticator) GetJwtIDFromClaim(token *jwt.Token) (string, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return "", errors.New("invalid token claims")
 	}
 	return claims["jti"].(string), nil
 }
-func (ja *JWTAuthenticator) GetSubFromClaim(token *jwt.Token) (string, error) {
+func (ja *jwtAuthenticator) GetSubFromClaim(token *jwt.Token) (string, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return "", errors.New("invalid token claims")
 	}
 	return claims["sub"].(string), nil
 }
-func (ja *JWTAuthenticator) VerifyExpiresAt(token *jwt.Token) error {
+func (ja *jwtAuthenticator) VerifyExpiresAt(token *jwt.Token) error {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return errors.New("invalid token claims")

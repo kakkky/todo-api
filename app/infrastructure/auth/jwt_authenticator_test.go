@@ -23,7 +23,7 @@ func TestJWTAuthenticator(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			sut := NewJWTAuthenticator()
+			sut := NewJwtAuthenticator()
 
 			// トークンを生成する
 			token := sut.GenerateToken(tt.args.sub, tt.args.jti)
@@ -43,9 +43,9 @@ func TestJWTAuthenticator(t *testing.T) {
 				t.Errorf("VerifyExpiresAt error = %v", err)
 			}
 
-			gotJti, err := sut.GetJWTIDFromClaim(verifiedToken)
+			gotJti, err := sut.GetJwtIDFromClaim(verifiedToken)
 			if err != nil {
-				t.Errorf("GetJWTIDFromClaim error = %v", err)
+				t.Errorf("GetJwtIDFromClaim error = %v", err)
 			}
 			if gotJti != tt.args.jti {
 				t.Errorf("mismatch jti: expected %v, got %v", tt.args.jti, gotJti)

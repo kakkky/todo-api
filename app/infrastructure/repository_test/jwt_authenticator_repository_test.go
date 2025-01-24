@@ -9,7 +9,7 @@ import (
 	"github.com/kakkky/app/infrastructure/kvs"
 )
 
-func TestjwtAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
+func TestJwtAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
 	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())
 	type args struct {
 		userID   string

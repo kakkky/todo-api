@@ -36,7 +36,7 @@ func (au *AuthorizationUsecase) Run(ctx context.Context, input AuthorizationInpu
 		return nil, err
 	}
 	// JWT クレームから情報を取得
-	jti, err := au.jwtAuthenticator.GetJWTIDFromClaim(token)
+	jti, err := au.jwtAuthenticator.GetJwtIDFromClaim(token)
 	if err != nil {
 		return nil, err
 	}
