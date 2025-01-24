@@ -30,6 +30,3 @@ go.work.sum
 # go.work
 go.work
 go.work.sum
-
-# 秘密鍵・暗号鍵
-app/infrastructure/auth/certificate/*
