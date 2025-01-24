@@ -3,22 +3,22 @@ package auth
 import "context"
 
 type LogoutUsecase struct {
-	tokenAuthenticator           TokenAuthenticator
-	tokenAuthenticatorRepository TokenAuthenticatorRepository
+	jwtAuthenticator           JwtAuthenticator
+	jwtAuthenticatorRepository JwtAuthenticatorRepository
 }
 
 func NewLogoutUsecase(
-	tokenAuthenticator TokenAuthenticator,
-	tokenAuthenticatorRepository TokenAuthenticatorRepository,
+	jwtAuthenticator JwtAuthenticator,
+	jwtAuthenticatorRepository JwtAuthenticatorRepository,
 ) *LogoutUsecase {
 	return &LogoutUsecase{
-		tokenAuthenticator:           tokenAuthenticator,
-		tokenAuthenticatorRepository: tokenAuthenticatorRepository,
+		jwtAuthenticator:           jwtAuthenticator,
+		jwtAuthenticatorRepository: jwtAuthenticatorRepository,
 	}
 }
 
 func (lu *LogoutUsecase) Run(ctx context.Context, input LogoutUsecaseInputDTO) error {
-	if err := lu.tokenAuthenticatorRepository.Delete(ctx, input.UserID); err != nil {
+	if err := lu.jwtAuthenticatorRepository.Delete(ctx, input.UserID); err != nil {
 		return err
 	}
 	return nil

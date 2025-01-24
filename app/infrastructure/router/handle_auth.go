@@ -16,7 +16,7 @@ func handleAuth(mux *http.ServeMux) {
 	authorization := middleware.Authorication(
 		authUsecase.NewAuthorizationUsecase(
 			authInfra.NewJWTAuthenticator(),
-			repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander()),
+			repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander()),
 		),
 	)
 
@@ -24,7 +24,7 @@ func handleAuth(mux *http.ServeMux) {
 		authHandler.NewLoginHandler(
 			authUsecase.NewLoginUsecase(
 				repository.NewUserRepository(sqlc.NewSqlcQuerier()),
-				repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander()),
+				repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander()),
 				authInfra.NewJWTAuthenticator(),
 			))))
 
@@ -32,7 +32,7 @@ func handleAuth(mux *http.ServeMux) {
 		authHandler.NewLogoutHandler(
 			authUsecase.NewLogoutUsecase(
 				authInfra.NewJWTAuthenticator(),
-				repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander()),
+				repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander()),
 			),
 		),
 	))

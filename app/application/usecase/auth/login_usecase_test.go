@@ -15,14 +15,14 @@ func TestAuth_LoginUsecase_Run(t *testing.T) {
 	user1, _ := user.NewUser("user1@test.com", "user1", "password")
 	tests := []struct {
 		name    string
-		mockFn  func(mur *user.MockUserRepository, ma *MockTokenAuthenticator, mar *MockTokenAuthenticatorRepository)
+		mockFn  func(mur *user.MockUserRepository, ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository)
 		input   LoginUsecaseInputDTO
 		want    *LoginUsecaseOutputDTO
 		wantErr bool
 	}{
 		{
 			name: "正常系:ユーザーにJWTトークンが返る",
-			mockFn: func(mur *user.MockUserRepository, ma *MockTokenAuthenticator, mar *MockTokenAuthenticatorRepository) {
+			mockFn: func(mur *user.MockUserRepository, ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				mur.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(user1, nil)
 				ma.EXPECT().GenerateToken(gomock.Any(), gomock.Any()).Return(&jwt.Token{})
 				ma.EXPECT().SignToken(gomock.Any()).Return("jwt", nil)
@@ -39,7 +39,7 @@ func TestAuth_LoginUsecase_Run(t *testing.T) {
 		},
 		{
 			name: "準正常系:パスワードが異なる",
-			mockFn: func(mur *user.MockUserRepository, ma *MockTokenAuthenticator, mar *MockTokenAuthenticatorRepository) {
+			mockFn: func(mur *user.MockUserRepository, ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				mur.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(user1, nil)
 			},
 			input: LoginUsecaseInputDTO{
@@ -55,8 +55,8 @@ func TestAuth_LoginUsecase_Run(t *testing.T) {
 			t.Parallel()
 			ctrl := gomock.NewController(t)
 			mockUserRepository := user.NewMockUserRepository(ctrl)
-			mockAuthenticator := NewMockTokenAuthenticator(ctrl)
-			mockAuthenticatorRepository := NewMockTokenAuthenticatorRepository(ctrl)
+			mockAuthenticator := NewMockJwtAuthenticator(ctrl)
+			mockAuthenticatorRepository := NewMockJwtAuthenticatorRepository(ctrl)
 			tt.mockFn(mockUserRepository, mockAuthenticator, mockAuthenticatorRepository)
 			sut := NewLoginUsecase(mockUserRepository, mockAuthenticatorRepository, mockAuthenticator)
 			ctx := context.Background()

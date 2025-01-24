@@ -10,18 +10,18 @@ import (
 )
 
 func SetupLogin(id string) string {
-	tokenAuthenticator := auth.NewJWTAuthenticator()
+	jwtAuthenticator := auth.NewJWTAuthenticator()
 	// トークン生成
-	token := tokenAuthenticator.GenerateToken(id, "jti")
-	tokenAuthenticatorRepository := repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander())
+	token := jwtAuthenticator.GenerateToken(id, "jti")
+	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())
 	// Redisに保存
-	tokenAuthenticatorRepository.Save(context.Background(), time.Duration(2*time.Hour), id, "jti")
+	jwtAuthenticatorRepository.Save(context.Background(), time.Duration(2*time.Hour), id, "jti")
 	// 署名
-	signedToken, _ := tokenAuthenticator.SignToken(token)
+	signedToken, _ := jwtAuthenticator.SignToken(token)
 	return signedToken
 }
 
 func CleanupLogin(id string) {
-	tokenAuthenticatorRepository := repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander())
-	tokenAuthenticatorRepository.Delete(context.Background(), id)
+	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())
+	jwtAuthenticatorRepository.Delete(context.Background(), id)
 }

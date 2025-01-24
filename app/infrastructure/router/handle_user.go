@@ -19,7 +19,7 @@ func handleUser(mux *http.ServeMux) {
 	authorization := middleware.Authorication(
 		auth.NewAuthorizationUsecase(
 			authInfra.NewJWTAuthenticator(),
-			repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander()),
+			repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander()),
 		),
 	)
 

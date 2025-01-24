@@ -9,20 +9,20 @@ import (
 )
 
 type LoginUsecase struct {
-	userRepository               user.UserRepository
-	tokenAuthenticatorRepository TokenAuthenticatorRepository
-	tokenAuthenticator           TokenAuthenticator
+	userRepository             user.UserRepository
+	jwtAuthenticatorRepository JwtAuthenticatorRepository
+	jwtAuthenticator           JwtAuthenticator
 }
 
 func NewLoginUsecase(
 	userRepository user.UserRepository,
-	tokenAuthenticatorRepository TokenAuthenticatorRepository,
-	tokenAuthenticator TokenAuthenticator,
+	jwtAuthenticatorRepository JwtAuthenticatorRepository,
+	jwtAuthenticator JwtAuthenticator,
 ) *LoginUsecase {
 	return &LoginUsecase{
-		userRepository:               userRepository,
-		tokenAuthenticatorRepository: tokenAuthenticatorRepository,
-		tokenAuthenticator:           tokenAuthenticator,
+		userRepository:             userRepository,
+		jwtAuthenticatorRepository: jwtAuthenticatorRepository,
+		jwtAuthenticator:           jwtAuthenticator,
 	}
 }
 
@@ -45,13 +45,13 @@ func (lu *LoginUsecase) Run(ctx context.Context, input LoginUsecaseInputDTO) (
 	}
 	// トークンを生成
 	jwtId := ulid.NewUlid() //JWTトークンを識別するID
-	token := lu.tokenAuthenticator.GenerateToken(u.GetID(), jwtId)
+	token := lu.jwtAuthenticator.GenerateToken(u.GetID(), jwtId)
 	// トークンをkvsに保存
-	if err := lu.tokenAuthenticatorRepository.Save(ctx, time.Duration(24*time.Hour), u.GetID(), jwtId); err != nil {
+	if err := lu.jwtAuthenticatorRepository.Save(ctx, time.Duration(24*time.Hour), u.GetID(), jwtId); err != nil {
 		return nil, err
 	}
 	// 署名済みトークンを発行
-	signedToken, err := lu.tokenAuthenticator.SignToken(token)
+	signedToken, err := lu.jwtAuthenticator.SignToken(token)
 	if err != nil {
 		return nil, err
 	}

@@ -14,7 +14,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 	tests := []struct {
 		name    string
 		input   AuthorizationInputDTO
-		mockFn  func(ma *MockTokenAuthenticator, mar *MockTokenAuthenticatorRepository)
+		mockFn  func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository)
 		want    *AuthorizationOutputDTO
 		wantErr bool
 	}{
@@ -23,7 +23,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 			input: AuthorizationInputDTO{
 				SignedToken: "signedToken",
 			},
-			mockFn: func(ma *MockTokenAuthenticator, mar *MockTokenAuthenticatorRepository) {
+			mockFn: func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				ma.EXPECT().VerifyToken(gomock.Any()).Return(&jwt.Token{}, nil)
 				ma.EXPECT().VerifyExpiresAt(&jwt.Token{}).Return(nil)
 				ma.EXPECT().GetJWTIDFromClaim(&jwt.Token{}).Return("jti", nil)
@@ -40,7 +40,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 			input: AuthorizationInputDTO{
 				SignedToken: "signedToken",
 			},
-			mockFn: func(ma *MockTokenAuthenticator, mar *MockTokenAuthenticatorRepository) {
+			mockFn: func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				ma.EXPECT().VerifyToken(gomock.Any()).Return(&jwt.Token{}, nil)
 				ma.EXPECT().VerifyExpiresAt(&jwt.Token{}).Return(nil)
 				ma.EXPECT().GetJWTIDFromClaim(&jwt.Token{}).Return("jti", nil)
@@ -58,8 +58,8 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ctrl := gomock.NewController(t)
-			mockAuthenticator := NewMockTokenAuthenticator(ctrl)
-			mockAuthenticatorRepository := NewMockTokenAuthenticatorRepository(ctrl)
+			mockAuthenticator := NewMockJwtAuthenticator(ctrl)
+			mockAuthenticatorRepository := NewMockJwtAuthenticatorRepository(ctrl)
 			tt.mockFn(mockAuthenticator, mockAuthenticatorRepository)
 
 			sut := NewAuthorizationUsecase(mockAuthenticator, mockAuthenticatorRepository)

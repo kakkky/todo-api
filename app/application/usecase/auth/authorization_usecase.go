@@ -7,17 +7,17 @@ import (
 )
 
 type AuthorizationUsecase struct {
-	tokenAuthenticator           TokenAuthenticator
-	tokenAuthenticatorRepository TokenAuthenticatorRepository
+	jwtAuthenticator           JwtAuthenticator
+	jwtAuthenticatorRepository JwtAuthenticatorRepository
 }
 
 func NewAuthorizationUsecase(
-	tokenAuthenticator TokenAuthenticator,
-	tokenAuthenticatorRepository TokenAuthenticatorRepository,
+	jwtAuthenticator JwtAuthenticator,
+	jwtAuthenticatorRepository JwtAuthenticatorRepository,
 ) *AuthorizationUsecase {
 	return &AuthorizationUsecase{
-		tokenAuthenticator:           tokenAuthenticator,
-		tokenAuthenticatorRepository: tokenAuthenticatorRepository,
+		jwtAuthenticator:           jwtAuthenticator,
+		jwtAuthenticatorRepository: jwtAuthenticatorRepository,
 	}
 }
 
@@ -27,26 +27,26 @@ func (au *AuthorizationUsecase) Run(ctx context.Context, input AuthorizationInpu
 ) {
 	// 公開鍵で署名済みトークンを検証する
 	// 解読されたトークンが返る
-	token, err := au.tokenAuthenticator.VerifyToken(input.SignedToken)
+	token, err := au.jwtAuthenticator.VerifyToken(input.SignedToken)
 	if err != nil {
 		return nil, err
 	}
 	// トークンの有効期限を検証
-	if err := au.tokenAuthenticator.VerifyExpiresAt(token); err != nil {
+	if err := au.jwtAuthenticator.VerifyExpiresAt(token); err != nil {
 		return nil, err
 	}
 	// JWT クレームから情報を取得
-	jti, err := au.tokenAuthenticator.GetJWTIDFromClaim(token)
+	jti, err := au.jwtAuthenticator.GetJWTIDFromClaim(token)
 	if err != nil {
 		return nil, err
 	}
-	userID, err := au.tokenAuthenticator.GetSubFromClaim(token)
+	userID, err := au.jwtAuthenticator.GetSubFromClaim(token)
 	if err != nil {
 		return nil, err
 	}
 	// KVS から保存された jti を取得
 	// ログアウトしていた場合は、nilが返る
-	jtiFromKVS, err := au.tokenAuthenticatorRepository.Load(ctx, userID)
+	jtiFromKVS, err := au.jwtAuthenticatorRepository.Load(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

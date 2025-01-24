@@ -9,8 +9,8 @@ import (
 	"github.com/kakkky/app/infrastructure/kvs"
 )
 
-func TestTokenAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
-	tokenAuthenticatorRepository := repository.NewTokenAuthenticatorRepository(kvs.NewRedisCommander())
+func TestjwtAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
+	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())
 	type args struct {
 		userID   string
 		jwtID    string
@@ -37,18 +37,18 @@ func TestTokenAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
-			if err := tokenAuthenticatorRepository.Save(ctx, tt.args.duration, tt.args.userID, tt.args.jwtID); (err != nil) != tt.wantErr {
-				t.Errorf("tokenAuthenticatorRepository.Save() error=%v,wantErr %v", err, tt.wantErr)
+			if err := jwtAuthenticatorRepository.Save(ctx, tt.args.duration, tt.args.userID, tt.args.jwtID); (err != nil) != tt.wantErr {
+				t.Errorf("jwtAuthenticatorRepository.Save() error=%v,wantErr %v", err, tt.wantErr)
 			}
-			got, err := tokenAuthenticatorRepository.Load(ctx, tt.args.userID)
+			got, err := jwtAuthenticatorRepository.Load(ctx, tt.args.userID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("tokenAuthenticatorRepository.Load() error=%v,wantErr %v", err, tt.wantErr)
+				t.Errorf("jwtAuthenticatorRepository.Load() error=%v,wantErr %v", err, tt.wantErr)
 			}
 			if got != tt.want {
-				t.Errorf("tokenAuthenticatorRepository.Load() got %v, want %v", got, tt.want)
+				t.Errorf("jwtAuthenticatorRepository.Load() got %v, want %v", got, tt.want)
 			}
-			if err := tokenAuthenticatorRepository.Delete(ctx, tt.args.userID); (err != nil) != tt.wantErr {
-				t.Errorf("tokenAuthenticatorRepository.Delete() error=%v,wantErr %v", err, tt.wantErr)
+			if err := jwtAuthenticatorRepository.Delete(ctx, tt.args.userID); (err != nil) != tt.wantErr {
+				t.Errorf("jwtAuthenticatorRepository.Delete() error=%v,wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
