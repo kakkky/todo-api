@@ -18,7 +18,7 @@ func NewLogoutUsecase(
 }
 
 func (lu *LogoutUsecase) Run(ctx context.Context, input LogoutUsecaseInputDTO) error {
-	if err := lu.tokenAuthenticatorRepository.Delete(ctx, input.ID); err != nil {
+	if err := lu.tokenAuthenticatorRepository.Delete(ctx, input.UserID); err != nil {
 		return err
 	}
 	return nil

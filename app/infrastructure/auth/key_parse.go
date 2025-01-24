@@ -26,6 +26,9 @@ func parsePublicKey(pemData []byte) (*rsa.PublicKey, error) {
 	if err != nil {
 		return nil, err
 	}
-	publicKey, _ := key.(*rsa.PublicKey)
+	publicKey, ok := key.(*rsa.PublicKey)
+	if !ok {
+		return nil, errors.New("unknown key type")
+	}
 	return publicKey, nil
 }

@@ -31,7 +31,7 @@ func (lh *LogoutHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// リクエストスコープのコンテキストからuserIDを取得する
 	userID := r.Context().Value(middleware.UserIDKey{}).(string)
 	ctx := r.Context()
-	if err := lh.logoutUsecase.Run(ctx, auth.LogoutUsecaseInputDTO{ID: userID}); err != nil {
+	if err := lh.logoutUsecase.Run(ctx, auth.LogoutUsecaseInputDTO{UserID: userID}); err != nil {
 		presenter.RespondInternalServerError(rw, err.Error())
 	}
 	presenter.RespondNoContent(rw)

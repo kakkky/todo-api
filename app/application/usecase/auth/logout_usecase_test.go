@@ -21,7 +21,7 @@ func TestLogoutUsecase(t *testing.T) {
 				mar.EXPECT().Delete(gomock.Any(), gomock.Any()).Return(nil)
 			},
 			input: LogoutUsecaseInputDTO{
-				ID: "1",
+				UserID: "1",
 			},
 			wantErr: false,
 		},
@@ -31,7 +31,7 @@ func TestLogoutUsecase(t *testing.T) {
 				mar.EXPECT().Delete(gomock.Any(), gomock.Any()).Return(fmt.Errorf("err"))
 			},
 			input: LogoutUsecaseInputDTO{
-				ID: "1",
+				UserID: "1",
 			},
 			wantErr: true,
 		},
