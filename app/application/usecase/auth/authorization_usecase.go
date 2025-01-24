@@ -26,21 +26,7 @@ func (au *AuthorizationUsecase) Run(ctx context.Context, input AuthorizationInpu
 	error,
 ) {
 	// 公開鍵で署名済みトークンを検証する
-	// 解読されたトークンが返る
-	token, err := au.jwtAuthenticator.VerifyToken(input.SignedToken)
-	if err != nil {
-		return nil, err
-	}
-	// トークンの有効期限を検証
-	if err := au.jwtAuthenticator.VerifyExpiresAt(token); err != nil {
-		return nil, err
-	}
-	// JWT クレームから情報を取得
-	jti, err := au.jwtAuthenticator.GetJwtIDFromClaim(token)
-	if err != nil {
-		return nil, err
-	}
-	userID, err := au.jwtAuthenticator.GetSubFromClaim(token)
+	userID, jti, err := au.jwtAuthenticator.VerifyJwtToken(input.SignedToken)
 	if err != nil {
 		return nil, err
 	}

@@ -13,7 +13,7 @@ func TestJwtAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
 	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())
 	type args struct {
 		userID   string
-		jwtID    string
+		jti      string
 		duration time.Duration
 	}
 	tests := []struct {
@@ -23,10 +23,10 @@ func TestJwtAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "正常系: userID:jwtIDのペアでredisに保存できる",
+			name: "正常系: userID:jtiのペアでredisに保存できる",
 			args: args{
 				userID:   "1",
-				jwtID:    "jwt",
+				jti:      "jwt",
 				duration: time.Duration(1 * time.Minute),
 			},
 			want:    "jwt",
@@ -37,7 +37,7 @@ func TestJwtAuthenticatorRepository_Save_And_Load_And_Delete(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
-			if err := jwtAuthenticatorRepository.Save(ctx, tt.args.duration, tt.args.userID, tt.args.jwtID); (err != nil) != tt.wantErr {
+			if err := jwtAuthenticatorRepository.Save(ctx, tt.args.duration, tt.args.userID, tt.args.jti); (err != nil) != tt.wantErr {
 				t.Errorf("jwtAuthenticatorRepository.Save() error=%v,wantErr %v", err, tt.wantErr)
 			}
 			got, err := jwtAuthenticatorRepository.Load(ctx, tt.args.userID)

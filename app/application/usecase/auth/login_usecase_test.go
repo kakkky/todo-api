@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/google/go-cmp/cmp"
 	"github.com/kakkky/app/domain/user"
 	"go.uber.org/mock/gomock"
@@ -24,8 +23,7 @@ func TestAuth_LoginUsecase_Run(t *testing.T) {
 			name: "正常系:ユーザーにJWTトークンが返る",
 			mockFn: func(mur *user.MockUserRepository, ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				mur.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(user1, nil)
-				ma.EXPECT().GenerateToken(gomock.Any(), gomock.Any()).Return(&jwt.Token{})
-				ma.EXPECT().SignToken(gomock.Any()).Return("jwt", nil)
+				ma.EXPECT().GenerateJwtToken(gomock.Any(), gomock.Any()).Return("signedToken", nil)
 				mar.EXPECT().Save(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 			},
 			input: LoginUsecaseInputDTO{
@@ -33,7 +31,7 @@ func TestAuth_LoginUsecase_Run(t *testing.T) {
 				Password: "password",
 			},
 			want: &LoginUsecaseOutputDTO{
-				SignedToken: "jwt",
+				SignedToken: "signedToken",
 			},
 			wantErr: false,
 		},

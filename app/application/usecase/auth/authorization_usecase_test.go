@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/google/go-cmp/cmp"
 	"go.uber.org/mock/gomock"
 )
@@ -24,10 +23,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 				SignedToken: "signedToken",
 			},
 			mockFn: func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
-				ma.EXPECT().VerifyToken(gomock.Any()).Return(&jwt.Token{}, nil)
-				ma.EXPECT().VerifyExpiresAt(&jwt.Token{}).Return(nil)
-				ma.EXPECT().GetJwtIDFromClaim(&jwt.Token{}).Return("jti", nil)
-				ma.EXPECT().GetSubFromClaim(&jwt.Token{}).Return("userID", nil)
+				ma.EXPECT().VerifyJwtToken(gomock.Any()).Return("userID", "jti", nil)
 				mar.EXPECT().Load(gomock.Any(), "userID").Return("jti", nil)
 			},
 			want: &AuthorizationOutputDTO{
@@ -41,10 +37,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 				SignedToken: "signedToken",
 			},
 			mockFn: func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
-				ma.EXPECT().VerifyToken(gomock.Any()).Return(&jwt.Token{}, nil)
-				ma.EXPECT().VerifyExpiresAt(&jwt.Token{}).Return(nil)
-				ma.EXPECT().GetJwtIDFromClaim(&jwt.Token{}).Return("jti", nil)
-				ma.EXPECT().GetSubFromClaim(&jwt.Token{}).Return("userID", nil)
+				ma.EXPECT().VerifyJwtToken(gomock.Any()).Return("userID", "jti", nil)
 				mar.EXPECT().Load(gomock.Any(), "userID").Return("", nil)
 			},
 			want: &AuthorizationOutputDTO{

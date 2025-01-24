@@ -24,39 +24,21 @@ func TestJWTAuthenticator(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			sut := NewJwtAuthenticator()
-
-			// トークンを生成する
-			token := sut.GenerateToken(tt.args.sub, tt.args.jti)
-			// トークンに署名し、署名済みトークンを生成
-			signedToken, err := sut.SignToken(token)
+			signedToken, err := sut.GenerateJwtToken(tt.args.sub, tt.args.jti)
 			if err != nil {
-				t.Errorf("SignToken error = %v", err)
+				t.Errorf("GenerateJwtToken() error=%v", err)
 			}
-
-			// 署名済みトークンを解析する
-			verifiedToken, err := sut.VerifyToken(signedToken)
+			gotSub, gotJti, err := sut.VerifyJwtToken(signedToken)
 			if err != nil {
-				t.Errorf("VerifyToken error = %v", err)
+				t.Errorf("VerifyToken() error = %v", err)
+				return
 			}
-
-			if err := sut.VerifyExpiresAt(verifiedToken); err != nil {
-				t.Errorf("VerifyExpiresAt error = %v", err)
-			}
-
-			gotJti, err := sut.GetJwtIDFromClaim(verifiedToken)
-			if err != nil {
-				t.Errorf("GetJwtIDFromClaim error = %v", err)
+			// 同値性の確認
+			if gotSub != tt.args.sub {
+				t.Errorf("VerifyToken() got = %v, want = %v", gotSub, tt.args.sub)
 			}
 			if gotJti != tt.args.jti {
-				t.Errorf("mismatch jti: expected %v, got %v", tt.args.jti, gotJti)
-			}
-
-			gotSub, err := sut.GetSubFromClaim(verifiedToken)
-			if err != nil {
-				t.Errorf("GetSubFromClaim error = %v", err)
-			}
-			if gotSub != tt.args.sub {
-				t.Errorf("mismatch sub: expected %v, got %v", tt.args.sub, gotSub)
+				t.Errorf("VerifyToken() got = %v, want = %v", gotJti, tt.args.jti)
 			}
 		})
 	}

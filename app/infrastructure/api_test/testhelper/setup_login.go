@@ -12,12 +12,10 @@ import (
 func SetupLogin(id string) string {
 	jwtAuthenticator := auth.NewJwtAuthenticator()
 	// トークン生成
-	token := jwtAuthenticator.GenerateToken(id, "jti")
+	signedToken, _ := jwtAuthenticator.GenerateJwtToken(id, "jti")
 	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())
 	// Redisに保存
 	jwtAuthenticatorRepository.Save(context.Background(), time.Duration(2*time.Hour), id, "jti")
-	// 署名
-	signedToken, _ := jwtAuthenticator.SignToken(token)
 	return signedToken
 }
 

@@ -39,18 +39,14 @@ func NewJwtAuthenticator() *jwtAuthenticator {
 	}
 }
 
-func (ja *jwtAuthenticator) GenerateToken(sub, jwtId string) *jwt.Token {
+func (ja *jwtAuthenticator) GenerateJwtToken(sub, jti string) (string, error) {
 	claims := jwt.StandardClaims{
-		Id:        jwtId,
+		Id:        jti,
 		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 		IssuedAt:  time.Now().Unix(),
 		Subject:   sub,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-	return token
-}
-
-func (ja *jwtAuthenticator) SignToken(token *jwt.Token) (string, error) {
 	signedToken, err := token.SignedString(ja.privateKey)
 	if err != nil {
 		return "", err
@@ -58,8 +54,9 @@ func (ja *jwtAuthenticator) SignToken(token *jwt.Token) (string, error) {
 	return signedToken, nil
 }
 
-// 署名済みのトークンを公開鍵によって解析する
-func (ja *jwtAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) {
+// 署名済みのトークンを公開鍵によって検証する
+// クレームから取り出した値を返す
+func (ja *jwtAuthenticator) VerifyJwtToken(signedToken string) (sub string, jti string, err error) {
 	token, err := jwt.Parse(signedToken, func(t *jwt.Token) (interface{}, error) {
 		// トークンの署名アルゴリズムをチェック
 		if _, ok := t.Method.(*jwt.SigningMethodRSA); !ok {
@@ -68,29 +65,44 @@ func (ja *jwtAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) 
 		return ja.publicKey, nil
 	})
 	if err != nil {
-		return nil, err
+		return "", "", err
 	}
+	//　トークンは有効か
 	if !token.Valid {
-		return nil, fmt.Errorf("token is invalid")
+		return "", "", fmt.Errorf("token is invalid")
 	}
-	return token, nil
+	// 有効期限は過ぎていないか
+	if err := verifyExpiresAt(token); err != nil {
+		return "", "", err
+	}
+	// subを取得
+	sub, err = getSubFromClaim(token)
+	if err != nil {
+		return "", "", err
+	}
+	// jtiを取得
+	jti, err = getJtiFromClaim(token)
+	if err != nil {
+		return "", "", err
+	}
+	return sub, jti, nil
 }
 
-func (ja *jwtAuthenticator) GetJwtIDFromClaim(token *jwt.Token) (string, error) {
+func getJtiFromClaim(token *jwt.Token) (string, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return "", errors.New("invalid token claims")
 	}
 	return claims["jti"].(string), nil
 }
-func (ja *jwtAuthenticator) GetSubFromClaim(token *jwt.Token) (string, error) {
+func getSubFromClaim(token *jwt.Token) (string, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return "", errors.New("invalid token claims")
 	}
 	return claims["sub"].(string), nil
 }
-func (ja *jwtAuthenticator) VerifyExpiresAt(token *jwt.Token) error {
+func verifyExpiresAt(token *jwt.Token) error {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return errors.New("invalid token claims")

@@ -12,7 +12,6 @@ package auth
 import (
 	reflect "reflect"
 
-	jwt "github.com/golang-jwt/jwt"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -40,90 +39,33 @@ func (m *MockJwtAuthenticator) EXPECT() *MockJwtAuthenticatorMockRecorder {
 	return m.recorder
 }
 
-// GenerateToken mocks base method.
-func (m *MockJwtAuthenticator) GenerateToken(sub, jwtID string) *jwt.Token {
+// GenerateJwtToken mocks base method.
+func (m *MockJwtAuthenticator) GenerateJwtToken(sub, jti string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GenerateToken", sub, jwtID)
-	ret0, _ := ret[0].(*jwt.Token)
-	return ret0
-}
-
-// GenerateToken indicates an expected call of GenerateToken.
-func (mr *MockJwtAuthenticatorMockRecorder) GenerateToken(sub, jwtID any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateToken", reflect.TypeOf((*MockJwtAuthenticator)(nil).GenerateToken), sub, jwtID)
-}
-
-// GetJwtIDFromClaim mocks base method.
-func (m *MockJwtAuthenticator) GetJwtIDFromClaim(token *jwt.Token) (string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetJwtIDFromClaim", token)
+	ret := m.ctrl.Call(m, "GenerateJwtToken", sub, jti)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetJwtIDFromClaim indicates an expected call of GetJwtIDFromClaim.
-func (mr *MockJwtAuthenticatorMockRecorder) GetJwtIDFromClaim(token any) *gomock.Call {
+// GenerateJwtToken indicates an expected call of GenerateJwtToken.
+func (mr *MockJwtAuthenticatorMockRecorder) GenerateJwtToken(sub, jti any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetJwtIDFromClaim", reflect.TypeOf((*MockJwtAuthenticator)(nil).GetJwtIDFromClaim), token)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateJwtToken", reflect.TypeOf((*MockJwtAuthenticator)(nil).GenerateJwtToken), sub, jti)
 }
 
-// GetSubFromClaim mocks base method.
-func (m *MockJwtAuthenticator) GetSubFromClaim(token *jwt.Token) (string, error) {
+// VerifyJwtToken mocks base method.
+func (m *MockJwtAuthenticator) VerifyJwtToken(signedToken string) (string, string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetSubFromClaim", token)
+	ret := m.ctrl.Call(m, "VerifyJwtToken", signedToken)
 	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret1, _ := ret[1].(string)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
 }
 
-// GetSubFromClaim indicates an expected call of GetSubFromClaim.
-func (mr *MockJwtAuthenticatorMockRecorder) GetSubFromClaim(token any) *gomock.Call {
+// VerifyJwtToken indicates an expected call of VerifyJwtToken.
+func (mr *MockJwtAuthenticatorMockRecorder) VerifyJwtToken(signedToken any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSubFromClaim", reflect.TypeOf((*MockJwtAuthenticator)(nil).GetSubFromClaim), token)
-}
-
-// SignToken mocks base method.
-func (m *MockJwtAuthenticator) SignToken(token *jwt.Token) (string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SignToken", token)
-	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// SignToken indicates an expected call of SignToken.
-func (mr *MockJwtAuthenticatorMockRecorder) SignToken(token any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SignToken", reflect.TypeOf((*MockJwtAuthenticator)(nil).SignToken), token)
-}
-
-// VerifyExpiresAt mocks base method.
-func (m *MockJwtAuthenticator) VerifyExpiresAt(token *jwt.Token) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "VerifyExpiresAt", token)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// VerifyExpiresAt indicates an expected call of VerifyExpiresAt.
-func (mr *MockJwtAuthenticatorMockRecorder) VerifyExpiresAt(token any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VerifyExpiresAt", reflect.TypeOf((*MockJwtAuthenticator)(nil).VerifyExpiresAt), token)
-}
-
-// VerifyToken mocks base method.
-func (m *MockJwtAuthenticator) VerifyToken(signedToken string) (*jwt.Token, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "VerifyToken", signedToken)
-	ret0, _ := ret[0].(*jwt.Token)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// VerifyToken indicates an expected call of VerifyToken.
-func (mr *MockJwtAuthenticatorMockRecorder) VerifyToken(signedToken any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VerifyToken", reflect.TypeOf((*MockJwtAuthenticator)(nil).VerifyToken), signedToken)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VerifyJwtToken", reflect.TypeOf((*MockJwtAuthenticator)(nil).VerifyJwtToken), signedToken)
 }

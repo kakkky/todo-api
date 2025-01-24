@@ -16,8 +16,8 @@ func NewJwtAuthenticatorRepository(kvsCommander KvsCommander) *jwtAuthenticatorR
 	}
 }
 
-func (tar *jwtAuthenticatorRepository) Save(ctx context.Context, duration time.Duration, userID, jwtID string) error {
-	return tar.kvsCommander.Save(ctx, duration, userID, jwtID)
+func (tar *jwtAuthenticatorRepository) Save(ctx context.Context, duration time.Duration, userID, jti string) error {
+	return tar.kvsCommander.Save(ctx, duration, userID, jti)
 }
 
 // 存在しないKEYを指定した場合は空文字を返す

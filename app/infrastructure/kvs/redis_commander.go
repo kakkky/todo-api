@@ -19,12 +19,12 @@ func NewRedisCommander() *RedisCommander {
 	}
 }
 
-func (rc *RedisCommander) Save(ctx context.Context, duration time.Duration, userID, jwtID string) error {
+func (rc *RedisCommander) Save(ctx context.Context, duration time.Duration, userID, jti string) error {
 	// Redis クライアントが nil の場合はエラーを返す
 	if rc.cli == nil {
 		return errors.New("failed to get Redis client")
 	}
-	status := rc.cli.Set(ctx, userID, jwtID, duration)
+	status := rc.cli.Set(ctx, userID, jti, duration)
 	if status.Err() != nil {
 		return status.Err()
 	}

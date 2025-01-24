@@ -44,15 +44,13 @@ func (lu *LoginUsecase) Run(ctx context.Context, input LoginUsecaseInputDTO) (
 		return nil, err
 	}
 	// トークンを生成
-	jwtId := ulid.NewUlid() //JWTトークンを識別するID
-	token := lu.jwtAuthenticator.GenerateToken(u.GetID(), jwtId)
-	// トークンをkvsに保存
-	if err := lu.jwtAuthenticatorRepository.Save(ctx, time.Duration(24*time.Hour), u.GetID(), jwtId); err != nil {
+	jti := ulid.NewUlid() //JWTトークンを識別するID
+	signedToken, err := lu.jwtAuthenticator.GenerateJwtToken(u.GetID(), jti)
+	if err != nil {
 		return nil, err
 	}
-	// 署名済みトークンを発行
-	signedToken, err := lu.jwtAuthenticator.SignToken(token)
-	if err != nil {
+	// トークンをkvsに保存
+	if err := lu.jwtAuthenticatorRepository.Save(ctx, time.Duration(24*time.Hour), u.GetID(), jti); err != nil {
 		return nil, err
 	}
 	return &LoginUsecaseOutputDTO{

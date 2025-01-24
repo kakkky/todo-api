@@ -71,15 +71,15 @@ func (mr *MockJwtAuthenticatorRepositoryMockRecorder) Load(ctx, userID any) *gom
 }
 
 // Save mocks base method.
-func (m *MockJwtAuthenticatorRepository) Save(ctx context.Context, duration time.Duration, userID, jwtID string) error {
+func (m *MockJwtAuthenticatorRepository) Save(ctx context.Context, duration time.Duration, userID, jti string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", ctx, duration, userID, jwtID)
+	ret := m.ctrl.Call(m, "Save", ctx, duration, userID, jti)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Save indicates an expected call of Save.
-func (mr *MockJwtAuthenticatorRepositoryMockRecorder) Save(ctx, duration, userID, jwtID any) *gomock.Call {
+func (mr *MockJwtAuthenticatorRepositoryMockRecorder) Save(ctx, duration, userID, jti any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockJwtAuthenticatorRepository)(nil).Save), ctx, duration, userID, jwtID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockJwtAuthenticatorRepository)(nil).Save), ctx, duration, userID, jti)
 }
