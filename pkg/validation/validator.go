@@ -3,12 +3,13 @@ package validation
 import "github.com/go-playground/validator/v10"
 
 // シングルトンインスタンスとして用意
-var validation *validator.Validate
+var validate *validator.Validate
 
-func NewValidation() *validator.Validate {
-	if validation != nil {
-		return validation
+func NewValidator() *validator.Validate {
+	if validate != nil {
+		return validate
 	}
 	// 非ポインタ構造体でもrequiredgタグが有効になる
-	return validator.New(validator.WithRequiredStructEnabled())
+	validate = validator.New(validator.WithRequiredStructEnabled())
+	return validate
 }

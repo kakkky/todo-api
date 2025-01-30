@@ -37,7 +37,7 @@ func (lh *LoginHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
-	if err := validation.NewValidation().Struct(&params); err != nil {
+	if err := validation.NewValidator().Struct(&params); err != nil {
 		presenter.RespondBadRequest(rw, err.Error())
 		return
 	}
