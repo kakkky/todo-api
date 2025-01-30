@@ -39,7 +39,7 @@ func handleTask(mux *http.ServeMux) {
 			),
 		),
 	))
-	mux.Handle("PATCH /tasks/{id}", composeMiddlewares(authorization, middleware.Logger)(
+	mux.Handle("PATCH /tasks/{id}/state", composeMiddlewares(authorization, middleware.Logger)(
 		taskHandler.NewUpdateTaskStateHandler(
 			taskUsecase.NewUpdateTaskStateUsecase(
 				taskRepository,

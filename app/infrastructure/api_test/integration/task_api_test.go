@@ -323,7 +323,7 @@ func TestTask_UpdateTaskState(t *testing.T) {
 			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
-			r := httptest.NewRequest(http.MethodPatch, "/tasks/"+tt.pathParam, bytes.NewBuffer(b))
+			r := httptest.NewRequest(http.MethodPatch, "/tasks/"+tt.pathParam+"/state", bytes.NewBuffer(b))
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する

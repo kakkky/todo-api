@@ -14,7 +14,7 @@ import (
 
 // @title                      TodoRestAPI
 // @version                    1.0
-// @description                This is TodoARestPI by golang.
+// @description                This is TodoRestPI by golang.
 // @host                       localhost:8080
 // @BasePath                   /
 // @securityDefinitions.apikey BearerAuth
