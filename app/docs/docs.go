@@ -839,7 +839,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "TodoRestAPI",
-	Description:      "This is TodoARestPI by golang.",
+	Description:      "This is TodoRestPI by golang.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

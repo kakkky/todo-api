@@ -9,32 +9,36 @@ import (
 
 // ルーティングを登録したマルチプレクサを返す
 func NewMux() http.Handler {
+	// マルチプレクサを初期化
 	mux := http.NewServeMux()
+	initDependencies()
+	initHandlers()
+	initMiddlewares()
 	// 開発用ルーティング
 	{
 		mux.HandleFunc("GET /health", health.HealthCheckHandler)
 		mux.Handle("GET /swagger/", swagger.WrapHandler)
 	}
-	// ユーザー系
+	// 認証系ルーティング
 	{
-		handleUser(mux)
-		handleAuth(mux)
+		mux.Handle("POST /login", composeMiddlewares(logger)(loginHandler))
+		mux.Handle("DELETE /logout", composeMiddlewares(logger, authorization)(logoutHandler))
 	}
-	// タスク系
+	// ユーザー系ルーティング
 	{
-		handleTask(mux)
+		mux.Handle("POST /user", composeMiddlewares(logger)(postUserHandler))
+		mux.Handle("DELETE /user", composeMiddlewares(logger, authorization)(deleteUserHandler))
+		mux.Handle("GET /users", composeMiddlewares(logger, authorization)(getUsersHandler))
+		mux.Handle("PATCH /user", composeMiddlewares(logger, authorization)(updateUserHandler))
 	}
-
+	// タスク系ルーティング
+	{
+		mux.Handle("POST /tasks", composeMiddlewares(logger, authorization)(postTaskHandler))
+		mux.Handle("DELETE /tasks/{id}", composeMiddlewares(logger, authorization)(deleteTaskHandler))
+		mux.Handle("PATCH /tasks/{id}/state", composeMiddlewares(logger, authorization)(updateTaskStateHandler))
+		mux.Handle("GET /tasks/{id}", composeMiddlewares(logger, authorization)(getTaskHandler))
+		mux.Handle("GET /tasks", composeMiddlewares(logger, authorization)(getTasksHandler))
+		mux.Handle("GET /user/tasks", composeMiddlewares(logger, authorization)(getUserTasksHandler))
+	}
 	return mux
-}
-
-// 適用させたい順で、ミドルウェアを引数に入れる
-// composeMiddewares(M1,M2,M3)とした場合、M1(M2(M3()))といったようにラップされたミドルウェアを返す
-func composeMiddlewares(middlewares ...func(http.Handler) http.Handler) func(http.Handler) http.Handler {
-	return func(h http.Handler) http.Handler {
-		for i := range middlewares {
-			h = middlewares[len(middlewares)-(i+1)](h)
-		}
-		return h
-	}
 }
