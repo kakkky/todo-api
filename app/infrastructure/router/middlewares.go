@@ -4,7 +4,10 @@ import (
 	"net/http"
 
 	"github.com/kakkky/app/adapter/presentation/middleware"
+	"github.com/kakkky/app/adapter/repository"
 	authUsecase "github.com/kakkky/app/application/usecase/auth"
+	"github.com/kakkky/app/infrastructure/auth"
+	"github.com/kakkky/app/infrastructure/kvs"
 )
 
 var (
@@ -16,8 +19,8 @@ var (
 func initMiddlewares() {
 	authorization = middleware.Authorication(
 		authUsecase.NewAuthorizationUsecase(
-			jwtAuthenticator,
-			jwtAuthenticatorRepository,
+			auth.NewJwtAuthenticator(),
+			repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander()),
 		),
 	)
 	logger = middleware.Logger

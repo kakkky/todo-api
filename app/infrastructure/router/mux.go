@@ -11,9 +11,11 @@ import (
 func NewMux() http.Handler {
 	// マルチプレクサを初期化
 	mux := http.NewServeMux()
-	initDependencies()
+	// ハンドラーの初期化
 	initHandlers()
+	// ミドルウェアの初期化
 	initMiddlewares()
+
 	// 開発用ルーティング
 	{
 		mux.HandleFunc("GET /health", health.HealthCheckHandler)
