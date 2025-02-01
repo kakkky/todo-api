@@ -23,7 +23,7 @@ func TestAuth_LoginUsecase_Run(t *testing.T) {
 			name: "正常系:ユーザーにJWTトークンが返る",
 			mockFn: func(mur *user.MockUserRepository, ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				mur.EXPECT().FindByEmail(gomock.Any(), gomock.Any()).Return(user1, nil)
-				ma.EXPECT().GenerateJwtToken(gomock.Any(), gomock.Any()).Return("signedToken", nil)
+				ma.EXPECT().GenerateJwtToken(gomock.Any(), gomock.Any()).Return("jwtToken", nil)
 				mar.EXPECT().Save(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 			},
 			input: LoginUsecaseInputDTO{
@@ -31,7 +31,7 @@ func TestAuth_LoginUsecase_Run(t *testing.T) {
 				Password: "password",
 			},
 			want: &LoginUsecaseOutputDTO{
-				SignedToken: "signedToken",
+				JwtToken: "jwtToken",
 			},
 			wantErr: false,
 		},

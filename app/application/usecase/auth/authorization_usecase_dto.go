@@ -1,7 +1,7 @@
 package auth
 
 type AuthorizationInputDTO struct {
-	SignedToken string
+	JwtToken string
 }
 
 type AuthorizationOutputDTO struct {

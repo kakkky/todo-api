@@ -24,11 +24,11 @@ func TestJWTAuthenticator(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			sut := NewJwtAuthenticator()
-			signedToken, err := sut.GenerateJwtToken(tt.args.sub, tt.args.jti)
+			jwtToken, err := sut.GenerateJwtToken(tt.args.sub, tt.args.jti)
 			if err != nil {
 				t.Errorf("GenerateJwtToken() error=%v", err)
 			}
-			gotSub, gotJti, err := sut.VerifyJwtToken(signedToken)
+			gotSub, gotJti, err := sut.VerifyJwtToken(jwtToken)
 			if err != nil {
 				t.Errorf("VerifyToken() error = %v", err)
 				return

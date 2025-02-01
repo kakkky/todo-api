@@ -26,7 +26,7 @@ func (au *AuthorizationUsecase) Run(ctx context.Context, input AuthorizationInpu
 	error,
 ) {
 	// 公開鍵で署名済みトークンを検証する
-	userID, jti, err := au.jwtAuthenticator.VerifyJwtToken(input.SignedToken)
+	userID, jti, err := au.jwtAuthenticator.VerifyJwtToken(input.JwtToken)
 	if err != nil {
 		return nil, err
 	}

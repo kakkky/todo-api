@@ -47,17 +47,17 @@ func (ja *jwtAuthenticator) GenerateJwtToken(sub, jti string) (string, error) {
 		Subject:   sub,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-	signedToken, err := token.SignedString(ja.privateKey)
+	jwtToken, err := token.SignedString(ja.privateKey)
 	if err != nil {
 		return "", err
 	}
-	return signedToken, nil
+	return jwtToken, nil
 }
 
 // 署名済みのトークンを公開鍵によって検証する
 // クレームから取り出した値を返す
-func (ja *jwtAuthenticator) VerifyJwtToken(signedToken string) (sub string, jti string, err error) {
-	token, err := jwt.Parse(signedToken, func(t *jwt.Token) (interface{}, error) {
+func (ja *jwtAuthenticator) VerifyJwtToken(jwtToken string) (sub string, jti string, err error) {
+	token, err := jwt.Parse(jwtToken, func(t *jwt.Token) (interface{}, error) {
 		// トークンの署名アルゴリズムをチェック
 		if _, ok := t.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, fmt.Errorf("unexpected signing method")

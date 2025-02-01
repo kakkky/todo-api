@@ -45,9 +45,9 @@ func TestUser_GetUsers(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				signedToken := testhelper.SetupLogin("1")
+				jwtToken := testhelper.SetupLogin("1")
 				defer testhelper.CleanupLogin("1")
-				r.Header.Set("Authorization", "Bearer "+signedToken)
+				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			// リクエストを送信
 			mux.ServeHTTP(rw, r)
@@ -162,9 +162,9 @@ func TestUser_UpdateUser(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				signedToken := testhelper.SetupLogin("1")
+				jwtToken := testhelper.SetupLogin("1")
 				defer testhelper.CleanupLogin("1")
-				r.Header.Set("Authorization", "Bearer "+signedToken)
+				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			// リクエストを送信
 			mux.ServeHTTP(rw, r)
@@ -214,9 +214,9 @@ func TestUser_DeleteUser(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				signedToken := testhelper.SetupLogin("1")
+				jwtToken := testhelper.SetupLogin("1")
 				defer testhelper.CleanupLogin("1")
-				r.Header.Set("Authorization", "Bearer "+signedToken)
+				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			mux.ServeHTTP(rw, r)
 			// ステータスコードを検証

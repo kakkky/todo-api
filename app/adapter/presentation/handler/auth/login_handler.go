@@ -55,7 +55,7 @@ func (lh *LoginHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resp := LoginResponse{
-		SignedToken: output.SignedToken,
+		JwtToken: output.JwtToken,
 	}
 	presenter.RespondOK(rw, resp)
 }

@@ -104,8 +104,8 @@ func TestAuth_Logout(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				signedToken := testhelper.SetupLogin("1")
-				r.Header.Set("Authorization", "Bearer "+signedToken)
+				jwtToken := testhelper.SetupLogin("1")
+				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			// リクエストを送信
 			mux.ServeHTTP(rw, r)

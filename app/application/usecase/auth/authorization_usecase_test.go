@@ -20,7 +20,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 		{
 			name: "正常系：トークンの認証に成功し、userIDを返す",
 			input: AuthorizationInputDTO{
-				SignedToken: "signedToken",
+				JwtToken: "jwtToken",
 			},
 			mockFn: func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				ma.EXPECT().VerifyJwtToken(gomock.Any()).Return("userID", "jti", nil)
@@ -34,7 +34,7 @@ func TestAuthorizationUsecase_Run(t *testing.T) {
 		{
 			name: "準正常系：kvsから得たjtiとトークンから得たjtiが一致しない",
 			input: AuthorizationInputDTO{
-				SignedToken: "signedToken",
+				JwtToken: "jwtToken",
 			},
 			mockFn: func(ma *MockJwtAuthenticator, mar *MockJwtAuthenticatorRepository) {
 				ma.EXPECT().VerifyJwtToken(gomock.Any()).Return("userID", "jti", nil)

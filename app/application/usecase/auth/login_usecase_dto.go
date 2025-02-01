@@ -6,5 +6,5 @@ type LoginUsecaseInputDTO struct {
 }
 
 type LoginUsecaseOutputDTO struct {
-	SignedToken string
+	JwtToken string
 }

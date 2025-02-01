@@ -15,12 +15,12 @@ type UserIDKey struct{}
 func Authorication(authorizationUsecase *auth.AuthorizationUsecase) func(h http.Handler) http.Handler {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-			signedToken, err := getSignedToken(r)
+			jwtToken, err := getJwtToken(r)
 			if err != nil {
 				presenter.RespondUnAuthorized(rw, err.Error())
 				return
 			}
-			input := auth.AuthorizationInputDTO{SignedToken: signedToken}
+			input := auth.AuthorizationInputDTO{JwtToken: jwtToken}
 			output, err := authorizationUsecase.Run(r.Context(), input)
 			if err != nil {
 				presenter.RespondUnAuthorized(rw, err.Error())
@@ -35,7 +35,7 @@ func Authorication(authorizationUsecase *auth.AuthorizationUsecase) func(h http.
 	}
 }
 
-func getSignedToken(r *http.Request) (string, error) {
+func getJwtToken(r *http.Request) (string, error) {
 	authorizationHeader := r.Header.Get("Authorization")
 	if authorizationHeader == "" {
 		return "", errors.New("authorization Header is missing")

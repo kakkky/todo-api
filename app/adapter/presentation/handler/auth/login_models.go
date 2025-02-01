@@ -6,5 +6,5 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	SignedToken string `json:"signed_token"`
+	JwtToken string `json:"signed_token"`
 }
