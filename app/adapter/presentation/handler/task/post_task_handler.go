@@ -43,10 +43,10 @@ func (pth *PostTaskHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// contextからuserIdを取得
-	userId := r.Context().Value(middleware.UserIDKey{}).(string)
+	userID := middleware.GetUserID(r.Context())
 	// inputDTOに詰め替える
 	input := task.CreateTaskUsecaseInputDTO{
-		UserId:  userId,
+		UserId:  userID,
 		Content: params.Content,
 		State:   params.State,
 	}

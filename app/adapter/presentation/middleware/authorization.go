@@ -10,7 +10,7 @@ import (
 	"github.com/kakkky/app/application/usecase/auth"
 )
 
-type UserIDKey struct{}
+type userIDKey struct{}
 
 func Authorication(authorizationUsecase *auth.AuthorizationUsecase) func(h http.Handler) http.Handler {
 	return func(h http.Handler) http.Handler {
@@ -28,7 +28,7 @@ func Authorication(authorizationUsecase *auth.AuthorizationUsecase) func(h http.
 			}
 			userID := output.UserID
 			// コンテキストにuserIDを含める
-			ctx := context.WithValue(r.Context(), UserIDKey{}, userID)
+			ctx := context.WithValue(r.Context(), userIDKey{}, userID)
 			// 後続の処理（ハンドラ）を実行する
 			h.ServeHTTP(rw, r.WithContext(ctx))
 		})
@@ -46,4 +46,10 @@ func getJwtToken(r *http.Request) (string, error) {
 		return "", errors.New("invalid Authorization header format")
 	}
 	return parts[1], nil
+}
+
+// コンテキストに設定したユーザーIDを取得する
+// ハンドラーで使用する
+func GetUserID(context context.Context) string {
+	return context.Value(userIDKey{}).(string)
 }

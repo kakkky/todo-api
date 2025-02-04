@@ -15,7 +15,13 @@ func NewMux() http.Handler {
 	initHandlers()
 	// ミドルウェアの初期化
 	initMiddlewares()
+	// ハンドラをルーティングに登録
+	registerRoutes(mux)
 
+	return mux
+}
+
+func registerRoutes(mux *http.ServeMux) {
 	// 開発用ルーティング
 	{
 		mux.HandleFunc("GET /health", health.HealthCheckHandler)
@@ -42,5 +48,4 @@ func NewMux() http.Handler {
 		mux.Handle("GET /tasks", composeMiddlewares(logger, authorization)(getTasksHandler))
 		mux.Handle("GET /user/tasks", composeMiddlewares(logger, authorization)(getUserTasksHandler))
 	}
-	return mux
 }

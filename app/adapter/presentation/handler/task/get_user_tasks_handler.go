@@ -29,9 +29,9 @@ func NewGetUserTasksHandler(fetchUserTasksUsecase *task.FetchUserTasksUsecase) *
 // @Failure  500 {object} presenter.FailureResponse                    "内部サーバーエラー"
 // @Router   /user/tasks [get]
 func (guth *GetUserTasksHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	userId := r.Context().Value(middleware.UserIDKey{}).(string)
+	userID := middleware.GetUserID(r.Context())
 	input := task.FetchUserTasksUsecaseInputDTO{
-		UserId: userId,
+		UserId: userID,
 	}
 	outputs, err := guth.fetchUserTasksUsecase.Run(r.Context(), input)
 	if err != nil && errors.IsDomainErr(err) {

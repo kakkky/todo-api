@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/kakkky/app/domain/errors"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -37,12 +38,11 @@ func (s *server) Run(ctx context.Context) error {
 	eg.Go(func() error {
 		// サーバー起動中にエラーが起きると、ctxに伝達される（Shutdownによるエラーは正常なので無視）
 		log.Printf("server is runnning at port %q...", s.srv.Addr)
-		if err := s.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := s.srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Printf("http server on %s failed : %+v", s.srv.Addr, err)
 			return err
 		}
 		log.Printf("The server on %s is gracefully shutting down", s.srv.Addr)
-
 		return nil
 	})
 	// サーバーからのエラーとシグナルを待機する

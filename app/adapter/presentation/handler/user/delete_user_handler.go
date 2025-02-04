@@ -30,9 +30,9 @@ func NewDeleteUserHandler(unregisterUsecase *user.UnregisterUsecase) *DeleteUser
 // @Router      /user [delete]
 func (duh *DeleteUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// リクエストスコープのコンテキストからuserIdを取得
-	id := r.Context().Value(middleware.UserIDKey{}).(string)
+	userID := middleware.GetUserID(r.Context())
 	input := user.UnregisterUsecaseInputDTO{
-		ID: id,
+		ID: userID,
 	}
 	ctx := r.Context()
 	err := duh.unregisterUsecase.Run(ctx, input)

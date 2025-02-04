@@ -46,11 +46,11 @@ func (utsh *UpdateTaskStateHandler) ServeHTTP(rw http.ResponseWriter, r *http.Re
 	// idをパスパラメータから取得
 	id := r.PathValue("id")
 	// contextからuserIdを取得
-	userId := r.Context().Value(middleware.UserIDKey{}).(string)
+	userID := middleware.GetUserID(r.Context())
 	// inputDTOに詰め替える
 	input := task.UpdateTaskStateUsecaseInputDTO{
 		ID:     id,
-		UserId: userId,
+		UserId: userID,
 		State:  params.State,
 	}
 	output, err := utsh.updateTaskStateUsecase.Run(r.Context(), input)

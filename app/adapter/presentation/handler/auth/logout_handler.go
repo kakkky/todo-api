@@ -29,7 +29,7 @@ func NewLogoutHandler(logoutUsecase *auth.LogoutUsecase) *LogoutHandler {
 func (lh *LogoutHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// 認可制御のミドルウェアでコンテキストに値が付加されている
 	// リクエストスコープのコンテキストからuserIDを取得する
-	userID := r.Context().Value(middleware.UserIDKey{}).(string)
+	userID := middleware.GetUserID(r.Context())
 	ctx := r.Context()
 	if err := lh.logoutUsecase.Run(ctx, auth.LogoutUsecaseInputDTO{UserID: userID}); err != nil {
 		presenter.RespondInternalServerError(rw, err.Error())

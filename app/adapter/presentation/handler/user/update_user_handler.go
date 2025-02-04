@@ -34,7 +34,7 @@ func NewUpdateUserHandler(updateUserUsecase *user.UpdateProfileUsecase) *UpdateU
 // @Failure     500     {object} presenter.FailureResponse                     "内部サーバーエラー"
 // @Router      /user [patch]
 func (uuh *UpdateUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	userID := r.Context().Value(middleware.UserIDKey{}).(string)
+	userID := middleware.GetUserID(r.Context())
 	var params UpdateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
 		presenter.RespondBadRequest(rw, err.Error())

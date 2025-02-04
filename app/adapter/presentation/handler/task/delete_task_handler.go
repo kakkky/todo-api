@@ -33,11 +33,11 @@ func (dth *DeleteTaskHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request)
 	// パスパラメータから取得
 	id := r.PathValue("id")
 	// contextからuserIdを取得
-	userId := r.Context().Value(middleware.UserIDKey{}).(string)
+	userID := middleware.GetUserID(r.Context())
 	// inputDTOに詰め替える
 	input := task.DeleteTaskUsecaseInputDTO{
 		ID:     id,
-		UserId: userId,
+		UserId: userID,
 	}
 	err := dth.deleteTaskUsease.Run(r.Context(), input)
 	// タスクを削除する権限がない（ログインしているユーザーのタスクでない）場合
