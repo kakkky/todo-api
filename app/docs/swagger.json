@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is TodoRestPI by golang.",
-        "title": "TodoRestAPI",
+        "description": "This is TODO API by golang.",
+        "title": "TODO API",
         "contact": {},
         "version": "1.0"
     },

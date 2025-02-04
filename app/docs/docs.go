@@ -838,8 +838,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "TodoRestAPI",
-	Description:      "This is TodoRestPI by golang.",
+	Title:            "TODO API",
+	Description:      "This is TODO API by golang.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

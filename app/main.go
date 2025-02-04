@@ -12,9 +12,9 @@ import (
 	"github.com/kakkky/app/infrastructure/server"
 )
 
-// @title                      TodoRestAPI
+// @title                      TODO API
 // @version                    1.0
-// @description                This is TodoRestPI by golang.
+// @description                This is TODO API by golang.
 // @host                       localhost:8080
 // @BasePath                   /
 // @securityDefinitions.apikey BearerAuth
@@ -30,7 +30,7 @@ func main() {
 }
 
 func run(ctx context.Context, cfg *config.Config) {
-	// データベース接続を初期化し、終了時にクローズする
+	// // データベース接続を初期化し、終了時にクローズする
 	close := db.NewDB(ctx, cfg)
 	defer close()
 

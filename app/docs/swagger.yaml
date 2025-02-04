@@ -194,8 +194,8 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  description: This is TodoRestPI by golang.
-  title: TodoRestAPI
+  description: This is TODO API by golang.
+  title: TODO API
   version: "1.0"
 paths:
   /health:
