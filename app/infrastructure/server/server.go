@@ -53,6 +53,7 @@ func (s *server) Run(ctx context.Context) error {
 	if err := s.srv.Shutdown(ctx); err != nil {
 		log.Fatalf("failed to shutdown http server on %s : %+v", s.srv.Addr, err)
 	}
+	log.Println("server was successfully shut down gracefully")
 	// ゴルーチンのクロージャ内のエラーを返す
 	// ゴルーチンを待機する
 	return eg.Wait()

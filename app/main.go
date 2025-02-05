@@ -30,7 +30,7 @@ func main() {
 }
 
 func run(ctx context.Context, cfg *config.Config) {
-	// // データベース接続を初期化し、終了時にクローズする
+	// データベース接続を初期化し、終了時にクローズする
 	close := db.NewDB(ctx, cfg)
 	defer close()
 

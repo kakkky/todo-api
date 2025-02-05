@@ -53,7 +53,7 @@ func TestAuth_Login(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// テストデータを投入
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
 			r := httptest.NewRequest(http.MethodPost, "/login", bytes.NewBuffer(b))
@@ -65,7 +65,7 @@ func TestAuth_Login(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NomalizeJWT(rw.Body.Bytes()),
+				testhelper.NomalizeJWT(t, rw.Body.Bytes()),
 			)
 			g := goldie.New(
 				t,
@@ -98,13 +98,13 @@ func TestAuth_Logout(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
 			r := httptest.NewRequest(http.MethodDelete, "/logout", nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			// リクエストを送信
@@ -119,7 +119,7 @@ func TestAuth_Logout(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NormalizeULID(rw.Body.Bytes()),
+				testhelper.NormalizeULID(t, rw.Body.Bytes()),
 			)
 			g := goldie.New(
 				t,

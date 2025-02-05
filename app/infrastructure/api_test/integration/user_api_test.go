@@ -37,7 +37,7 @@ func TestUser_GetUsers(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
 
 			// リクエストボディをマーシャル（→json）
 			r := httptest.NewRequest(http.MethodGet, "/users", nil)
@@ -45,8 +45,8 @@ func TestUser_GetUsers(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			// リクエストを送信
@@ -98,7 +98,7 @@ func TestUser_PostUser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
 
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
@@ -111,7 +111,7 @@ func TestUser_PostUser(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NormalizeULID(rw.Body.Bytes()),
+				testhelper.NormalizeULID(t, rw.Body.Bytes()),
 			)
 			g := goldie.New(
 				t,
@@ -153,7 +153,7 @@ func TestUser_UpdateUser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
 
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
@@ -162,8 +162,8 @@ func TestUser_UpdateUser(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			// リクエストを送信
@@ -174,7 +174,7 @@ func TestUser_UpdateUser(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NormalizeULID(rw.Body.Bytes()),
+				testhelper.NormalizeULID(t, rw.Body.Bytes()),
 			)
 			g := goldie.New(
 				t,
@@ -207,15 +207,15 @@ func TestUser_DeleteUser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
 
 			r := httptest.NewRequest(http.MethodDelete, "/user", nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			mux.ServeHTTP(rw, r)
@@ -229,7 +229,7 @@ func TestUser_DeleteUser(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NormalizeULID(rw.Body.Bytes()),
+				testhelper.NormalizeULID(t, rw.Body.Bytes()),
 			)
 			g := goldie.New(
 				t,

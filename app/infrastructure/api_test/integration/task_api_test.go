@@ -47,15 +47,15 @@ func TestTask_GetTask(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			// リクエストボディをマーシャル（→json）
 			r := httptest.NewRequest(http.MethodGet, "/tasks/"+tt.pathParam, nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			// リクエストを送信
@@ -100,14 +100,14 @@ func TestTask_GetTasks(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			r := httptest.NewRequest(http.MethodGet, "/tasks", nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			mux.ServeHTTP(rw, r)
@@ -151,14 +151,14 @@ func TestTask_GetUserTasks(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			r := httptest.NewRequest(http.MethodGet, "/user/tasks", nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			mux.ServeHTTP(rw, r)
@@ -229,7 +229,7 @@ func TestTask_PostTask(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
 			r := httptest.NewRequest(http.MethodPost, "/tasks", bytes.NewBuffer(b))
@@ -237,8 +237,8 @@ func TestTask_PostTask(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			mux.ServeHTTP(rw, r)
@@ -247,7 +247,7 @@ func TestTask_PostTask(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NormalizeULID(rw.Body.Bytes()),
+				testhelper.NormalizeULID(t, rw.Body.Bytes()),
 			)
 			g := goldie.New(
 				t,
@@ -320,7 +320,7 @@ func TestTask_UpdateTaskState(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
 			r := httptest.NewRequest(http.MethodPatch, "/tasks/"+tt.pathParam+"/state", bytes.NewBuffer(b))
@@ -328,8 +328,8 @@ func TestTask_UpdateTaskState(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			mux.ServeHTTP(rw, r)
@@ -388,15 +388,15 @@ func TestTask_DeleteTask(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dbTesthelper.SetupFixtures("../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
 
 			r := httptest.NewRequest(http.MethodDelete, "/tasks/"+tt.pathParam, nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin("1")
-				defer testhelper.CleanupLogin("1")
+				jwtToken := testhelper.SetupLogin(t, "1")
+				defer testhelper.CleanupLogin(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			mux.ServeHTTP(rw, r)

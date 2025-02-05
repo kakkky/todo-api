@@ -108,7 +108,7 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			// user1のみがDBに保存されている
-			testhelper.SetupFixtures("testdata/fixtures/users.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
 			ctx := context.Background()
 			got, err := userRepository.FindByEmail(ctx, tt.args.email)
 			// 期待されるエラータイプが設定されている場合はそれも検証
@@ -170,7 +170,7 @@ func TestUserRepository_FindById(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			// user1のみがDBに保存されている
-			testhelper.SetupFixtures("testdata/fixtures/users.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
 			ctx := context.Background()
 			got, err := userRepository.FindById(ctx, tt.args.id)
 			// 期待されるエラータイプが設定されている場合はそれも検証
@@ -213,7 +213,7 @@ func TestUserRepository_FetchAllUsers(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetupFixtures("testdata/fixtures/users.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
 			ctx := context.Background()
 			got, err := userRepository.FetchAllUsers(ctx)
 			if (err != nil) != tt.wantErr {
@@ -270,7 +270,7 @@ func TestUserRepository_Update(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetupFixtures("testdata/fixtures/users.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
 			ctx := context.Background()
 			if err := userRepository.Update(ctx, tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("userRepository.Update()=error:%v, wantErr:%v", err, tt.wantErr)
@@ -312,7 +312,7 @@ func TestUserRepository_Delete(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetupFixtures("testdata/fixtures/users.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
 			ctx := context.Background()
 			if err := userRepository.Delete(ctx, tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("userRepository.Delete()=error:%v, wantErr:%v", err, tt.wantErr)

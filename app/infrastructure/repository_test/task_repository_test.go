@@ -41,7 +41,7 @@ func TestTaskRepository_Save(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetupFixtures("testdata/fixtures/users.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml")
 
 			ctx := context.Background()
 			// タスクを保存
@@ -100,7 +100,7 @@ func TestTaskRepository_FindById(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			// task1のみがDBに保存されている
-			testhelper.SetupFixtures("testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
 			ctx := context.Background()
 			got, err := taskRepository.FindById(ctx, tt.args.id)
 			if (err != nil) != tt.wantErr && tt.errType != nil && errors.Is(err, tt.errType) {
@@ -149,7 +149,7 @@ func TestTaskRepository_Update(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			// 既存のタスクを更新
-			testhelper.SetupFixtures("testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
 
 			ctx := context.Background()
 			if err := taskRepository.Update(ctx, tt.args.task); (err != nil) != tt.wantErr {
@@ -196,7 +196,7 @@ func TestTaskRepository_Delete(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			// 既存のタスクを更新
-			testhelper.SetupFixtures("testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
+			testhelper.SetupFixtures(t, "testdata/fixtures/users.yml", "testdata/fixtures/tasks.yml")
 
 			ctx := context.Background()
 			if err := taskRepository.Delete(ctx, tt.args.task); (err != nil) != tt.wantErr {
