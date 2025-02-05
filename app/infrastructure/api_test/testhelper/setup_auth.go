@@ -10,26 +10,29 @@ import (
 	"github.com/kakkky/app/infrastructure/kvs"
 )
 
-func SetupLogin(t *testing.T, id string) string {
+// ログイン状態をセットアップする
+// userID：JTIのペアを、KVSに保存する
+// 生成したJWTトークンを返す
+func LoginForTest(t *testing.T, userID string) string {
 	t.Helper()
 
 	jwtAuthenticator := auth.NewJwtAuthenticator()
 	// トークン生成
-	jwtToken, err := jwtAuthenticator.GenerateJwtToken(id, "jti")
+	jwtToken, err := jwtAuthenticator.GenerateJwtToken(userID, "jti")
 	if err != nil {
 		t.Fatalf("error occuerd in jwtAuthenticator.GenerateJwtToken() :%v", err)
 	}
 	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())
 	// Redisに保存
-	jwtAuthenticatorRepository.Save(context.Background(), time.Duration(2*time.Hour), id, "jti")
+	jwtAuthenticatorRepository.Save(context.Background(), time.Duration(2*time.Hour), userID, "jti")
 	return jwtToken
 }
 
-func CleanupLogin(t *testing.T, id string) {
+func LogoutForTest(t *testing.T, userID string) {
 	t.Helper()
 
 	jwtAuthenticatorRepository := repository.NewJwtAuthenticatorRepository(kvs.NewRedisCommander())
-	if err := jwtAuthenticatorRepository.Delete(context.Background(), id); err != nil {
+	if err := jwtAuthenticatorRepository.Delete(context.Background(), userID); err != nil {
 		t.Fatalf("error occured in jwtAuthenticatorRepository.Delete() :%v", err)
 	}
 }

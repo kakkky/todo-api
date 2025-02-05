@@ -1,6 +1,6 @@
 {
   "status": 200,
   "data": {
-    "signed_token": "jwt"
+    "jwt_token": "jwt"
   }
 }

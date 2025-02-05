@@ -65,7 +65,7 @@ func TestAuth_Login(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NomalizeJWT(t, rw.Body.Bytes()),
+				testhelper.NormalizeJWT(t, rw.Body.Bytes()),
 			)
 			g := goldie.New(
 				t,
@@ -104,7 +104,7 @@ func TestAuth_Logout(t *testing.T) {
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
 			if tt.isLogin {
-				jwtToken := testhelper.SetupLogin(t, "1")
+				jwtToken := testhelper.LoginForTest(t, "1")
 				r.Header.Set("Authorization", "Bearer "+jwtToken)
 			}
 			// リクエストを送信

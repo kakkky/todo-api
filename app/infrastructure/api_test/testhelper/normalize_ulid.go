@@ -5,7 +5,6 @@ import (
 	"testing"
 )
 
-// ランダムなULID値を "PLACEHOLDER_ULID" に置換
 func NormalizeULID(t *testing.T, b []byte) []byte {
 	t.Helper()
 
