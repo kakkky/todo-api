@@ -174,7 +174,7 @@ func TestUser_UpdateUser(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NormalizeULID(t, rw.Body.Bytes()),
+				rw.Body.Bytes(),
 			)
 			g := goldie.New(
 				t,
@@ -229,7 +229,7 @@ func TestUser_DeleteUser(t *testing.T) {
 			}
 			resp := testhelper.FormatJSON(
 				t,
-				testhelper.NormalizeULID(t, rw.Body.Bytes()),
+				rw.Body.Bytes(),
 			)
 			g := goldie.New(
 				t,
