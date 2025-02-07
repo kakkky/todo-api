@@ -1,6 +1,8 @@
 # 【Go】 WEBフレームワークなしで開発する TODO API ハンズオン
 このリポジトリーは、Zenn書籍で扱っているハンズオンのソースコードです。
 
+URL ▶︎ https://zenn.dev/yuta_kakiki/books/08227a2ca0d290
+
 # バージョン
 ```
 go version go1.23.1 darwin/arm64
