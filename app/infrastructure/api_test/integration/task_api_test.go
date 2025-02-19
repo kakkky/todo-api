@@ -152,7 +152,7 @@ func TestTask_GetUserTasks(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml", "../testdata/fixtures/tasks.yml")
-			r := httptest.NewRequest(http.MethodGet, "/user/tasks", nil)
+			r := httptest.NewRequest(http.MethodGet, "/users/me/tasks", nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する

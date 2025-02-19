@@ -27,7 +27,7 @@ func NewGetUserTasksHandler(fetchUserTasksUsecase *task.FetchUserTasksUsecase) *
 // @Success  200 {object} presenter.SuccessResponse[[]GetTaskResponse] "タスクの情報"
 // @Failure  400 {object} presenter.FailureResponse                    "不正なリクエスト"
 // @Failure  500 {object} presenter.FailureResponse                    "内部サーバーエラー"
-// @Router   /user/tasks [get]
+// @Router   /users/me/tasks [get]
 func (guth *GetUserTasksHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	userID := middleware.GetUserID(r.Context())
 	input := task.FetchUserTasksUsecaseInputDTO{

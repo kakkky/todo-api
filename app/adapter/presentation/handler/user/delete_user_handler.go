@@ -27,7 +27,7 @@ func NewDeleteUserHandler(unregisterUsecase *user.UnregisterUsecase) *DeleteUser
 // @Success     204
 // @Failure     400 {object} presenter.FailureResponse "不正なリクエスト"
 // @Failure     500 {object} presenter.FailureResponse "内部サーバーエラー"
-// @Router      /user [delete]
+// @Router      /users/me [delete]
 func (duh *DeleteUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// リクエストスコープのコンテキストからuserIdを取得
 	userID := middleware.GetUserID(r.Context())

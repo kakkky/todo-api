@@ -29,7 +29,7 @@ func NewPostUserHandler(registerUsecase *user.RegisterUsecase) *PostUserHandler 
 // @Success     201     {object} presenter.SuccessResponse[PostUserResponse] "登録されたユーザーの情報"
 // @Failure     400     {object} presenter.FailureResponse                   "不正なリクエスト"
 // @Failure     500     {object} presenter.FailureResponse                   "内部サーバーエラー"
-// @Router      /user [post]
+// @Router      /users [post]
 func (puh *PostUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// jsonをデコード
 	var params PostUserRequest

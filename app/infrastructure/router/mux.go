@@ -34,10 +34,10 @@ func registerRoutes(mux *http.ServeMux) {
 	}
 	// ユーザー系ルーティング
 	{
-		mux.Handle("POST /user", composeMiddlewares(logger)(postUserHandler))
-		mux.Handle("DELETE /user", composeMiddlewares(logger, authorization)(deleteUserHandler))
+		mux.Handle("POST /users", composeMiddlewares(logger)(postUserHandler))
+		mux.Handle("DELETE /users/me", composeMiddlewares(logger, authorization)(deleteUserHandler))
 		mux.Handle("GET /users", composeMiddlewares(logger, authorization)(getUsersHandler))
-		mux.Handle("PATCH /user", composeMiddlewares(logger, authorization)(updateUserHandler))
+		mux.Handle("PATCH /users/me", composeMiddlewares(logger, authorization)(updateUserHandler))
 	}
 	// タスク系ルーティング
 	{
@@ -46,6 +46,6 @@ func registerRoutes(mux *http.ServeMux) {
 		mux.Handle("PATCH /tasks/{id}/state", composeMiddlewares(logger, authorization)(updateTaskStateHandler))
 		mux.Handle("GET /tasks/{id}", composeMiddlewares(logger, authorization)(getTaskHandler))
 		mux.Handle("GET /tasks", composeMiddlewares(logger, authorization)(getTasksHandler))
-		mux.Handle("GET /user/tasks", composeMiddlewares(logger, authorization)(getUserTasksHandler))
+		mux.Handle("GET /users/me/tasks", composeMiddlewares(logger, authorization)(getUserTasksHandler))
 	}
 }

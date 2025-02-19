@@ -11,16 +11,16 @@ go version go1.23.1 darwin/arm64
 # エンドポイント
 | HTTPメソッド | エンドポイント       | 説明                        |
 |--------------|----------------------|-----------------------------|
-| POST         | /user               | 新しいユーザーを作成する      |
-| DELETE       | /user               | ユーザーを削除する           |
+| POST         | /users               | 新しいユーザーを作成する      |
+| DELETE       | /users/me               | カレントユーザーを削除する           |
 | GET          | /users              | 全てのユーザーを取得する      |
-| PATCH        | /user               | ユーザーのプロフィールを更新する |
+| PATCH        | /users/me               | カレントユーザーのプロフィールを更新する |
 | POST         | /tasks              | 新しいタスクを作成する        |
 | DELETE       | /tasks/{id}         | 指定したIDのタスクを削除する   |
 | PATCH        | /tasks/{id}/state         | 指定したIDのタスクの状態を更新する |
 | GET          | /tasks/{id}         | 指定したIDのタスクを取得する   |
 | GET          | /tasks              | 全てのタスクを取得する        |
-| GET          | /user/tasks         | ユーザーに紐づくタスクを取得する |
+| GET          | /users/me/tasks         | ユーザーに紐づくタスクを取得する |
 | POST         | /login              | ログインを行う        |
 | DELETE       | /logout             | ログアウトを行う      |
 

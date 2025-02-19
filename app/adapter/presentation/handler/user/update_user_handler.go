@@ -32,7 +32,7 @@ func NewUpdateUserHandler(updateUserUsecase *user.UpdateProfileUsecase) *UpdateU
 // @Success     200     {object} presenter.SuccessResponse[UpdateUserResponse] "登録されたユーザーの情報"
 // @Failure     400     {object} presenter.FailureResponse                     "不正なリクエスト"
 // @Failure     500     {object} presenter.FailureResponse                     "内部サーバーエラー"
-// @Router      /user [patch]
+// @Router      /users/me [patch]
 func (uuh *UpdateUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	userID := middleware.GetUserID(r.Context())
 	var params UpdateUserRequest

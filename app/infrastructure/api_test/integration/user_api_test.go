@@ -102,7 +102,7 @@ func TestUser_PostUser(t *testing.T) {
 
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
-			r := httptest.NewRequest(http.MethodPost, "/user", bytes.NewBuffer(b))
+			r := httptest.NewRequest(http.MethodPost, "/users", bytes.NewBuffer(b))
 			rw := httptest.NewRecorder()
 			mux.ServeHTTP(rw, r)
 			// ステータスコードを検証
@@ -157,7 +157,7 @@ func TestUser_UpdateUser(t *testing.T) {
 
 			// リクエストボディをマーシャル（→json）
 			b, _ := json.Marshal(tt.req)
-			r := httptest.NewRequest(http.MethodPatch, "/user", bytes.NewBuffer(b))
+			r := httptest.NewRequest(http.MethodPatch, "/users/me", bytes.NewBuffer(b))
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
@@ -209,7 +209,7 @@ func TestUser_DeleteUser(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
 
-			r := httptest.NewRequest(http.MethodDelete, "/user", nil)
+			r := httptest.NewRequest(http.MethodDelete, "/users/me", nil)
 			rw := httptest.NewRecorder()
 			// ログイン状態をセットアップ
 			// Authorizationヘッダーを付加する
