@@ -14,6 +14,7 @@ import (
 var (
 	authorization func(h http.Handler) http.Handler
 	logger        func(h http.Handler) http.Handler
+	cors          func(h http.Handler) http.Handler
 )
 
 // ミドルウェアを初期化する
@@ -25,6 +26,7 @@ func initMiddlewares() {
 		),
 	)
 	logger = middleware.Logger
+	cors = middleware.Cors
 }
 
 // 適用させたい順で、ミドルウェアを引数に入れる

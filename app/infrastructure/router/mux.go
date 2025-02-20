@@ -24,28 +24,28 @@ func NewMux() http.Handler {
 func registerRoutes(mux *http.ServeMux) {
 	// 開発用ルーティング
 	{
-		mux.HandleFunc("GET /health", health.HealthCheckHandler)
+		mux.Handle("GET /health", composeMiddlewares(cors, logger)(http.HandlerFunc(health.HealthCheckHandler)))
 		mux.Handle("GET /swagger/", swagger.WrapHandler)
 	}
 	// 認証系ルーティング
 	{
-		mux.Handle("POST /login", composeMiddlewares(logger)(loginHandler))
-		mux.Handle("DELETE /logout", composeMiddlewares(logger, authorization)(logoutHandler))
+		mux.Handle("POST /login", composeMiddlewares(cors, logger)(loginHandler))
+		mux.Handle("DELETE /logout", composeMiddlewares(cors, logger, authorization)(logoutHandler))
 	}
 	// ユーザー系ルーティング
 	{
-		mux.Handle("POST /users", composeMiddlewares(logger)(postUserHandler))
-		mux.Handle("DELETE /users/me", composeMiddlewares(logger, authorization)(deleteUserHandler))
-		mux.Handle("GET /users", composeMiddlewares(logger, authorization)(getUsersHandler))
-		mux.Handle("PATCH /users/me", composeMiddlewares(logger, authorization)(updateUserHandler))
+		mux.Handle("POST /users", composeMiddlewares(cors, logger)(postUserHandler))
+		mux.Handle("DELETE /users/me", composeMiddlewares(cors, logger, authorization)(deleteUserHandler))
+		mux.Handle("GET /users", composeMiddlewares(cors, logger, authorization)(getUsersHandler))
+		mux.Handle("PATCH /users/me", composeMiddlewares(cors, logger, authorization)(updateUserHandler))
 	}
 	// タスク系ルーティング
 	{
-		mux.Handle("POST /tasks", composeMiddlewares(logger, authorization)(postTaskHandler))
-		mux.Handle("DELETE /tasks/{id}", composeMiddlewares(logger, authorization)(deleteTaskHandler))
-		mux.Handle("PATCH /tasks/{id}/state", composeMiddlewares(logger, authorization)(updateTaskStateHandler))
-		mux.Handle("GET /tasks/{id}", composeMiddlewares(logger, authorization)(getTaskHandler))
-		mux.Handle("GET /tasks", composeMiddlewares(logger, authorization)(getTasksHandler))
-		mux.Handle("GET /users/me/tasks", composeMiddlewares(logger, authorization)(getUserTasksHandler))
+		mux.Handle("POST /tasks", composeMiddlewares(cors, logger, authorization)(postTaskHandler))
+		mux.Handle("DELETE /tasks/{id}", composeMiddlewares(cors, logger, authorization)(deleteTaskHandler))
+		mux.Handle("PATCH /tasks/{id}/state", composeMiddlewares(cors, logger, authorization)(updateTaskStateHandler))
+		mux.Handle("GET /tasks/{id}", composeMiddlewares(cors, logger, authorization)(getTaskHandler))
+		mux.Handle("GET /tasks", composeMiddlewares(cors, logger, authorization)(getTasksHandler))
+		mux.Handle("GET /users/me/tasks", composeMiddlewares(cors, logger, authorization)(getUserTasksHandler))
 	}
 }
