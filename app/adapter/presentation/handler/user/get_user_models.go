@@ -1,6 +1,6 @@
 package user
 
-type GetUsersResponse struct {
+type GetUserResponse struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }

@@ -68,6 +68,59 @@ func TestUser_GetUsers(t *testing.T) {
 	}
 }
 
+func TestUser_GetCurrentUser(t *testing.T) {
+	tests := []struct {
+		name     string
+		wantCode int
+		gfName   string
+		isLogin  bool //ログインさせるか
+	}{
+		{
+			name:     "正常系",
+			wantCode: http.StatusOK,
+			gfName:   "get_current_user_nomal",
+			isLogin:  true,
+		},
+		{
+			name:     "準正常系：未ログイン",
+			wantCode: http.StatusUnauthorized,
+			gfName:   "get_current_user_seminomal_not_loggedin",
+			isLogin:  false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dbTesthelper.SetupFixtures(t, "../testdata/fixtures/users.yml")
+
+			// リクエストボディをマーシャル（→json）
+			r := httptest.NewRequest(http.MethodGet, "/users/me", nil)
+			rw := httptest.NewRecorder()
+			// ログイン状態をセットアップ
+			// Authorizationヘッダーを付加する
+			if tt.isLogin {
+				jwtToken := testhelper.LoginForTest(t, "1")
+				defer testhelper.LogoutForTest(t, "1")
+				r.Header.Set("Authorization", "Bearer "+jwtToken)
+			}
+			// リクエストを送信
+			mux.ServeHTTP(rw, r)
+			// ステータスコードを検証
+			if rw.Code != tt.wantCode {
+				t.Errorf("got %d , but want Code %d", rw.Code, tt.wantCode)
+			}
+			resp := testhelper.FormatJSON(
+				t,
+				rw.Body.Bytes(),
+			)
+			g := goldie.New(
+				t,
+				goldie.WithFixtureDir("../testdata/golden/user"),
+				goldie.WithNameSuffix(".golden.json"))
+			g.Assert(t, tt.gfName, resp)
+		})
+	}
+}
+
 func TestUser_PostUser(t *testing.T) {
 	tests := []struct {
 		name     string

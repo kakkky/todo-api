@@ -23,10 +23,11 @@ var (
 
 // ユーザー系ハンドラー
 var (
-	postUserHandler   *user.PostUserHandler
-	deleteUserHandler *user.DeleteUserHandler
-	updateUserHandler *user.UpdateUserHandler
-	getUsersHandler   *user.GetUsersHandler
+	postUserHandler       *user.PostUserHandler
+	deleteUserHandler     *user.DeleteUserHandler
+	updateUserHandler     *user.UpdateUserHandler
+	getUsersHandler       *user.GetUsersHandler
+	getCurrentUserHandler *user.GetCurrentUserHandler
 )
 
 // タスク系ハンドラー
@@ -79,6 +80,12 @@ func initUserHandlers() {
 
 	getUsersHandler = user.NewGetUsersHandler(
 		userUsecase.NewFetchUsersUsecase(
+			repository.NewUserRepository(sqlc.NewSqlcQuerier()),
+		),
+	)
+
+	getCurrentUserHandler = user.NewGetCurrentUserHandler(
+		userUsecase.NewFetchUserUsecase(
 			repository.NewUserRepository(sqlc.NewSqlcQuerier()),
 		),
 	)

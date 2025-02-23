@@ -323,7 +323,42 @@ const docTemplate = `{
                 }
             }
         },
-        "/user": {
+        "/users": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "全てのユーザーのID・名前をリストで取得する",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "全ユーザーを取得する",
+                "responses": {
+                    "200": {
+                        "description": "登録されたユーザーの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-array_user_GetUsersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "新しいユーザーを登録する",
                 "consumes": [
@@ -367,7 +402,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/users/me": {
             "delete": {
                 "security": [
                     {
@@ -450,7 +487,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/tasks": {
+        "/users/me/tasks": {
             "get": {
                 "security": [
                     {
@@ -470,43 +507,6 @@ const docTemplate = `{
                         "description": "タスクの情報",
                         "schema": {
                             "$ref": "#/definitions/presenter.SuccessResponse-array_task_GetTaskResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "不正なリクエスト",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.FailureResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "内部サーバーエラー",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.FailureResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/users": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "全てのユーザーのID・名前をリストで取得する",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "全ユーザーを取得する",
-                "responses": {
-                    "200": {
-                        "description": "登録されたユーザーの情報",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.SuccessResponse-array_user_GetUsersResponse"
                         }
                     },
                     "400": {
@@ -544,7 +544,7 @@ const docTemplate = `{
         "auth.LoginResponse": {
             "type": "object",
             "properties": {
-                "signed_token": {
+                "jwt_token": {
                     "type": "string"
                 }
             }

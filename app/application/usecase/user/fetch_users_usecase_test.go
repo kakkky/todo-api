@@ -9,11 +9,11 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestUser_FetchUserUsecase_Run(t *testing.T) {
+func TestUser_FetchUsersUsecase_Run(t *testing.T) {
 	tests := []struct {
 		name    string
 		mockFn  func(mr *user.MockUserRepository)
-		want    []*FetchUsersUsecaseOutputDTO
+		want    []*FetchUserUsecaseOutputDTO
 		wantErr bool
 	}{
 		{
@@ -27,7 +27,7 @@ func TestUser_FetchUserUsecase_Run(t *testing.T) {
 					}, nil,
 				)
 			},
-			want: []*FetchUsersUsecaseOutputDTO{
+			want: []*FetchUserUsecaseOutputDTO{
 				{
 					ID:   "1",
 					Name: "user1",

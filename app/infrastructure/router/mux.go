@@ -37,6 +37,7 @@ func registerRoutes(mux *http.ServeMux) {
 		mux.Handle("POST /users", composeMiddlewares(cors, logger)(postUserHandler))
 		mux.Handle("DELETE /users/me", composeMiddlewares(cors, logger, authorization)(deleteUserHandler))
 		mux.Handle("GET /users", composeMiddlewares(cors, logger, authorization)(getUsersHandler))
+		mux.Handle("GET /users/me", composeMiddlewares(cors, logger, authorization)(getCurrentUserHandler))
 		mux.Handle("PATCH /users/me", composeMiddlewares(cors, logger, authorization)(updateUserHandler))
 	}
 	// タスク系ルーティング

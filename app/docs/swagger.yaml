@@ -12,7 +12,7 @@ definitions:
     type: object
   auth.LoginResponse:
     properties:
-      signed_token:
+      jwt_token:
         type: string
     type: object
   health.healthResponse:
@@ -392,7 +392,59 @@ paths:
       summary: タスク状態を更新する
       tags:
       - Task
-  /user:
+  /users:
+    get:
+      description: 全てのユーザーのID・名前をリストで取得する
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登録されたユーザーの情報
+          schema:
+            $ref: '#/definitions/presenter.SuccessResponse-array_user_GetUsersResponse'
+        "400":
+          description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      security:
+      - BearerAuth: []
+      summary: 全ユーザーを取得する
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: 新しいユーザーを登録する
+      parameters:
+      - description: ユーザー登録のための情報
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.PostUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 登録されたユーザーの情報
+          schema:
+            $ref: '#/definitions/presenter.SuccessResponse-user_PostUserResponse'
+        "400":
+          description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      summary: ユーザーの登録
+      tags:
+      - User
+  /users/me:
     delete:
       description: ユーザーを退会させ、ユーザー情報を削除する
       produces:
@@ -444,36 +496,7 @@ paths:
       summary: ユーザーの更新
       tags:
       - User
-    post:
-      consumes:
-      - application/json
-      description: 新しいユーザーを登録する
-      parameters:
-      - description: ユーザー登録のための情報
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/user.PostUserRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: 登録されたユーザーの情報
-          schema:
-            $ref: '#/definitions/presenter.SuccessResponse-user_PostUserResponse'
-        "400":
-          description: 不正なリクエスト
-          schema:
-            $ref: '#/definitions/presenter.FailureResponse'
-        "500":
-          description: 内部サーバーエラー
-          schema:
-            $ref: '#/definitions/presenter.FailureResponse'
-      summary: ユーザーの登録
-      tags:
-      - User
-  /user/tasks:
+  /users/me/tasks:
     get:
       description: ログインしているユーザーのタスクを全て表示する
       produces:
@@ -496,29 +519,6 @@ paths:
       summary: ユーザーが持つ全てのタスクを表示する
       tags:
       - Task
-  /users:
-    get:
-      description: 全てのユーザーのID・名前をリストで取得する
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 登録されたユーザーの情報
-          schema:
-            $ref: '#/definitions/presenter.SuccessResponse-array_user_GetUsersResponse'
-        "400":
-          description: 不正なリクエスト
-          schema:
-            $ref: '#/definitions/presenter.FailureResponse'
-        "500":
-          description: 内部サーバーエラー
-          schema:
-            $ref: '#/definitions/presenter.FailureResponse'
-      security:
-      - BearerAuth: []
-      summary: 全ユーザーを取得する
-      tags:
-      - User
 securityDefinitions:
   BearerAuth:
     in: header

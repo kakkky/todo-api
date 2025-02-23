@@ -1,6 +1,10 @@
 package user
 
-type FetchUsersUsecaseOutputDTO struct {
+type FetchUserUsecaseOutputDTO struct {
 	ID   string
 	Name string
+}
+
+type FetchUserUsecaseInputDTO struct {
+	ID string
 }

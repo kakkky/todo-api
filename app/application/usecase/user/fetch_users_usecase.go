@@ -18,14 +18,14 @@ func NewFetchUsersUsecase(
 	}
 }
 
-func (luu *FetchUsersUsecase) Run(ctx context.Context) ([]*FetchUsersUsecaseOutputDTO, error) {
-	us, err := luu.userRepository.FetchAllUsers(ctx)
+func (fuu *FetchUsersUsecase) Run(ctx context.Context) ([]*FetchUserUsecaseOutputDTO, error) {
+	us, err := fuu.userRepository.FetchAllUsers(ctx)
 	if err != nil {
 		return nil, err
 	}
-	outputs := make([]*FetchUsersUsecaseOutputDTO, 0, len(us))
+	outputs := make([]*FetchUserUsecaseOutputDTO, 0, len(us))
 	for _, u := range us {
-		outputs = append(outputs, &FetchUsersUsecaseOutputDTO{ID: u.GetID(), Name: u.GetName()})
+		outputs = append(outputs, &FetchUserUsecaseOutputDTO{ID: u.GetID(), Name: u.GetName()})
 	}
 	return outputs, nil
 }

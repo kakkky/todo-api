@@ -38,9 +38,9 @@ func (guh *GetUsersHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		presenter.RespondInternalServerError(rw, err.Error())
 		return
 	}
-	resp := make([]GetUsersResponse, 0, len(outputs))
+	resp := make([]GetUserResponse, 0, len(outputs))
 	for _, output := range outputs {
-		resp = append(resp, GetUsersResponse{
+		resp = append(resp, GetUserResponse{
 			ID:   output.ID,
 			Name: output.Name,
 		})

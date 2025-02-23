@@ -3,6 +3,8 @@
 
 URL ▶︎ https://zenn.dev/yuta_kakiki/books/08227a2ca0d290
 
+※ 一部ハンズオンのコードと異なります（ハンズオンには全てコードを載せているのでそれ単体で進められます）
+
 # バージョン
 ```
 go version go1.23.1 darwin/arm64
@@ -14,7 +16,8 @@ go version go1.23.1 darwin/arm64
 | POST         | /users               | 新しいユーザーを作成する      |
 | DELETE       | /users/me               | カレントユーザーを削除する           |
 | GET          | /users              | 全てのユーザーを取得する      |
-| PATCH        | /users/me               | カレントユーザーのプロフィールを更新する |
+| GET          | /users              | 全てのユーザーを取得する      |
+| GET       | /users/me               | カレントユーザーのプロフィールを取得する |
 | POST         | /tasks              | 新しいタスクを作成する        |
 | DELETE       | /tasks/{id}         | 指定したIDのタスクを削除する   |
 | PATCH        | /tasks/{id}/state         | 指定したIDのタスクの状態を更新する |
