@@ -2,21 +2,18 @@ package middleware
 
 import (
 	"net/http"
-
-	"github.com/kakkky/app/adapter/presentation/presenter"
 )
 
 func Cors(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// 開発環境ようなので全てのリクエストを通すようにする
-		w.Header().Set("Access-Control-Allow-Origin", "*") // 本番環境でこのようにするのは禁止
+		// フロントエンドのオリジンを設定（開発環境用）
+		origin := r.Header.Get("Origin")
+
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-Requested-With, Origin, X-Csrftoken, Accept, Authorization")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE, OPTIONS")
-		// プリフライトリクエストの対応
-		if r.Method == "OPTIONS" {
-			presenter.RespondNoContent(w)
-			return
-		}
+
 		h.ServeHTTP(w, r)
 	})
 }

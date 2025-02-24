@@ -36,11 +36,11 @@ definitions:
       status:
         type: integer
     type: object
-  presenter.SuccessResponse-array_user_GetUsersResponse:
+  presenter.SuccessResponse-array_user_GetUserResponse:
     properties:
       data:
         items:
-          $ref: '#/definitions/user.GetUsersResponse'
+          $ref: '#/definitions/user.GetUserResponse'
         type: array
       status:
         type: integer
@@ -77,6 +77,13 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/task.UpdateTaskStateResponse'
+      status:
+        type: integer
+    type: object
+  presenter.SuccessResponse-user_GetUserResponse:
+    properties:
+      data:
+        $ref: '#/definitions/user.GetUserResponse'
       status:
         type: integer
     type: object
@@ -146,7 +153,7 @@ definitions:
       user_id:
         type: string
     type: object
-  user.GetUsersResponse:
+  user.GetUserResponse:
     properties:
       id:
         type: string
@@ -401,7 +408,7 @@ paths:
         "200":
           description: 登録されたユーザーの情報
           schema:
-            $ref: '#/definitions/presenter.SuccessResponse-array_user_GetUsersResponse'
+            $ref: '#/definitions/presenter.SuccessResponse-array_user_GetUserResponse'
         "400":
           description: 不正なリクエスト
           schema:
@@ -463,6 +470,28 @@ paths:
       security:
       - BearerAuth: []
       summary: ユーザーの退会
+      tags:
+      - User
+    get:
+      description: トークンを元に、ログインしているユーザー情報（id,name）を返す
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ユーザーの情報
+          schema:
+            $ref: '#/definitions/presenter.SuccessResponse-user_GetUserResponse'
+        "400":
+          description: 不正なリクエスト
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+        "500":
+          description: 内部サーバーエラー
+          schema:
+            $ref: '#/definitions/presenter.FailureResponse'
+      security:
+      - BearerAuth: []
+      summary: ログインしているユーザーを取得する
       tags:
       - User
     patch:

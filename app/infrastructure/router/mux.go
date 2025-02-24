@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/kakkky/app/adapter/presentation/handler/health"
+	"github.com/kakkky/app/adapter/presentation/presenter"
 	swagger "github.com/swaggo/http-swagger"
 )
 
@@ -36,8 +37,8 @@ func registerRoutes(mux *http.ServeMux) {
 	{
 		mux.Handle("POST /users", composeMiddlewares(cors, logger)(postUserHandler))
 		mux.Handle("DELETE /users/me", composeMiddlewares(cors, logger, authorization)(deleteUserHandler))
-		mux.Handle("GET /users", composeMiddlewares(cors, logger, authorization)(getUsersHandler))
 		mux.Handle("GET /users/me", composeMiddlewares(cors, logger, authorization)(getCurrentUserHandler))
+		mux.Handle("GET /users", composeMiddlewares(cors, logger, authorization)(getUsersHandler))
 		mux.Handle("PATCH /users/me", composeMiddlewares(cors, logger, authorization)(updateUserHandler))
 	}
 	// タスク系ルーティング
@@ -48,5 +49,9 @@ func registerRoutes(mux *http.ServeMux) {
 		mux.Handle("GET /tasks/{id}", composeMiddlewares(cors, logger, authorization)(getTaskHandler))
 		mux.Handle("GET /tasks", composeMiddlewares(cors, logger, authorization)(getTasksHandler))
 		mux.Handle("GET /users/me/tasks", composeMiddlewares(cors, logger, authorization)(getUserTasksHandler))
+	}
+	// CORSのプリフライトリクエスト用のエンドポイント
+	{
+		mux.Handle("OPTIONS /", composeMiddlewares(cors, logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { presenter.RespondNoContent(w) })))
 	}
 }

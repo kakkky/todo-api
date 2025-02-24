@@ -25,8 +25,8 @@ func NewGetCurrentUserHandler(fetchUserUsecase *user.FetchUserUsecase) *GetCurre
 // @Produce     json
 // @Security    BearerAuth
 // @Success     200 {object} presenter.SuccessResponse[GetUserResponse] "ユーザーの情報"
-// @Failure     400 {object} presenter.FailureResponse                     "不正なリクエスト"
-// @Failure     500 {object} presenter.FailureResponse                     "内部サーバーエラー"
+// @Failure     400 {object} presenter.FailureResponse                  "不正なリクエスト"
+// @Failure     500 {object} presenter.FailureResponse                  "内部サーバーエラー"
 // @Router      /users/me [get]
 func (gcuh *GetCurrentUserHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()

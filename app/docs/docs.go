@@ -342,7 +342,7 @@ const docTemplate = `{
                     "200": {
                         "description": "登録されたユーザーの情報",
                         "schema": {
-                            "$ref": "#/definitions/presenter.SuccessResponse-array_user_GetUsersResponse"
+                            "$ref": "#/definitions/presenter.SuccessResponse-array_user_GetUserResponse"
                         }
                     },
                     "400": {
@@ -405,6 +405,41 @@ const docTemplate = `{
             }
         },
         "/users/me": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "トークンを元に、ログインしているユーザー情報（id,name）を返す",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "ログインしているユーザーを取得する",
+                "responses": {
+                    "200": {
+                        "description": "ユーザーの情報",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuccessResponse-user_GetUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "不正なリクエスト",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "内部サーバーエラー",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.FailureResponse"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -582,13 +617,13 @@ const docTemplate = `{
                 }
             }
         },
-        "presenter.SuccessResponse-array_user_GetUsersResponse": {
+        "presenter.SuccessResponse-array_user_GetUserResponse": {
             "type": "object",
             "properties": {
                 "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/user.GetUsersResponse"
+                        "$ref": "#/definitions/user.GetUserResponse"
                     }
                 },
                 "status": {
@@ -645,6 +680,17 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "$ref": "#/definitions/task.UpdateTaskStateResponse"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.SuccessResponse-user_GetUserResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/user.GetUserResponse"
                 },
                 "status": {
                     "type": "integer"
@@ -753,7 +799,7 @@ const docTemplate = `{
                 }
             }
         },
-        "user.GetUsersResponse": {
+        "user.GetUserResponse": {
             "type": "object",
             "properties": {
                 "id": {
